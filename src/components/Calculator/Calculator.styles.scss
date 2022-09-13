@@ -1,0 +1,64 @@
+.calcu {
+    background: #dbdbdb;
+    width: 50%;
+    padding: 2.5rem;
+    border-radius: 3rem;
+
+    h2 {
+        font-size: 2.5rem;
+        color: #000;
+        font-weight: normal;
+    }
+
+    button {
+        transition: all 0.15s ease-in-out;
+    }
+
+    &__btn {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        font-size: 1.25rem;
+        width: 100%;
+        color: #fff;
+        background: #505050;
+        padding: 1rem 1.45rem;
+        margin: 0.5rem 0;
+
+        &:hover {
+            background: #ccc;
+            color: #000;
+        }
+
+        &.add-btn {
+            font-weight: bold;
+            font-size: 1.5rem;
+            justify-content: center;
+        }
+    }
+
+    &__bottom {
+        margin-top: 5rem;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        .formula {
+            max-width: 40%;
+            text-align: center;
+            background: rgb(118, 92, 92);
+            font-size: 1.25rem;
+            padding: 1rem;
+            border-radius: 1rem;
+            font-style: italic;
+        }
+
+        .submit-btn {
+            width: fit-content;
+            font-weight: bold;
+            text-transform: uppercase;
+            border-radius: 1rem;
+            padding: 1rem 1.5rem;
+        }
+    }
+}

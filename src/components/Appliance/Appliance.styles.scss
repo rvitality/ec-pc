@@ -1,0 +1,126 @@
+.appliance {
+    position: relative;
+    margin: 2rem 0;
+
+    &__selection {
+        position: relative;
+
+        &:hover button {
+            color: #000;
+            background: #aaa;
+        }
+
+        &:hover .appliance__options {
+            display: block;
+        }
+    }
+
+    &__options {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        display: none;
+
+        ul {
+            border: 1px solid #000;
+            z-index: 3;
+            position: relative;
+            min-width: 300px;
+        }
+
+        li {
+            cursor: pointer;
+            list-style-type: none;
+            background: #fff;
+            color: #000;
+            padding: 0.8rem;
+
+            h3 {
+                font-weight: normal;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+            }
+
+            &:hover {
+                background: #aaa;
+            }
+        }
+
+        li > ul {
+            display: none;
+        }
+        li:hover > ul {
+            display: block;
+        }
+
+        .lvl1,
+        .lvl2,
+        .lvl3 {
+            position: absolute;
+            left: 100%;
+            top: -1px;
+        }
+
+        .lvl1,
+        .lvl2 {
+            li {
+                position: relative;
+            }
+        }
+
+        .lvl2,
+        .lvl3 {
+            li {
+                min-width: 275px;
+            }
+        }
+    }
+
+    form {
+        display: flex;
+        width: 100%;
+        color: #000;
+        gap: 6rem;
+        margin: 1rem 0;
+        align-items: center;
+        justify-content: space-between;
+
+        .inputs {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .form-control {
+            width: fit-content;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.25rem;
+        }
+
+        label {
+            font-size: 1.15rem;
+        }
+        input {
+            font-size: 1.25rem;
+            width: 100%;
+            padding: 0.5rem 0.85rem;
+        }
+
+        button[type="submit"] {
+            background: #898989;
+            border: none;
+            border-radius: 0.5rem;
+            color: #fff;
+            width: fit-content;
+            text-transform: uppercase;
+            font-size: 1.25rem;
+            padding: 0.7rem 1.5rem;
+
+            &:hover {
+                background: #666565;
+            }
+        }
+    }
+}
