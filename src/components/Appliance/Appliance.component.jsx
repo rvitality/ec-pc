@@ -125,7 +125,7 @@ const DUMMY_DATA = [
     },
 ];
 
-const Appliance = ({ appliances = [], num, onAddAppliance }) => {
+const Appliance = ({ appliances = [], num, onAddAppliance, sarimaRate }) => {
     const [selectedAppliance, setSelectedAppliance] = useState({});
     const selectedApplianceExists = Object.keys(selectedAppliance).length > 0;
 
@@ -167,9 +167,7 @@ const Appliance = ({ appliances = [], num, onAddAppliance }) => {
         if (quantity && hours) {
             const { wattage } = selectedAppliance;
 
-            const SARIMA_RATE = 8;
-
-            const applianceBill = ((wattage * (hours * 30) * quantity) / 1000) * SARIMA_RATE;
+            const applianceBill = ((wattage * (hours * 30) * quantity) / 1000) * sarimaRate;
 
             if (actionType === "add") {
                 setMessage({ status: "success", msg: "Appliance added successfully." });

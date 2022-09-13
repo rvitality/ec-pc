@@ -7,7 +7,8 @@ import "./Calculator.styles.scss";
 import { useApplianceContext } from "../../context/ApplianceContext";
 
 const Calculator = () => {
-    const { setTotalBill, selectedAppliances, setSelectedAppliances } = useApplianceContext();
+    const { setTotalBill, selectedAppliances, setSelectedAppliances, sarimaRate } =
+        useApplianceContext();
 
     const [applianceHolders, setApplianceHolders] = useState(Array(3).fill());
 
@@ -59,6 +60,7 @@ const Calculator = () => {
                     num={index + 1}
                     appliances={selectedAppliances}
                     onAddAppliance={addApplianceHandler}
+                    sarimaRate={sarimaRate}
                 />
             ))}
 
@@ -71,7 +73,10 @@ const Calculator = () => {
             </button>
 
             <div className="calcu__bottom">
-                <p className="formula">Total Estimated kWH of all Appliances (kWH * 30 days)</p>
+                <p className="formula">
+                    Estimated kWH of an appliance (((wattage * (hours * 30 days) * quantity) / 1000)
+                    * SARIMA_RATE)
+                </p>
 
                 <button className="calcu__btn submit-btn" onClick={submitDataHandler} type="button">
                     Submit

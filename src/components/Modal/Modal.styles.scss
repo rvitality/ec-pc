@@ -6,23 +6,39 @@
     height: 100%;
     min-height: 350px;
 
-    .forecasted-bill {
-        text-align: center;
+    .value {
+        font-weight: 500;
+    }
 
-        h2 {
+    .forecasted-bill {
+        display: flex;
+        text-align: center;
+        gap: 2rem;
+
+        h3 {
             font-weight: normal;
             text-transform: capitalize;
-            font-size: 2rem;
+            font-size: 1.5rem;
         }
 
-        .total-bill {
-            font-size: 1.75rem;
-            margin-top: 1.5rem;
+        p {
+            font-size: 1.35rem;
+            margin-top: 1rem;
+        }
+
+        .divider {
+            height: 80px;
+            width: 2px;
+            background: #777;
         }
     }
 
     .breakdown {
         margin-top: 3rem;
+
+        .value {
+            margin-left: 0.35rem;
+        }
 
         h3 {
             font-weight: normal;
@@ -43,6 +59,12 @@
             &.lvl1 > li {
                 margin-top: 1.5rem;
             }
+        }
+
+        .info {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
         }
     }
 }

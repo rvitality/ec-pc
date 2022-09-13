@@ -10,6 +10,7 @@ export const ApplianceContextProvider = props => {
     const [selectedAppliances, setSelectedAppliances] = useState([]);
 
     const contextValue = {
+        sarimaRate: 8,
         totalBill,
         setTotalBill,
         selectedAppliances,
