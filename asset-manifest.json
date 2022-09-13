@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/ec-pc/static/css/main.a5550ec5.css",
+    "main.js": "/ec-pc/static/js/main.746f36e2.js",
+    "index.html": "/ec-pc/index.html",
+    "main.a5550ec5.css.map": "/ec-pc/static/css/main.a5550ec5.css.map",
+    "main.746f36e2.js.map": "/ec-pc/static/js/main.746f36e2.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.a5550ec5.css",
+    "static/js/main.746f36e2.js"
+  ]
+}
