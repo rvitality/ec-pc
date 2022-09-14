@@ -79,11 +79,27 @@
 
     .extra-inputs {
         display: flex;
+        flex-direction: column;
+        align-items: flex-start;
         width: 100%;
         color: #000;
-        gap: 2rem;
         margin: 1rem 0;
-        align-items: center;
+        transition: all 0.25s ease-in-out;
+
+        .top {
+            width: 100%;
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 2rem;
+            margin-bottom: 1.5rem;
+
+            &.hide {
+                margin-bottom: 0;
+                height: 0;
+                overflow: hidden;
+            }
+        }
 
         .inputs {
             display: flex;
@@ -119,6 +135,44 @@
             &:hover {
                 background: #666565;
             }
+        }
+
+        .durations-container {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+
+            .duration {
+                display: flex;
+                align-items: center;
+
+                &__count-num {
+                    font-weight: 500;
+                    margin-right: 0.5rem;
+                }
+            }
+        }
+    }
+
+    .trigger-expand {
+        cursor: pointer;
+        font-style: italic;
+        align-self: flex-end;
+        color: rgb(54, 54, 131);
+        transition: 0.25 ease-in-out;
+
+        span {
+            display: flex;
+            align-items: center;
+            gap: 0.35rem;
+        }
+
+        svg {
+            font-weight: bold;
+        }
+
+        &:hover {
+            font-weight: 500;
         }
     }
 }

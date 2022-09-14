@@ -2,6 +2,8 @@ import React, { useEffect, useRef, useState } from "react";
 
 import { v4 as uuidv4 } from "uuid";
 
+import { BsChevronUp } from "react-icons/bs";
+import { BsChevronDown } from "react-icons/bs";
 import { BsChevronRight } from "react-icons/bs";
 import { AiFillCaretDown } from "react-icons/ai";
 
@@ -128,11 +130,15 @@ const DUMMY_DATA = [
 const Appliance = ({ appliances = [], num, onAddAppliance, sarimaRate }) => {
     const prevSelectedAppliance = useRef();
 
+    const [isExpanded, setIsExpanded] = useState(true);
+
     const [selectedAppliance, setSelectedAppliance] = useState({});
     const selectedApplianceExists = Object.keys(selectedAppliance).length > 0;
 
     const [quantity, setQuantity] = useState(1);
     const [duration, setDuration] = useState(1);
+
+    const [durationElements, setDurationElements] = useState([uuidv4()]);
 
     const [appliancesOptions, setAppliancesOptions] = useState();
     const [message, setMessage] = useState({});
@@ -166,6 +172,14 @@ const Appliance = ({ appliances = [], num, onAddAppliance, sarimaRate }) => {
         onAddAppliance(previousAppliance, currentAppliance);
     };
 
+    const quantityInputChangeHandler = e => {
+        const inputValue = +e.target.value;
+
+        setQuantity(inputValue);
+
+        setDurationElements(Array(inputValue).fill());
+    };
+
     const inputBlurHandler = (event, type) => {
         const inputValue = event.target.value;
 
@@ -184,40 +198,6 @@ const Appliance = ({ appliances = [], num, onAddAppliance, sarimaRate }) => {
         prevSelectedAppliance.current = currentAppliance;
         onAddAppliance(previousAppliance, currentAppliance);
     };
-
-    // const quantityBlurHandler = e => {
-    //     const quantityInputValue = e.target.value;
-
-    //     const { wattage } = selectedAppliance;
-    //     const applianceBill =
-    //         ((wattage * (duration * 30) * quantityInputValue) / 1000) * sarimaRate;
-
-    //     const previousAppliance = prevSelectedAppliance.current;
-
-    //     const currentAppliance = {
-    //         ...selectedAppliance,
-    //         quantity: quantityInputValue,
-    //         duration,
-    //         applianceBill,
-    //     };
-    //     prevSelectedAppliance.current = currentAppliance;
-
-    //     onAddAppliance(previousAppliance, currentAppliance);
-    // };
-
-    // const durationBlurHandler = e => {
-    //     const durationInputValue = e.target.value;
-
-    //     const { wattage } = selectedAppliance;
-    //     const applianceBill =
-    //         ((wattage * (durationInputValue * 30) * quantity) / 1000) * sarimaRate;
-    //     onAddAppliance({
-    //         ...selectedAppliance,
-    //         quantity,
-    //         duration: durationInputValue,
-    //         applianceBill,
-    //     });
-    // };
 
     const applianceChoices = (
         <ul className="lvl1">
@@ -322,32 +302,56 @@ const Appliance = ({ appliances = [], num, onAddAppliance, sarimaRate }) => {
 
             {selectedApplianceExists && (
                 <div className="extra-inputs">
-                    <div className="form-control">
-                        <label htmlFor="quantity">Quantity: </label>
-                        <input
-                            type="number"
-                            id="quantity"
-                            min={0}
-                            max={25}
-                            value={quantity}
-                            onChange={e => setQuantity(e.target.value)}
-                            onBlur={e => inputBlurHandler(e, "quantity")}
-                            required
-                        />
+                    <div className={`top  ${!isExpanded ? "hide" : ""}`}>
+                        <div className="form-control">
+                            <label htmlFor="quantity">Quantity: </label>
+                            <input
+                                type="number"
+                                id="quantity"
+                                min={1}
+                                max={25}
+                                value={quantity}
+                                onChange={quantityInputChangeHandler}
+                                onBlur={e => inputBlurHandler(e, "quantity")}
+                                required
+                            />
+                        </div>
+
+                        <div className="durations-container">
+                            {durationElements.map((_, index) => (
+                                <div key={index} className="form-control">
+                                    <label htmlFor="duration" className="duration">
+                                        <small className="duration__count-num">({index + 1})</small>{" "}
+                                        Duration <em>(hr)</em>:{" "}
+                                    </label>
+                                    <input
+                                        type="number"
+                                        id="duration"
+                                        min={1}
+                                        max={25}
+                                        value={duration}
+                                        onChange={e => setDuration(e.target.value)}
+                                        onBlur={e => inputBlurHandler(e, "duration")}
+                                        required
+                                    />
+                                </div>
+                            ))}
+                        </div>
                     </div>
 
-                    <div className="form-control">
-                        <label htmlFor="duration">Duration(hr): </label>
-                        <input
-                            type="number"
-                            id="duration"
-                            min={0}
-                            max={25}
-                            value={duration}
-                            onChange={e => setDuration(e.target.value)}
-                            onBlur={e => inputBlurHandler(e, "duration")}
-                            required
-                        />
+                    <div
+                        className="trigger-expand"
+                        onClick={() => setIsExpanded(prevState => !prevState)}
+                    >
+                        {isExpanded ? (
+                            <span>
+                                Collapse <BsChevronUp />
+                            </span>
+                        ) : (
+                            <span>
+                                Expand <BsChevronDown />
+                            </span>
+                        )}
                     </div>
                 </div>
             )}
