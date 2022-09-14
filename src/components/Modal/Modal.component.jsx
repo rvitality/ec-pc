@@ -4,7 +4,8 @@ import { useApplianceContext } from "../../context/ApplianceContext";
 import "./Modal.styles.scss";
 
 const Modal = () => {
-    const { totalBill, selectedAppliances, sarimaRate } = useApplianceContext();
+    console.log("MODAL");
+    const { totalBill, appliances, sarimaRate } = useApplianceContext();
 
     return (
         <div className="modal">
@@ -29,7 +30,7 @@ const Modal = () => {
             <div className="breakdown">
                 <h3>Appliances: </h3>
                 <ul className="lvl1">
-                    {selectedAppliances.map(item => (
+                    {appliances.map(item => (
                         <li key={item.applianceID}>
                             <p className="appliance-name">{item.applianceName}</p>
                             <div className="info">

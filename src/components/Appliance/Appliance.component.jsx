@@ -136,7 +136,11 @@ const Appliance = ({ appliances = [], num, onAddAppliance, sarimaRate }) => {
     const [message, setMessage] = useState({});
     const showMessage = Object.keys(message).length > 0;
 
+    // console.log("selectedAppliance: ", selectedAppliance);
+
     const selectApplianceHandler = appliance => {
+        // console.log("appliance: ", appliance);
+
         const existingAppliance = appliances.find(
             item => item.applianceID === appliance.applianceID
         );
@@ -251,6 +255,8 @@ const Appliance = ({ appliances = [], num, onAddAppliance, sarimaRate }) => {
     );
 
     useEffect(() => {
+        if (Object.keys(message).length === 0) return;
+
         const timeout = setTimeout(() => {
             setMessage({});
         }, 2000);
@@ -258,7 +264,7 @@ const Appliance = ({ appliances = [], num, onAddAppliance, sarimaRate }) => {
         return () => {
             clearTimeout(timeout);
         };
-    }, [message, showMessage]);
+    }, [message]);
 
     return (
         <div className="appliance">
