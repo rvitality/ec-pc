@@ -131,8 +131,8 @@ const Appliance = ({ appliances = [], num, onAddAppliance, sarimaRate }) => {
     const [selectedAppliance, setSelectedAppliance] = useState({});
     const selectedApplianceExists = Object.keys(selectedAppliance).length > 0;
 
-    const [quantity, setQuantity] = useState("");
-    const [duration, setDuration] = useState("");
+    const [quantity, setQuantity] = useState(1);
+    const [duration, setDuration] = useState(1);
 
     const [appliancesOptions, setAppliancesOptions] = useState();
     const [message, setMessage] = useState({});
@@ -149,6 +149,21 @@ const Appliance = ({ appliances = [], num, onAddAppliance, sarimaRate }) => {
         }
 
         setSelectedAppliance(appliance);
+
+        const { wattage } = appliance;
+        const applianceBill = ((wattage * (duration * 30) * quantity) / 1000) * sarimaRate;
+
+        const previousAppliance = prevSelectedAppliance.current;
+
+        const currentAppliance = {
+            ...appliance,
+            quantity,
+            duration,
+            applianceBill,
+        };
+
+        prevSelectedAppliance.current = currentAppliance;
+        onAddAppliance(previousAppliance, currentAppliance);
     };
 
     const inputBlurHandler = (event, type) => {
@@ -165,8 +180,8 @@ const Appliance = ({ appliances = [], num, onAddAppliance, sarimaRate }) => {
             [type]: +inputValue,
             applianceBill,
         };
-        prevSelectedAppliance.current = currentAppliance;
 
+        prevSelectedAppliance.current = currentAppliance;
         onAddAppliance(previousAppliance, currentAppliance);
     };
 
