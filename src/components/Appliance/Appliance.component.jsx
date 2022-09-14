@@ -129,55 +129,52 @@ const Appliance = ({ appliances = [], num, onAddAppliance, sarimaRate }) => {
     const [selectedAppliance, setSelectedAppliance] = useState({});
     const selectedApplianceExists = Object.keys(selectedAppliance).length > 0;
 
-    const [actionType, setActionType] = useState("add");
+    const [quantity, setQuantity] = useState("");
+    const [duration, setDuration] = useState("");
 
     const [appliancesOptions, setAppliancesOptions] = useState();
     const [message, setMessage] = useState({});
-
-    const quantityRef = useRef();
-    const durationRef = useRef();
-
-    const existingAppliance = appliances.find(
-        item => item.applianceID === selectedAppliance.applianceID
-    );
+    const showMessage = Object.keys(message).length > 0;
 
     const selectApplianceHandler = appliance => {
-        setSelectedAppliance(appliance);
+        const existingAppliance = appliances.find(
+            item => item.applianceID === appliance.applianceID
+        );
 
-        // if user selects new appliance
-        setActionType("add");
-
-        if (quantityRef.current && durationRef.current) {
-            quantityRef.current.value = "";
-            durationRef.current.value = "";
-        }
-    };
-
-    const submitHandler = e => {
-        e.preventDefault();
-
-        const quantity = +quantityRef.current.value || 1;
-        const hours = +durationRef.current.value || 1;
-
-        if (existingAppliance && actionType === "add") {
-            setMessage({ status: "error", msg: "Appliance already added." });
+        if (existingAppliance) {
+            setMessage({ status: "error", msg: "Appliance already exists." });
             return;
         }
 
-        if (quantity && hours) {
-            const { wattage } = selectedAppliance;
+        setSelectedAppliance(appliance);
+    };
 
-            const applianceBill = ((wattage * (hours * 30) * quantity) / 1000) * sarimaRate;
+    const quantityBlurHandler = e => {
+        const quantityInputValue = e.target.value;
 
-            if (actionType === "add") {
-                setMessage({ status: "success", msg: "Appliance added successfully." });
-                setActionType("update");
-            } else {
-                setMessage({ status: "success", msg: "Appliance updated successfully." });
-            }
+        const { wattage } = selectedAppliance;
+        const applianceBill =
+            ((wattage * (duration * 30) * quantityInputValue) / 1000) * sarimaRate;
+        onAddAppliance({
+            ...selectedAppliance,
+            quantity: quantityInputValue,
+            duration,
+            applianceBill,
+        });
+    };
 
-            onAddAppliance({ ...selectedAppliance, quantity, hours, applianceBill });
-        }
+    const durationBlurHandler = e => {
+        const durationInputValue = e.target.value;
+
+        const { wattage } = selectedAppliance;
+        const applianceBill =
+            ((wattage * (durationInputValue * 30) * quantity) / 1000) * sarimaRate;
+        onAddAppliance({
+            ...selectedAppliance,
+            quantity,
+            duration: durationInputValue,
+            applianceBill,
+        });
     };
 
     const applianceChoices = (
@@ -254,23 +251,22 @@ const Appliance = ({ appliances = [], num, onAddAppliance, sarimaRate }) => {
     );
 
     useEffect(() => {
-        if (Object.keys(message).length === 0 || message.status === "error") return;
-
         const timeout = setTimeout(() => {
             setMessage({});
-        }, 1500);
+        }, 2000);
 
         return () => {
             clearTimeout(timeout);
         };
-    }, [message]);
+    }, [message, showMessage]);
 
     return (
         <div className="appliance">
             <div className="appliance__selection">
                 <button
+                    type="button"
                     className="calcu__btn appliance__btn"
-                    onClick={() => setAppliancesOptions(applianceChoices)}
+                    onClick={e => setAppliancesOptions(applianceChoices)}
                 >
                     {selectedApplianceExists
                         ? selectedAppliance.applianceName
@@ -281,38 +277,38 @@ const Appliance = ({ appliances = [], num, onAddAppliance, sarimaRate }) => {
             </div>
 
             {selectedApplianceExists && (
-                <form onSubmit={submitHandler}>
-                    <div className="inputs">
-                        <div className="form-control">
-                            <label htmlFor="quantity">Quantity: </label>
-                            <input
-                                ref={quantityRef}
-                                type="number"
-                                id="quantity"
-                                min={0}
-                                max={25}
-                                required
-                            />
-                        </div>
-
-                        <div className="form-control">
-                            <label htmlFor="duration">Duration(hr): </label>
-                            <input
-                                ref={durationRef}
-                                type="number"
-                                id="duration"
-                                min={0}
-                                max={25}
-                                required
-                            />
-                        </div>
+                <div className="extra-inputs">
+                    <div className="form-control">
+                        <label htmlFor="quantity">Quantity: </label>
+                        <input
+                            type="number"
+                            id="quantity"
+                            min={0}
+                            max={25}
+                            value={quantity}
+                            onChange={e => setQuantity(e.target.value)}
+                            onBlur={quantityBlurHandler}
+                            required
+                        />
                     </div>
 
-                    <button type="submit">{actionType}</button>
-                </form>
+                    <div className="form-control">
+                        <label htmlFor="duration">Duration(hr): </label>
+                        <input
+                            type="number"
+                            id="duration"
+                            min={0}
+                            max={25}
+                            value={duration}
+                            onChange={e => setDuration(e.target.value)}
+                            onBlur={durationBlurHandler}
+                            required
+                        />
+                    </div>
+                </div>
             )}
 
-            {Object.keys(message).length > 0 && (
+            {showMessage && (
                 <p
                     style={{
                         color: `${message.status === "success" ? "#00C24E" : "red"}`,

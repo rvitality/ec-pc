@@ -7,81 +7,62 @@ import "./Calculator.styles.scss";
 import { useApplianceContext } from "../../context/ApplianceContext";
 
 const Calculator = () => {
-    const { setTotalBill, selectedAppliances, setSelectedAppliances, sarimaRate } =
-        useApplianceContext();
+    const { addAppliance, selectedAppliances, sarimaRate } = useApplianceContext();
 
     const [applianceHolders, setApplianceHolders] = useState(Array(3).fill());
 
-    const addApplianceHandler = appliance => {
-        console.log(appliance);
-
-        const exisitingAppliance = selectedAppliances.find(
-            item => item.applianceID === appliance.applianceID
-        );
-
-        // add
-        if (!exisitingAppliance) {
-            setSelectedAppliances(prevState => [...prevState, appliance]);
-        } else {
-            // update
-            const updatedAppliances = selectedAppliances.map(item => {
-                if (item.applianceID === exisitingAppliance.applianceID) {
-                    return appliance;
-                }
-
-                return item;
-            });
-            setSelectedAppliances(updatedAppliances);
-        }
-    };
-
     const newApplianceHolderHandler = () => {
-        setApplianceHolders(prevState => [...prevState, <Appliance num={prevState.length} />]);
+        setApplianceHolders(prevState => [
+            ...prevState,
+            <Appliance
+                key={prevState.length - 1}
+                num={prevState.length}
+                appliances={selectedAppliances}
+                onAddAppliance={addAppliance}
+                sarimaRate={sarimaRate}
+            />,
+        ]);
     };
 
-    const submitDataHandler = () => {
-        const total = selectedAppliances.reduce(
-            (sum, appliance) => sum + appliance.applianceBill,
-            0
-        );
-
-        setTotalBill(total);
-        console.log(total);
-        console.log(selectedAppliances);
+    const submitDataHandler = e => {
+        e.preventDefault();
+        console.log("SUBMITTED");
     };
 
     return (
         <aside className="calcu">
             <h2>Calculator</h2>
 
-            {applianceHolders.map((_, index) => (
-                <Appliance
-                    key={index}
-                    num={index + 1}
-                    appliances={selectedAppliances}
-                    onAddAppliance={addApplianceHandler}
-                    sarimaRate={sarimaRate}
-                />
-            ))}
+            <form onSubmit={submitDataHandler}>
+                {applianceHolders.map((_, index) => (
+                    <Appliance
+                        key={index}
+                        num={index + 1}
+                        appliances={selectedAppliances}
+                        onAddAppliance={addAppliance}
+                        sarimaRate={sarimaRate}
+                    />
+                ))}
 
-            <button
-                className="calcu__btn add-btn"
-                type="button"
-                onClick={newApplianceHolderHandler}
-            >
-                <IoMdAdd />
-            </button>
-
-            <div className="calcu__bottom">
-                <p className="formula">
-                    Estimated kWH of an appliance (((wattage * (hours * 30 days) * quantity) / 1000)
-                    * SARIMA_RATE)
-                </p>
-
-                <button className="calcu__btn submit-btn" onClick={submitDataHandler} type="button">
-                    Submit
+                <button
+                    className="calcu__btn add-btn"
+                    type="button"
+                    onClick={newApplianceHolderHandler}
+                >
+                    <IoMdAdd />
                 </button>
-            </div>
+
+                <div className="calcu__bottom">
+                    <p className="formula">
+                        Estimated kWH of an appliance (((wattage * (hours * 30 days) * quantity) /
+                        1000) * SARIMA_RATE)
+                    </p>
+
+                    <button className="calcu__btn submit-btn" type="submit">
+                        Submit
+                    </button>
+                </div>
+            </form>
         </aside>
     );
 };
