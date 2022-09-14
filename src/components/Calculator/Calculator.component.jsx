@@ -37,7 +37,7 @@ const reducer = (state, action) => {
         // UPDATE
         const mappedItems = state.selectedAppliances.map(currentItem => {
             if (currentItem.applianceID === existingItem.applianceID) {
-                return payload.item;
+                return { ...currentItem, ...payload.item };
             }
 
             return currentItem;
@@ -46,6 +46,22 @@ const reducer = (state, action) => {
         const totalBill = mappedItems.reduce((sum, item) => sum + item.applianceBill, 0);
         return { ...state, totalBill, selectedAppliances: mappedItems };
     }
+
+    if (type === "REPLACE") {
+        const { previousAppliance, currentAppliance } = payload;
+        // console.log(previousAppliance);
+        // console.log(currentAppliance);
+
+        const newAppliances = state.selectedAppliances.map(item => {
+            if (item.applianceID === previousAppliance.applianceID) {
+                return currentAppliance;
+            }
+
+            return item;
+        });
+
+        return { ...state, selectedAppliances: newAppliances };
+    }
 };
 
 const Calculator = () => {
@@ -53,8 +69,20 @@ const Calculator = () => {
     const [state, dispatch] = useReducer(reducer, initialState);
     const [applianceHolders, setApplianceHolders] = useState(Array(3).fill());
 
-    const addAppliance = item => {
-        dispatch({ type: "ADD/UPDATE", payload: { item } });
+    console.log(state.selectedAppliances);
+
+    const addAppliance = (previousAppliance = {}, currentAppliance = {}) => {
+        const { applianceID: prevApplianceID } = previousAppliance;
+        const { applianceID: currentApplianceID } = currentAppliance;
+
+        // replace what is in the appliances array if the user the appliance with a new one
+        if (prevApplianceID !== undefined && prevApplianceID !== currentApplianceID) {
+            console.log("REPLACE");
+            dispatch({ type: "REPLACE", payload: { previousAppliance, currentAppliance } });
+        } else {
+            // update here means same appliance but different quantity or duration
+            dispatch({ type: "ADD/UPDATE", payload: { item: currentAppliance } });
+        }
     };
 
     const newApplianceHolderHandler = () => {

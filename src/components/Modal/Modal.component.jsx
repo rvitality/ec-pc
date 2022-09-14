@@ -4,7 +4,6 @@ import { useApplianceContext } from "../../context/ApplianceContext";
 import "./Modal.styles.scss";
 
 const Modal = () => {
-    console.log("MODAL");
     const { totalBill, appliances, sarimaRate } = useApplianceContext();
 
     return (

@@ -126,6 +126,8 @@ const DUMMY_DATA = [
 ];
 
 const Appliance = ({ appliances = [], num, onAddAppliance, sarimaRate }) => {
+    const prevSelectedAppliance = useRef();
+
     const [selectedAppliance, setSelectedAppliance] = useState({});
     const selectedApplianceExists = Object.keys(selectedAppliance).length > 0;
 
@@ -136,11 +138,7 @@ const Appliance = ({ appliances = [], num, onAddAppliance, sarimaRate }) => {
     const [message, setMessage] = useState({});
     const showMessage = Object.keys(message).length > 0;
 
-    // console.log("selectedAppliance: ", selectedAppliance);
-
     const selectApplianceHandler = appliance => {
-        // console.log("appliance: ", appliance);
-
         const existingAppliance = appliances.find(
             item => item.applianceID === appliance.applianceID
         );
@@ -153,33 +151,58 @@ const Appliance = ({ appliances = [], num, onAddAppliance, sarimaRate }) => {
         setSelectedAppliance(appliance);
     };
 
-    const quantityBlurHandler = e => {
-        const quantityInputValue = e.target.value;
+    const inputBlurHandler = (event, type) => {
+        const inputValue = event.target.value;
 
         const { wattage } = selectedAppliance;
-        const applianceBill =
-            ((wattage * (duration * 30) * quantityInputValue) / 1000) * sarimaRate;
-        onAddAppliance({
+
+        const applianceBill = ((wattage * (duration * 30) * quantity) / 1000) * sarimaRate;
+
+        const previousAppliance = prevSelectedAppliance.current;
+
+        const currentAppliance = {
             ...selectedAppliance,
-            quantity: quantityInputValue,
-            duration,
+            [type]: +inputValue,
             applianceBill,
-        });
+        };
+        prevSelectedAppliance.current = currentAppliance;
+
+        onAddAppliance(previousAppliance, currentAppliance);
     };
 
-    const durationBlurHandler = e => {
-        const durationInputValue = e.target.value;
+    // const quantityBlurHandler = e => {
+    //     const quantityInputValue = e.target.value;
 
-        const { wattage } = selectedAppliance;
-        const applianceBill =
-            ((wattage * (durationInputValue * 30) * quantity) / 1000) * sarimaRate;
-        onAddAppliance({
-            ...selectedAppliance,
-            quantity,
-            duration: durationInputValue,
-            applianceBill,
-        });
-    };
+    //     const { wattage } = selectedAppliance;
+    //     const applianceBill =
+    //         ((wattage * (duration * 30) * quantityInputValue) / 1000) * sarimaRate;
+
+    //     const previousAppliance = prevSelectedAppliance.current;
+
+    //     const currentAppliance = {
+    //         ...selectedAppliance,
+    //         quantity: quantityInputValue,
+    //         duration,
+    //         applianceBill,
+    //     };
+    //     prevSelectedAppliance.current = currentAppliance;
+
+    //     onAddAppliance(previousAppliance, currentAppliance);
+    // };
+
+    // const durationBlurHandler = e => {
+    //     const durationInputValue = e.target.value;
+
+    //     const { wattage } = selectedAppliance;
+    //     const applianceBill =
+    //         ((wattage * (durationInputValue * 30) * quantity) / 1000) * sarimaRate;
+    //     onAddAppliance({
+    //         ...selectedAppliance,
+    //         quantity,
+    //         duration: durationInputValue,
+    //         applianceBill,
+    //     });
+    // };
 
     const applianceChoices = (
         <ul className="lvl1">
@@ -293,7 +316,7 @@ const Appliance = ({ appliances = [], num, onAddAppliance, sarimaRate }) => {
                             max={25}
                             value={quantity}
                             onChange={e => setQuantity(e.target.value)}
-                            onBlur={quantityBlurHandler}
+                            onBlur={e => inputBlurHandler(e, "quantity")}
                             required
                         />
                     </div>
@@ -307,7 +330,7 @@ const Appliance = ({ appliances = [], num, onAddAppliance, sarimaRate }) => {
                             max={25}
                             value={duration}
                             onChange={e => setDuration(e.target.value)}
-                            onBlur={durationBlurHandler}
+                            onBlur={e => inputBlurHandler(e, "duration")}
                             required
                         />
                     </div>
