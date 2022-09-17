@@ -65,11 +65,11 @@ const reducer = (state, action) => {
 };
 
 const Calculator = () => {
+    console.log("CALCU");
+
     const { setAppliances, sarimaRate } = useApplianceContext();
     const [state, dispatch] = useReducer(reducer, initialState);
     const [applianceHolders, setApplianceHolders] = useState(Array(3).fill());
-
-    console.log(state.selectedAppliances);
 
     const addAppliance = (previousAppliance = {}, currentAppliance = {}) => {
         const { applianceID: prevApplianceID } = previousAppliance;
@@ -77,7 +77,6 @@ const Calculator = () => {
 
         // replace what is in the appliances array if the user the appliance with a new one
         if (prevApplianceID !== undefined && prevApplianceID !== currentApplianceID) {
-            console.log("REPLACE");
             dispatch({ type: "REPLACE", payload: { previousAppliance, currentAppliance } });
         } else {
             // update here means same appliance but different quantity or duration

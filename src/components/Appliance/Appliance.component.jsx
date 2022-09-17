@@ -8,6 +8,7 @@ import { BsChevronRight } from "react-icons/bs";
 import { AiFillCaretDown } from "react-icons/ai";
 
 import "./Appliance.styles.scss";
+import DurationInput from "./DurationInput/DurationInput.component";
 
 const DUMMY_DATA = [
     {
@@ -136,9 +137,11 @@ const Appliance = ({ appliances = [], num, onAddAppliance, sarimaRate }) => {
     const selectedApplianceExists = Object.keys(selectedAppliance).length > 0;
 
     const [quantity, setQuantity] = useState(1);
-    const [duration, setDuration] = useState(1);
+    const durationElements = Array(quantity).fill();
 
-    const [durationElements, setDurationElements] = useState([uuidv4()]);
+    const [inputDurations, setInputDurations] = useState([]);
+    console.log(inputDurations);
+    const totalDuration = inputDurations.reduce((sum, num) => sum + num, 0);
 
     const [appliancesOptions, setAppliancesOptions] = useState();
     const [message, setMessage] = useState({});
@@ -157,14 +160,14 @@ const Appliance = ({ appliances = [], num, onAddAppliance, sarimaRate }) => {
         setSelectedAppliance(appliance);
 
         const { wattage } = appliance;
-        const applianceBill = ((wattage * (duration * 30) * quantity) / 1000) * sarimaRate;
+        const applianceBill = ((wattage * (totalDuration * 30) * quantity) / 1000) * sarimaRate;
 
         const previousAppliance = prevSelectedAppliance.current;
 
         const currentAppliance = {
             ...appliance,
             quantity,
-            duration,
+            duration: totalDuration === 0 ? 1 : totalDuration,
             applianceBill,
         };
 
@@ -177,21 +180,58 @@ const Appliance = ({ appliances = [], num, onAddAppliance, sarimaRate }) => {
 
         setQuantity(inputValue);
 
-        setDurationElements(Array(inputValue).fill());
+        const { wattage } = selectedAppliance;
+
+        const applianceBill = ((wattage * (totalDuration * 30) * inputValue) / 1000) * sarimaRate;
+
+        const previousAppliance = prevSelectedAppliance.current;
+
+        if (!inputDurations.find(num => num > 1)) {
+            setInputDurations(Array(inputValue).fill(1));
+        } else {
+            setInputDurations(prevState => prevState.slice(0, inputValue));
+        }
+
+        const currentAppliance = {
+            ...selectedAppliance,
+            quantity: inputValue,
+            duration: totalDuration === 0 ? inputValue : totalDuration,
+            applianceBill,
+        };
+
+        prevSelectedAppliance.current = currentAppliance;
+        onAddAppliance(previousAppliance, currentAppliance);
     };
 
-    const inputBlurHandler = (event, type) => {
-        const inputValue = event.target.value;
+    const durationChangeInputHandler = (num, durationValue) => {
+        console.log("durationValue: ", durationValue);
+
+        setInputDurations(prevState => {
+            prevState[num] = durationValue;
+            return prevState;
+        });
+
+        // ! these codes are necessary because we need the updated `totalDurations` based on the `durationValue`
+        // ! if we rely on the `totalDurations` above, we will get the old value because `setInputDurations` is called inside this function
+        // ! and will rerender this component with the updated `totalDurations`
+        // ! but before that happens, the setting of the updated duration is already made
+        // ! code -> duration: newTotalDurations,
+        // ! and `onAddAppliance` is already called before we even receive the updated `totalDurations`
+
+        // ! thus, we need to compute the new update `totalDurations` below ourselves
+        const inputDurationsCopy = [...inputDurations];
+        inputDurationsCopy[num] = durationValue;
+        const newTotalDurations = inputDurationsCopy.reduce((sum, duration) => sum + duration, 0);
 
         const { wattage } = selectedAppliance;
 
-        const applianceBill = ((wattage * (duration * 30) * quantity) / 1000) * sarimaRate;
+        const applianceBill = ((wattage * (totalDuration * 30) * quantity) / 1000) * sarimaRate;
 
         const previousAppliance = prevSelectedAppliance.current;
 
         const currentAppliance = {
             ...selectedAppliance,
-            [type]: +inputValue,
+            duration: newTotalDurations,
             applianceBill,
         };
 
@@ -312,29 +352,17 @@ const Appliance = ({ appliances = [], num, onAddAppliance, sarimaRate }) => {
                                 max={25}
                                 value={quantity}
                                 onChange={quantityInputChangeHandler}
-                                onBlur={e => inputBlurHandler(e, "quantity")}
                                 required
                             />
                         </div>
 
                         <div className="durations-container">
                             {durationElements.map((_, index) => (
-                                <div key={index} className="form-control">
-                                    <label htmlFor="duration" className="duration">
-                                        <small className="duration__count-num">({index + 1})</small>{" "}
-                                        Duration <em>(hr)</em>:{" "}
-                                    </label>
-                                    <input
-                                        type="number"
-                                        id="duration"
-                                        min={1}
-                                        max={25}
-                                        value={duration}
-                                        onChange={e => setDuration(e.target.value)}
-                                        onBlur={e => inputBlurHandler(e, "duration")}
-                                        required
-                                    />
-                                </div>
+                                <DurationInput
+                                    key={index}
+                                    num={index}
+                                    onChangeInputHander={durationChangeInputHandler}
+                                />
                             ))}
                         </div>
                     </div>

@@ -35,6 +35,9 @@ const Modal = () => {
                             <div className="info">
                                 <ul className="lvl2">
                                     <li>
+                                        Wattage: <span className="value">{item.wattage}</span>
+                                    </li>
+                                    <li>
                                         Quantity: <span className="value">{item.quantity}</span>
                                     </li>
                                     <li>
