@@ -137,15 +137,19 @@ const Appliance = ({ appliances = [], num, onAddAppliance, sarimaRate }) => {
     const selectedApplianceExists = Object.keys(selectedAppliance).length > 0;
 
     const [quantity, setQuantity] = useState(1);
-    const durationElements = Array(quantity).fill();
+    const [durationElements, setDurationElements] = useState(Array(quantity).fill());
+    console.log("durationElements: ", durationElements);
 
     const [inputDurations, setInputDurations] = useState([]);
-    console.log(inputDurations);
+    console.log("inputDurations:", inputDurations);
     const totalDuration = inputDurations.reduce((sum, num) => sum + num, 0);
+    console.log("totalDuration: ", totalDuration);
 
     const [appliancesOptions, setAppliancesOptions] = useState();
     const [message, setMessage] = useState({});
     const showMessage = Object.keys(message).length > 0;
+
+    const [applyToAllDuration, setApplyToAllDuration] = useState(false);
 
     const selectApplianceHandler = appliance => {
         const existingAppliance = appliances.find(
@@ -186,11 +190,16 @@ const Appliance = ({ appliances = [], num, onAddAppliance, sarimaRate }) => {
 
         const previousAppliance = prevSelectedAppliance.current;
 
+        // ! if the durations hasn't been touched or left their values with 1
         if (!inputDurations.find(num => num > 1)) {
             setInputDurations(Array(inputValue).fill(1));
         } else {
+            // ! if changes are made in the duration inputs
+            // ! keep only the range based on the `quantity` input value
             setInputDurations(prevState => prevState.slice(0, inputValue));
         }
+
+        setDurationElements(Array(inputValue).fill());
 
         const currentAppliance = {
             ...selectedAppliance,
@@ -204,8 +213,6 @@ const Appliance = ({ appliances = [], num, onAddAppliance, sarimaRate }) => {
     };
 
     const durationChangeInputHandler = (num, durationValue) => {
-        console.log("durationValue: ", durationValue);
-
         setInputDurations(prevState => {
             prevState[num] = durationValue;
             return prevState;
@@ -237,6 +244,20 @@ const Appliance = ({ appliances = [], num, onAddAppliance, sarimaRate }) => {
 
         prevSelectedAppliance.current = currentAppliance;
         onAddAppliance(previousAppliance, currentAppliance);
+    };
+
+    const applyToAllDurationHandler = e => {
+        setApplyToAllDuration(e.target.checked);
+
+        if (e.target.checked) {
+            setInputDurations(prevState => prevState.slice(0, 1));
+            setDurationElements(Array(1).fill());
+        } else {
+            setInputDurations(prevState => [prevState[0], ...Array(quantity - 1).fill(1)]);
+            setDurationElements(Array(quantity).fill());
+        }
+
+        // console.log(applyToAllDuration);
     };
 
     const applianceChoices = (
@@ -343,7 +364,7 @@ const Appliance = ({ appliances = [], num, onAddAppliance, sarimaRate }) => {
             {selectedApplianceExists && (
                 <div className="extra-inputs">
                     <div className={`top  ${!isExpanded ? "hide" : ""}`}>
-                        <div className="form-control">
+                        <div className="form-control quantity">
                             <label htmlFor="quantity">Quantity: </label>
                             <input
                                 type="number"
@@ -357,13 +378,36 @@ const Appliance = ({ appliances = [], num, onAddAppliance, sarimaRate }) => {
                         </div>
 
                         <div className="durations-container">
-                            {durationElements.map((_, index) => (
-                                <DurationInput
-                                    key={index}
-                                    num={index}
-                                    onChangeInputHander={durationChangeInputHandler}
-                                />
-                            ))}
+                            {durationElements.map((_, index) => {
+                                if (index === 0) {
+                                    return (
+                                        <React.Fragment key={index}>
+                                            <DurationInput
+                                                key={index}
+                                                num={index}
+                                                onChangeInputHander={durationChangeInputHandler}
+                                            />
+                                            <div className="apply-to-all">
+                                                <input
+                                                    onChange={applyToAllDurationHandler}
+                                                    type="checkbox"
+                                                    name=""
+                                                    id="apply-to-all"
+                                                />
+                                                <label htmlFor="apply-to-all">Apply to all</label>
+                                            </div>
+                                        </React.Fragment>
+                                    );
+                                }
+
+                                return (
+                                    <DurationInput
+                                        key={index}
+                                        num={index}
+                                        onChangeInputHander={durationChangeInputHandler}
+                                    />
+                                );
+                            })}
                         </div>
                     </div>
 

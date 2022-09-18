@@ -101,22 +101,21 @@
             }
         }
 
-        .inputs {
-            display: flex;
-            gap: 2rem;
-        }
-
         .form-control {
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 0.25rem;
+
+            &.quantity {
+                width: 40%;
+            }
         }
 
         label {
             font-size: 1.15rem;
         }
-        input {
+        input[type="number"] {
             font-size: 1.25rem;
             width: 100%;
             padding: 0.5rem 0.85rem;
@@ -139,8 +138,23 @@
 
         .durations-container {
             display: flex;
-            flex-direction: column;
+            flex-wrap: wrap;
+            justify-content: flex-end;
             gap: 0.5rem;
+            width: 60%;
+
+            .apply-to-all {
+                display: flex;
+                align-items: center;
+                justify-content: flex-end;
+                gap: 0.85rem;
+                margin: 0.75rem 0 1rem 0;
+                color: #1d91e3;
+
+                label {
+                    font-size: 1.05rem;
+                }
+            }
 
             .duration {
                 display: flex;
