@@ -127,7 +127,16 @@ const Appliance = ({ appliances = [], num, onAddAppliance, sarimaRate }) => {
     };
 
     const quantityInputChangeHandler = e => {
-        const inputValue = +e.target.value;
+        let inputValue = +e.target.value;
+
+        if (inputValue > 20) {
+            inputValue = 20;
+        }
+
+        if (inputValue < 1) {
+            inputValue = 1;
+        }
+
         setQuantity(inputValue);
 
         let newInputDurations = [...inputDurations];
@@ -307,7 +316,7 @@ const Appliance = ({ appliances = [], num, onAddAppliance, sarimaRate }) => {
                                 type="number"
                                 id="quantity"
                                 min={1}
-                                max={25}
+                                max={20}
                                 value={quantity}
                                 onChange={quantityInputChangeHandler}
                                 required

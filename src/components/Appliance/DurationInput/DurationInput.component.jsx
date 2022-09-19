@@ -4,8 +4,15 @@ const DurationInput = ({ num, onChangeInputHander }) => {
     const [duration, setDuration] = useState(1);
 
     const changeHandler = e => {
-        const inputValue = +e.target.value;
-        // console.log("fire: ", inputValue);
+        let inputValue = +e.target.value;
+
+        if (inputValue > 24) {
+            inputValue = 24;
+        }
+
+        if (inputValue < 1) {
+            inputValue = 1;
+        }
 
         setDuration(inputValue);
         onChangeInputHander(num, inputValue);
@@ -20,7 +27,7 @@ const DurationInput = ({ num, onChangeInputHander }) => {
                 type="number"
                 id={`duration_${num + 1}`}
                 min={1}
-                max={25}
+                max={24}
                 value={duration}
                 onChange={changeHandler}
                 required

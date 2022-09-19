@@ -79,8 +79,8 @@ const Calculator = () => {
     const [applianceHolders, setApplianceHolders] = useState(Array(3).fill());
 
     const addAppliance = (previousAppliance = {}, currentAppliance = {}) => {
-        console.log("previousAppliance: ", previousAppliance);
-        console.log("currentAppliance: ", currentAppliance);
+        // console.log("previousAppliance: ", previousAppliance);
+        // console.log("currentAppliance: ", currentAppliance);
 
         const { applianceID: prevApplianceID } = previousAppliance;
         const { applianceID: currentApplianceID } = currentAppliance;
