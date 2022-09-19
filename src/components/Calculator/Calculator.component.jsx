@@ -5,6 +5,7 @@ import { IoMdAdd } from "react-icons/io";
 
 import "./Calculator.styles.scss";
 import { useApplianceContext } from "../../context/ApplianceContext";
+import { logDOM } from "@testing-library/react";
 
 const initialState = {
     totalBill: 0,
@@ -112,6 +113,7 @@ const Calculator = () => {
 
     const submitDataHandler = e => {
         e.preventDefault();
+        console.log("submit");
         setAppliances(state.selectedAppliances);
     };
 
@@ -137,6 +139,19 @@ const Calculator = () => {
                 >
                     <IoMdAdd />
                 </button>
+
+                <div className="manual-input">
+                    <p>Manual Input:</p>
+
+                    <Appliance
+                        key={15}
+                        num={15 + 1}
+                        manual={true}
+                        appliances={state.selectedAppliances}
+                        onAddAppliance={addAppliance}
+                        sarimaRate={sarimaRate}
+                    />
+                </div>
 
                 <div className="calcu__bottom">
                     <p className="formula">

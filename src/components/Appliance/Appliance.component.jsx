@@ -86,7 +86,7 @@ const getCurrentAppliance = ({ selectedAppliance, duration, quantity, sarimaRate
     };
 };
 
-const Appliance = ({ appliances = [], num, onAddAppliance, sarimaRate }) => {
+const Appliance = ({ manual = false, appliances = [], num, onAddAppliance, sarimaRate }) => {
     const [state, dispatch] = useReducer(reducer, initialState);
     const {
         inputDurations,
@@ -103,7 +103,9 @@ const Appliance = ({ appliances = [], num, onAddAppliance, sarimaRate }) => {
 
     const prevSelectedAppliance = useRef();
 
-    const [quantity, setQuantity] = useState(1);
+    // const [quantity, setQuantity] = useState(1);
+    const quantityRef = useRef();
+    const quantity = quantityRef.current?.value || 1;
 
     const [appliancesOptions, setAppliancesOptions] = useState();
 
@@ -127,6 +129,8 @@ const Appliance = ({ appliances = [], num, onAddAppliance, sarimaRate }) => {
     };
 
     const quantityInputChangeHandler = e => {
+        console.log("quantity");
+
         let inputValue = +e.target.value;
 
         if (inputValue > 20) {
@@ -136,8 +140,6 @@ const Appliance = ({ appliances = [], num, onAddAppliance, sarimaRate }) => {
         if (inputValue < 1) {
             inputValue = 1;
         }
-
-        setQuantity(inputValue);
 
         let newInputDurations = [...inputDurations];
         let newTotalDurations = 0;
@@ -291,21 +293,36 @@ const Appliance = ({ appliances = [], num, onAddAppliance, sarimaRate }) => {
         };
     }, [message]);
 
+    const optionNewAppliance = !manual ? (
+        <>
+            <button
+                type="button"
+                className="calcu__btn appliance__btn"
+                onClick={setAppliancesOptionHandler}
+            >
+                {selectedApplianceExists ? selectedAppliance.applianceName : `Appliance #${num}`}
+                <AiFillCaretDown />
+            </button>
+            {appliancesOptions && <div className="appliance__options">{appliancesOptions}</div>}
+        </>
+    ) : (
+        <div className="manual">
+            <input
+                placeholder="Appliance name"
+                type="text"
+                className="calcu__btn appliance__btn manual__input"
+                onBlur={e => console.log(e.target.value)}
+            />
+            <div className="form-control">
+                <label htmlFor="wattage">Wattage: </label>
+                <input id="wattage" type="number" min={1} />
+            </div>
+        </div>
+    );
+
     return (
         <div className="appliance">
-            <div className="appliance__selection">
-                <button
-                    type="button"
-                    className="calcu__btn appliance__btn"
-                    onClick={setAppliancesOptionHandler}
-                >
-                    {selectedApplianceExists
-                        ? selectedAppliance.applianceName
-                        : `Appliance #${num}`}
-                    <AiFillCaretDown />
-                </button>
-                {appliancesOptions && <div className="appliance__options">{appliancesOptions}</div>}
-            </div>
+            <div className="appliance__selection">{optionNewAppliance}</div>
 
             {selectedApplianceExists && (
                 <div className="extra-inputs">
@@ -315,10 +332,11 @@ const Appliance = ({ appliances = [], num, onAddAppliance, sarimaRate }) => {
                             <input
                                 type="number"
                                 id="quantity"
+                                defaultValue={1}
                                 min={1}
                                 max={20}
-                                value={quantity}
-                                onChange={quantityInputChangeHandler}
+                                ref={quantityRef}
+                                onBlur={quantityInputChangeHandler}
                                 required
                             />
                         </div>

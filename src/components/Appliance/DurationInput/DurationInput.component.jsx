@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useRef } from "react";
 
 const DurationInput = ({ num, onChangeInputHander }) => {
-    const [duration, setDuration] = useState(1);
+    const durationRef = useRef();
+    const duration = durationRef.current?.value || 1;
 
     const changeHandler = e => {
         let inputValue = +e.target.value;
@@ -14,7 +15,6 @@ const DurationInput = ({ num, onChangeInputHander }) => {
             inputValue = 1;
         }
 
-        setDuration(inputValue);
         onChangeInputHander(num, inputValue);
     };
 
@@ -28,7 +28,8 @@ const DurationInput = ({ num, onChangeInputHander }) => {
                 id={`duration_${num + 1}`}
                 min={1}
                 max={24}
-                value={duration}
+                defaultValue={1}
+                ref={durationRef}
                 onChange={changeHandler}
                 required
             />
