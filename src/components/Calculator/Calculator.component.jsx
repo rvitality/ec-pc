@@ -76,7 +76,7 @@ const reducer = (state, action) => {
 const Calculator = () => {
     const { setAppliances, sarimaRate } = useApplianceContext();
     const [state, dispatch] = useReducer(reducer, initialState);
-    const [applianceHolders, setApplianceHolders] = useState(Array(1).fill());
+    const [applianceHolders, setApplianceHolders] = useState(Array(3).fill());
 
     const addAppliance = (previousAppliance = {}, currentAppliance = {}) => {
         console.log("previousAppliance: ", previousAppliance);

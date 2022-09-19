@@ -59,11 +59,16 @@ const reducer = (state, action) => {
     }
 
     if (type === "SET_INPUT_DURATIONS") {
-        const { newInputDurations } = payload;
+        const { newInputDurations, computedTotalDuration } = payload;
 
-        const totalDuration = newInputDurations.reduce((total, num) => total + num, 0);
+        // ! this value is multiplied with `quantity`
+        let newTotalDuration = computedTotalDuration;
 
-        return { ...state, totalDuration, inputDurations: newInputDurations };
+        if (!computedTotalDuration && !state.isAppliedToAllDuration) {
+            newTotalDuration = newInputDurations.reduce((total, num) => total + num, 0);
+        }
+
+        return { ...state, totalDuration: newTotalDuration, inputDurations: newInputDurations };
     }
 
     return state;
@@ -126,37 +131,39 @@ const Appliance = ({ appliances = [], num, onAddAppliance, sarimaRate }) => {
         setQuantity(inputValue);
 
         let newInputDurations = [...inputDurations];
+        let newTotalDurations = 0;
 
-        // ! if the durations hasn't been touched
-        if (!inputDurations.find(num => num > 1)) {
-            newInputDurations = Array(inputValue).fill(1);
+        if (!isAppliedToAllDuration) {
+            dispatch({ type: "SET_DURATION_ELEMENTS", payload: { count: inputValue } });
 
+            // ! if the durations hasn't been touched
+            if (!inputDurations.find(num => num > 1)) {
+                newInputDurations = Array(inputValue).fill(1);
+            } else {
+                // ! keep only the range of `duration inputs` based on the `quantity`  value
+
+                if (inputValue > newInputDurations.length) {
+                    newInputDurations = [...newInputDurations, 1];
+                } else {
+                    newInputDurations = newInputDurations.slice(0, inputValue);
+                }
+            }
+
+            newTotalDurations = newInputDurations.reduce((total, num) => total + num, 0);
             dispatch({
                 type: "SET_INPUT_DURATIONS",
                 payload: { newInputDurations },
             });
         } else {
-            // ! keep only the range of `duration inputs` based on the `quantity`  value
-
-            if (inputValue > newInputDurations.length) {
-                newInputDurations = [...newInputDurations, 1];
-            } else {
-                newInputDurations = newInputDurations.slice(0, inputValue);
-            }
+            newTotalDurations = newInputDurations[0] * inputValue;
 
             dispatch({
                 type: "SET_INPUT_DURATIONS",
-                payload: { newInputDurations },
+                payload: { newInputDurations, computedTotalDuration: newTotalDurations },
             });
         }
 
-        if (!isAppliedToAllDuration) {
-            dispatch({ type: "SET_DURATION_ELEMENTS", payload: { count: inputValue } });
-        }
-
         const previousAppliance = prevSelectedAppliance.current;
-
-        const newTotalDurations = newInputDurations.reduce((total, num) => total + num, 0);
 
         const currentAppliance = getCurrentAppliance({
             selectedAppliance,
@@ -174,23 +181,21 @@ const Appliance = ({ appliances = [], num, onAddAppliance, sarimaRate }) => {
         let newInputDurations = [...inputDurations];
         newInputDurations[num] = durationValue;
 
-        dispatch({
-            type: "SET_INPUT_DURATIONS",
-            payload: { newInputDurations },
-        });
+        let newTotalDurations = newInputDurations.reduce((sum, duration) => sum + duration, 0);
 
-        // ! these codes are necessary because we need the updated `totalDurations` based on the `durationValue`
-        // ! if we rely on the `totalDurations` above, we will get the old value because `setInputDurations` is called inside this function
-        // ! and will rerender this component with the updated `totalDurations`
-        // ! but before that happens, the setting of the updated duration is already made
+        if (!isAppliedToAllDuration) {
+            dispatch({
+                type: "SET_INPUT_DURATIONS",
+                payload: { newInputDurations },
+            });
+        } else {
+            newTotalDurations = newInputDurations[0] * quantity;
 
-        // ! code -> duration: newTotalDurations,
-        // ! and `onAddAppliance` is already called before we even receive the updated `totalDurations`
-
-        // ! thus, we need to compute the new update `totalDurations` below ourselves
-        const inputDurationsCopy = [...inputDurations];
-        inputDurationsCopy[num] = durationValue;
-        const newTotalDurations = inputDurationsCopy.reduce((sum, duration) => sum + duration, 0);
+            dispatch({
+                type: "SET_INPUT_DURATIONS",
+                payload: { newInputDurations, computedTotalDuration: newTotalDurations },
+            });
+        }
 
         const previousAppliance = prevSelectedAppliance.current;
 
@@ -208,33 +213,46 @@ const Appliance = ({ appliances = [], num, onAddAppliance, sarimaRate }) => {
     const applyToAllDurationHandler = e => {
         dispatch({ type: "APPLY_TO_ALL_DURATION" });
 
+        let newInputDurations = [...inputDurations];
+        let newTotalDurations = 0;
+
+        // ! IF `APPLY ALL` IS APPLIED
         if (e.target.checked) {
             dispatch({ type: "SET_DURATION_ELEMENTS", payload: { count: 1 } });
+
+            // we need to assign it like this, because of the reduce function
+            newInputDurations = [newInputDurations[0]];
+
+            //  ! multiply it to `quantity`, that's the main logic of `apply all`
+            newTotalDurations = newInputDurations[0] * quantity;
+
+            dispatch({
+                type: "SET_INPUT_DURATIONS",
+                payload: { newInputDurations, computedTotalDuration: newTotalDurations },
+            });
         } else {
-            let newInputDurations = [...inputDurations];
+            dispatch({ type: "SET_DURATION_ELEMENTS", payload: { count: quantity } });
+
             newInputDurations = [newInputDurations[0], ...Array(quantity - 1).fill(1)];
+            newTotalDurations = newInputDurations.reduce((total, num) => total + num, 0);
 
             dispatch({
                 type: "SET_INPUT_DURATIONS",
                 payload: { newInputDurations },
             });
-
-            dispatch({ type: "SET_DURATION_ELEMENTS", payload: { count: quantity } });
-
-            const previousAppliance = prevSelectedAppliance.current;
-
-            const newTotalDurations = newInputDurations.reduce((total, num) => total + num, 0);
-
-            const currentAppliance = getCurrentAppliance({
-                selectedAppliance,
-                duration: newTotalDurations,
-                quantity,
-                sarimaRate,
-            });
-
-            prevSelectedAppliance.current = currentAppliance;
-            onAddAppliance(previousAppliance, currentAppliance);
         }
+
+        const previousAppliance = prevSelectedAppliance.current;
+
+        const currentAppliance = getCurrentAppliance({
+            selectedAppliance,
+            duration: newTotalDurations,
+            quantity,
+            sarimaRate,
+        });
+
+        prevSelectedAppliance.current = currentAppliance;
+        onAddAppliance(previousAppliance, currentAppliance);
     };
 
     const setAppliancesOptionHandler = () => {
@@ -311,9 +329,11 @@ const Appliance = ({ appliances = [], num, onAddAppliance, sarimaRate }) => {
                                                     onChange={applyToAllDurationHandler}
                                                     type="checkbox"
                                                     name=""
-                                                    id="apply-to-all"
+                                                    id={selectedAppliance.applianceID}
                                                 />
-                                                <label htmlFor="apply-to-all">Apply to all</label>
+                                                <label htmlFor={selectedAppliance.applianceID}>
+                                                    Apply to all
+                                                </label>
                                             </div>
                                         </React.Fragment>
                                     );
