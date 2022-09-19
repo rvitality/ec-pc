@@ -48,13 +48,22 @@ const reducer = (state, action) => {
     }
 
     if (type === "REPLACE") {
-        const { previousAppliance, currentAppliance } = payload;
-        // console.log(previousAppliance);
-        // console.log(currentAppliance);
+        const { previousAppliance, newAppliance, sarimaRate } = payload;
+
+        const { wattage, quantity, duration } = newAppliance;
+
+        const applianceBill = ((wattage * (quantity * 30) * duration) / 1000) * sarimaRate;
+
+        const newModifiedAppliance = {
+            ...newAppliance,
+            quantity,
+            duration,
+            applianceBill,
+        };
 
         const newAppliances = state.selectedAppliances.map(item => {
             if (item.applianceID === previousAppliance.applianceID) {
-                return currentAppliance;
+                return newModifiedAppliance;
             }
 
             return item;
@@ -65,19 +74,23 @@ const reducer = (state, action) => {
 };
 
 const Calculator = () => {
-    console.log("CALCU");
-
     const { setAppliances, sarimaRate } = useApplianceContext();
     const [state, dispatch] = useReducer(reducer, initialState);
-    const [applianceHolders, setApplianceHolders] = useState(Array(3).fill());
+    const [applianceHolders, setApplianceHolders] = useState(Array(1).fill());
 
     const addAppliance = (previousAppliance = {}, currentAppliance = {}) => {
+        console.log("previousAppliance: ", previousAppliance);
+        console.log("currentAppliance: ", currentAppliance);
+
         const { applianceID: prevApplianceID } = previousAppliance;
         const { applianceID: currentApplianceID } = currentAppliance;
 
         // replace what is in the appliances array if the user the appliance with a new one
-        if (prevApplianceID !== undefined && prevApplianceID !== currentApplianceID) {
-            dispatch({ type: "REPLACE", payload: { previousAppliance, currentAppliance } });
+        if (prevApplianceID && prevApplianceID !== currentApplianceID) {
+            dispatch({
+                type: "REPLACE",
+                payload: { previousAppliance, newAppliance: currentAppliance, sarimaRate },
+            });
         } else {
             // update here means same appliance but different quantity or duration
             dispatch({ type: "ADD/UPDATE", payload: { item: currentAppliance } });

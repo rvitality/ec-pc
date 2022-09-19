@@ -1,227 +1,189 @@
 import React, { useEffect, useRef, useState } from "react";
 
-import { v4 as uuidv4 } from "uuid";
-
-import { BsChevronUp } from "react-icons/bs";
-import { BsChevronDown } from "react-icons/bs";
-import { BsChevronRight } from "react-icons/bs";
 import { AiFillCaretDown } from "react-icons/ai";
 
 import "./Appliance.styles.scss";
 import DurationInput from "./DurationInput/DurationInput.component";
+import { useReducer } from "react";
+import Options from "./Options/Options.component";
 
-const DUMMY_DATA = [
-    {
-        id: uuidv4(),
-        category: "Cooling Equipment",
-        data: [
-            {
-                id: uuidv4(),
-                subCategory: "Airconditioning Unit",
-                subData: [
-                    {
-                        applianceID: uuidv4(),
-                        applianceName: "Airconditioning Unit (0.75 HP)",
-                        wattage: 727,
-                    },
-                    {
-                        applianceID: uuidv4(),
-                        applianceName: "Airconditioning Unit (1.0 HP)",
-                        wattage: 944,
-                    },
-                    {
-                        applianceID: uuidv4(),
-                        applianceName: "Airconditioning Unit (1.5 HP)",
-                        wattage: 1252,
-                    },
-                    {
-                        applianceID: uuidv4(),
-                        applianceName: "Airconditioning Unit (2.0 HP)",
-                        wattage: 1913,
-                    },
-                ],
-            },
-            {
-                id: uuidv4(),
-                subCategory: "Desk Fan",
-                subData: [
-                    {
-                        applianceID: uuidv4(),
-                        applianceName: 'Desk Fan 10"',
-                        wattage: 50,
-                    },
-                    {
-                        applianceID: uuidv4(),
-                        applianceName: 'Desk Fan 12"',
-                        wattage: 35,
-                    },
-                    {
-                        applianceID: uuidv4(),
-                        applianceName: 'Desk Fan 14"',
-                        wattage: 55,
-                    },
-                    {
-                        applianceID: uuidv4(),
-                        applianceName: 'Desk Fan 16"',
-                        wattage: 74,
-                    },
-                    {
-                        applianceID: uuidv4(),
-                        applianceName: 'Desk Fan 20"',
-                        wattage: 175,
-                    },
-                ],
-            },
-            {
-                applianceID: uuidv4(),
-                applianceName: "Fan Box Type",
-                wattage: 50,
-            },
-            {
-                applianceID: uuidv4(),
-                applianceName: "Air Cooler/Humidifier",
-                wattage: 65,
-            },
-        ],
-    },
-    {
-        id: uuidv4(),
-        category: "Entertainment Systems",
-        data: [
-            {
-                applianceID: uuidv4(),
-                applianceName: "DVD/VCD Player",
-                wattage: 300,
-            },
-            {
-                applianceID: uuidv4(),
-                applianceName: "Tape Recorder (Cassette)",
-                wattage: 50,
-            },
-            {
-                id: uuidv4(),
-                subCategory: "T.V. Set",
-                subData: [
-                    {
-                        applianceID: uuidv4(),
-                        applianceName: 'T.V. Set Color 12"',
-                        wattage: 65,
-                    },
-                    {
-                        applianceID: uuidv4(),
-                        applianceName: 'T.V. Set Color 18"',
-                        wattage: 90,
-                    },
-                    {
-                        applianceID: uuidv4(),
-                        applianceName: 'T.V. Set Color 14"',
-                        wattage: 85,
-                    },
-                    {
-                        applianceID: uuidv4(),
-                        applianceName: 'T.V. Set Color 16"',
-                        wattage: 90,
-                    },
-                ],
-            },
-        ],
-    },
-];
+const initialState = {
+    sarimaRate: 8,
+    selectedAppliance: {},
+    applyAll: false,
+    quantity: 1,
+    duration: 1,
+    totalDuration: 1,
+    isExpanded: true,
+    isAppliedToAllDuration: false,
+    durationElements: Array(1).fill(),
+    inputDurations: [],
+    message: { status: "", msg: "" },
+};
 
-const Appliance = ({ appliances = [], num, onAddAppliance, sarimaRate }) => {
-    const prevSelectedAppliance = useRef();
+const reducer = (state, action) => {
+    const { type, payload } = action;
 
-    const [isExpanded, setIsExpanded] = useState(true);
+    if (type === "SELECT_APPLIANCE") {
+        const { appliance, appliances } = payload;
 
-    const [selectedAppliance, setSelectedAppliance] = useState({});
-    const selectedApplianceExists = Object.keys(selectedAppliance).length > 0;
-
-    const [quantity, setQuantity] = useState(1);
-    const [durationElements, setDurationElements] = useState(Array(quantity).fill());
-    console.log("durationElements: ", durationElements);
-
-    const [inputDurations, setInputDurations] = useState([]);
-    console.log("inputDurations:", inputDurations);
-    const totalDuration = inputDurations.reduce((sum, num) => sum + num, 0);
-    console.log("totalDuration: ", totalDuration);
-
-    const [appliancesOptions, setAppliancesOptions] = useState();
-    const [message, setMessage] = useState({});
-    const showMessage = Object.keys(message).length > 0;
-
-    const [applyToAllDuration, setApplyToAllDuration] = useState(false);
-
-    const selectApplianceHandler = appliance => {
         const existingAppliance = appliances.find(
             item => item.applianceID === appliance.applianceID
         );
 
         if (existingAppliance) {
-            setMessage({ status: "error", msg: "Appliance already exists." });
-            return;
+            return { ...state, message: { status: "error", msg: "Appliance already exists." } };
         }
 
-        setSelectedAppliance(appliance);
+        // return {...state, appliance}
+        // setSelectedAppliance(appliance);
 
-        const { wattage } = appliance;
-        const applianceBill = ((wattage * (totalDuration * 30) * quantity) / 1000) * sarimaRate;
+        return { ...state, selectedAppliance: appliance };
+    }
 
+    if (type === "RESET_MSG") {
+        return { ...state, message: initialState.message };
+    }
+
+    if (type === "TOGGLE_EXPANDED") {
+        return { ...state, isExpanded: !state.isExpanded };
+    }
+
+    if (type === "APPLY_TO_ALL_DURATION") {
+        return { ...state, isAppliedToAllDuration: !state.isAppliedToAllDuration };
+    }
+
+    if (type === "SET_DURATION_ELEMENTS") {
+        const { count } = payload;
+        return { ...state, durationElements: Array(count).fill() };
+    }
+
+    if (type === "SET_INPUT_DURATIONS") {
+        const { newInputDurations } = payload;
+
+        const totalDuration = newInputDurations.reduce((total, num) => total + num, 0);
+
+        return { ...state, totalDuration, inputDurations: newInputDurations };
+    }
+
+    return state;
+};
+
+const getCurrentAppliance = ({ selectedAppliance, duration, quantity, sarimaRate }) => {
+    const { wattage } = selectedAppliance;
+    const applianceBill = ((wattage * (duration * 30) * quantity) / 1000) * sarimaRate;
+
+    return {
+        ...selectedAppliance,
+        quantity,
+        duration,
+        applianceBill,
+    };
+};
+
+const Appliance = ({ appliances = [], num, onAddAppliance, sarimaRate }) => {
+    const [state, dispatch] = useReducer(reducer, initialState);
+    const {
+        inputDurations,
+        totalDuration,
+        durationElements,
+        selectedAppliance,
+        message,
+        isExpanded,
+        isAppliedToAllDuration,
+    } = state;
+
+    const selectedApplianceExists = Object.keys(selectedAppliance).length > 0;
+    const showMessage = Object.keys(message).length > 0;
+
+    const prevSelectedAppliance = useRef();
+
+    const [quantity, setQuantity] = useState(1);
+
+    const [appliancesOptions, setAppliancesOptions] = useState();
+
+    const selectApplianceHandler = appliance => {
         const previousAppliance = prevSelectedAppliance.current;
 
-        const currentAppliance = {
-            ...appliance,
-            quantity,
-            duration: totalDuration === 0 ? 1 : totalDuration,
-            applianceBill,
-        };
+        const currentAppliance = getCurrentAppliance({
+            selectedAppliance: appliance,
+            duration: previousAppliance ? previousAppliance.duration : 1,
+            quantity: previousAppliance ? previousAppliance.quantity : 1,
+            sarimaRate,
+        });
 
         prevSelectedAppliance.current = currentAppliance;
         onAddAppliance(previousAppliance, currentAppliance);
+
+        dispatch({
+            type: "SELECT_APPLIANCE",
+            payload: { appliance, appliances },
+        });
     };
 
     const quantityInputChangeHandler = e => {
         const inputValue = +e.target.value;
-
         setQuantity(inputValue);
 
-        const { wattage } = selectedAppliance;
+        let newInputDurations = [...inputDurations];
 
-        const applianceBill = ((wattage * (totalDuration * 30) * inputValue) / 1000) * sarimaRate;
+        // ! if the durations hasn't been touched
+        if (!inputDurations.find(num => num > 1)) {
+            newInputDurations = Array(inputValue).fill(1);
+
+            dispatch({
+                type: "SET_INPUT_DURATIONS",
+                payload: { newInputDurations },
+            });
+        } else {
+            // ! keep only the range of `duration inputs` based on the `quantity`  value
+
+            if (inputValue > newInputDurations.length) {
+                newInputDurations = [...newInputDurations, 1];
+            } else {
+                newInputDurations = newInputDurations.slice(0, inputValue);
+            }
+
+            dispatch({
+                type: "SET_INPUT_DURATIONS",
+                payload: { newInputDurations },
+            });
+        }
+
+        if (!isAppliedToAllDuration) {
+            dispatch({ type: "SET_DURATION_ELEMENTS", payload: { count: inputValue } });
+        }
 
         const previousAppliance = prevSelectedAppliance.current;
 
-        // ! if the durations hasn't been touched or left their values with 1
-        if (!inputDurations.find(num => num > 1)) {
-            setInputDurations(Array(inputValue).fill(1));
-        } else {
-            // ! if changes are made in the duration inputs
-            // ! keep only the range based on the `quantity` input value
-            setInputDurations(prevState => prevState.slice(0, inputValue));
-        }
+        const newTotalDurations = newInputDurations.reduce((total, num) => total + num, 0);
 
-        setDurationElements(Array(inputValue).fill());
-
-        const currentAppliance = {
-            ...selectedAppliance,
+        const currentAppliance = getCurrentAppliance({
+            selectedAppliance,
+            duration: newTotalDurations,
             quantity: inputValue,
-            duration: totalDuration === 0 ? inputValue : totalDuration,
-            applianceBill,
-        };
+            sarimaRate,
+        });
 
         prevSelectedAppliance.current = currentAppliance;
+
         onAddAppliance(previousAppliance, currentAppliance);
     };
 
     const durationChangeInputHandler = (num, durationValue) => {
-        setInputDurations(prevState => {
-            prevState[num] = durationValue;
-            return prevState;
+        let newInputDurations = [...inputDurations];
+        newInputDurations[num] = durationValue;
+
+        dispatch({
+            type: "SET_INPUT_DURATIONS",
+            payload: { newInputDurations },
         });
 
         // ! these codes are necessary because we need the updated `totalDurations` based on the `durationValue`
         // ! if we rely on the `totalDurations` above, we will get the old value because `setInputDurations` is called inside this function
         // ! and will rerender this component with the updated `totalDurations`
         // ! but before that happens, the setting of the updated duration is already made
+
         // ! code -> duration: newTotalDurations,
         // ! and `onAddAppliance` is already called before we even receive the updated `totalDurations`
 
@@ -230,114 +192,71 @@ const Appliance = ({ appliances = [], num, onAddAppliance, sarimaRate }) => {
         inputDurationsCopy[num] = durationValue;
         const newTotalDurations = inputDurationsCopy.reduce((sum, duration) => sum + duration, 0);
 
-        const { wattage } = selectedAppliance;
-
-        const applianceBill = ((wattage * (totalDuration * 30) * quantity) / 1000) * sarimaRate;
-
         const previousAppliance = prevSelectedAppliance.current;
 
-        const currentAppliance = {
-            ...selectedAppliance,
+        const currentAppliance = getCurrentAppliance({
+            selectedAppliance,
             duration: newTotalDurations,
-            applianceBill,
-        };
+            quantity,
+            sarimaRate,
+        });
 
         prevSelectedAppliance.current = currentAppliance;
         onAddAppliance(previousAppliance, currentAppliance);
     };
 
     const applyToAllDurationHandler = e => {
-        setApplyToAllDuration(e.target.checked);
+        dispatch({ type: "APPLY_TO_ALL_DURATION" });
 
         if (e.target.checked) {
-            setInputDurations(prevState => prevState.slice(0, 1));
-            setDurationElements(Array(1).fill());
+            dispatch({ type: "SET_DURATION_ELEMENTS", payload: { count: 1 } });
         } else {
-            setInputDurations(prevState => [prevState[0], ...Array(quantity - 1).fill(1)]);
-            setDurationElements(Array(quantity).fill());
-        }
+            let newInputDurations = [...inputDurations];
+            newInputDurations = [newInputDurations[0], ...Array(quantity - 1).fill(1)];
 
-        // console.log(applyToAllDuration);
+            dispatch({
+                type: "SET_INPUT_DURATIONS",
+                payload: { newInputDurations },
+            });
+
+            dispatch({ type: "SET_DURATION_ELEMENTS", payload: { count: quantity } });
+
+            const previousAppliance = prevSelectedAppliance.current;
+
+            const newTotalDurations = newInputDurations.reduce((total, num) => total + num, 0);
+
+            const currentAppliance = getCurrentAppliance({
+                selectedAppliance,
+                duration: newTotalDurations,
+                quantity,
+                sarimaRate,
+            });
+
+            prevSelectedAppliance.current = currentAppliance;
+            onAddAppliance(previousAppliance, currentAppliance);
+        }
     };
 
-    const applianceChoices = (
-        <ul className="lvl1">
-            {DUMMY_DATA.map(({ id, category, data }) => {
-                return (
-                    <li key={id}>
-                        <h3>
-                            {category}
-                            <BsChevronRight />
-                        </h3>
+    const setAppliancesOptionHandler = () => {
+        const { wattage } = selectedAppliance;
 
-                        <ul className="lvl2">
-                            {data.map(itemData => {
-                                const {
-                                    id,
-                                    applianceID,
-                                    subCategory,
-                                    subData,
-                                    applianceName,
-                                    wattage,
-                                } = itemData;
+        const applianceBill = ((wattage * (totalDuration * 30) * quantity) / 1000) * sarimaRate;
 
-                                if (subData) {
-                                    return (
-                                        <li key={id}>
-                                            <h3>
-                                                {subCategory}
-                                                <BsChevronRight />
-                                            </h3>
-
-                                            <ul className="lvl3">
-                                                {subData.map(
-                                                    ({ applianceID, applianceName, wattage }) => (
-                                                        <li
-                                                            key={applianceID}
-                                                            onClick={() =>
-                                                                selectApplianceHandler({
-                                                                    applianceID,
-                                                                    applianceName,
-                                                                    wattage,
-                                                                })
-                                                            }
-                                                        >
-                                                            <h3>{applianceName}</h3>
-                                                        </li>
-                                                    )
-                                                )}
-                                            </ul>
-                                        </li>
-                                    );
-                                }
-
-                                return (
-                                    <li
-                                        key={applianceID}
-                                        onClick={() =>
-                                            selectApplianceHandler({
-                                                applianceID,
-                                                applianceName,
-                                                wattage,
-                                            })
-                                        }
-                                    >
-                                        <h3>{applianceName}</h3>
-                                    </li>
-                                );
-                            })}
-                        </ul>
-                    </li>
-                );
-            })}
-        </ul>
-    );
+        setAppliancesOptions(
+            <Options
+                quantity={quantity}
+                duration={totalDuration}
+                applianceBill={applianceBill}
+                onSelectAppliance={selectApplianceHandler}
+            />
+        );
+    };
 
     useEffect(() => {
         if (Object.keys(message).length === 0) return;
 
         const timeout = setTimeout(() => {
-            setMessage({});
+            dispatch({ type: "RESET_MSG" });
         }, 2000);
 
         return () => {
@@ -351,7 +270,7 @@ const Appliance = ({ appliances = [], num, onAddAppliance, sarimaRate }) => {
                 <button
                     type="button"
                     className="calcu__btn appliance__btn"
-                    onClick={e => setAppliancesOptions(applianceChoices)}
+                    onClick={setAppliancesOptionHandler}
                 >
                     {selectedApplianceExists
                         ? selectedAppliance.applianceName
@@ -413,17 +332,11 @@ const Appliance = ({ appliances = [], num, onAddAppliance, sarimaRate }) => {
 
                     <div
                         className="trigger-expand"
-                        onClick={() => setIsExpanded(prevState => !prevState)}
+                        onClick={() => {
+                            dispatch({ type: "TOGGLE_EXPANDED" });
+                        }}
                     >
-                        {isExpanded ? (
-                            <span>
-                                Collapse <BsChevronUp />
-                            </span>
-                        ) : (
-                            <span>
-                                Expand <BsChevronDown />
-                            </span>
-                        )}
+                        {isExpanded ? <span>Collapse</span> : <span>Expand</span>}
                     </div>
                 </div>
             )}
