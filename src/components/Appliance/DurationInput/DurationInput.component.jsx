@@ -2,17 +2,19 @@ import React, { useRef } from "react";
 
 const DurationInput = ({ num, onChangeInputHander }) => {
     const durationRef = useRef();
-    const duration = durationRef.current?.value || 1;
+    // const duration = durationRef.current?.value || 1;
 
-    const changeHandler = e => {
+    const inputBlurHandler = e => {
         let inputValue = +e.target.value;
 
         if (inputValue > 24) {
             inputValue = 24;
+            durationRef.current.value = 24;
         }
 
         if (inputValue < 1) {
             inputValue = 1;
+            durationRef.current.value = 1;
         }
 
         onChangeInputHander(num, inputValue);
@@ -30,7 +32,7 @@ const DurationInput = ({ num, onChangeInputHander }) => {
                 max={24}
                 defaultValue={1}
                 ref={durationRef}
-                onChange={changeHandler}
+                onBlur={inputBlurHandler}
                 required
             />
         </div>

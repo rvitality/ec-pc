@@ -6,6 +6,7 @@ import "./Appliance.styles.scss";
 import DurationInput from "./DurationInput/DurationInput.component";
 import { useReducer } from "react";
 import Options from "./Options/Options.component";
+import ManualInput from "./ManualInput/ManualInput.component";
 
 const initialState = {
     sarimaRate: 8,
@@ -25,7 +26,12 @@ const reducer = (state, action) => {
     const { type, payload } = action;
 
     if (type === "SELECT_APPLIANCE") {
-        const { appliance, appliances } = payload;
+        const { appliance, appliances, manual } = payload;
+
+        // REPLACE
+        if (manual) {
+            return { ...state, selectedAppliance: appliance };
+        }
 
         const existingAppliance = appliances.find(
             item => item.applianceID === appliance.applianceID
@@ -98,47 +104,59 @@ const Appliance = ({ manual = false, appliances = [], num, onAddAppliance, sarim
         isAppliedToAllDuration,
     } = state;
 
+    console.log(selectedAppliance);
+
     const selectedApplianceExists = Object.keys(selectedAppliance).length > 0;
     const showMessage = Object.keys(message).length > 0;
 
     const prevSelectedAppliance = useRef();
 
-    // const [quantity, setQuantity] = useState(1);
-    const quantityRef = useRef();
-    const quantity = quantityRef.current?.value || 1;
+    const [quantity, setQuantity] = useState(1);
+    // const quantityRef = useRef();
+    // const quantity = quantityRef.current?.value || 1;
 
     const [appliancesOptions, setAppliancesOptions] = useState();
 
     const selectApplianceHandler = appliance => {
+        console.log(appliance);
+        if (!appliance.applianceName?.trim() || !appliance.applianceID) return;
+
         const previousAppliance = prevSelectedAppliance.current;
 
-        const currentAppliance = getCurrentAppliance({
+        let currentAppliance = getCurrentAppliance({
             selectedAppliance: appliance,
             duration: previousAppliance ? previousAppliance.duration : 1,
             quantity: previousAppliance ? previousAppliance.quantity : 1,
             sarimaRate,
         });
 
+        // if(manual){
+        //     currentAppliance = {...currentAppliance, wattage}
+        // }
+
         prevSelectedAppliance.current = currentAppliance;
         onAddAppliance(previousAppliance, currentAppliance);
 
         dispatch({
             type: "SELECT_APPLIANCE",
-            payload: { appliance, appliances },
+            payload: { appliance, appliances, manual },
         });
     };
 
     const quantityInputChangeHandler = e => {
-        console.log("quantity");
-
         let inputValue = +e.target.value;
+        setQuantity(inputValue);
 
         if (inputValue > 20) {
             inputValue = 20;
+            // quantityRef.current.value = 20;
+            setQuantity(20);
         }
 
         if (inputValue < 1) {
             inputValue = 1;
+            // quantityRef.current.value = 1;
+            setQuantity(1);
         }
 
         let newInputDurations = [...inputDurations];
@@ -188,7 +206,7 @@ const Appliance = ({ manual = false, appliances = [], num, onAddAppliance, sarim
         onAddAppliance(previousAppliance, currentAppliance);
     };
 
-    const durationChangeInputHandler = (num, durationValue) => {
+    const durationOnBlurHandler = (num, durationValue) => {
         let newInputDurations = [...inputDurations];
         newInputDurations[num] = durationValue;
 
@@ -306,18 +324,7 @@ const Appliance = ({ manual = false, appliances = [], num, onAddAppliance, sarim
             {appliancesOptions && <div className="appliance__options">{appliancesOptions}</div>}
         </>
     ) : (
-        <div className="manual">
-            <input
-                placeholder="Appliance name"
-                type="text"
-                className="calcu__btn appliance__btn manual__input"
-                onBlur={e => console.log(e.target.value)}
-            />
-            <div className="form-control">
-                <label htmlFor="wattage">Wattage: </label>
-                <input id="wattage" type="number" min={1} />
-            </div>
-        </div>
+        <ManualInput onSelectAppliance={selectApplianceHandler} />
     );
 
     return (
@@ -332,11 +339,10 @@ const Appliance = ({ manual = false, appliances = [], num, onAddAppliance, sarim
                             <input
                                 type="number"
                                 id="quantity"
-                                defaultValue={1}
                                 min={1}
                                 max={20}
-                                ref={quantityRef}
-                                onBlur={quantityInputChangeHandler}
+                                value={quantity}
+                                onChange={quantityInputChangeHandler}
                                 required
                             />
                         </div>
@@ -349,7 +355,7 @@ const Appliance = ({ manual = false, appliances = [], num, onAddAppliance, sarim
                                             <DurationInput
                                                 key={index}
                                                 num={index}
-                                                onChangeInputHander={durationChangeInputHandler}
+                                                onChangeInputHander={durationOnBlurHandler}
                                             />
                                             <div className="apply-to-all">
                                                 <input
@@ -370,7 +376,7 @@ const Appliance = ({ manual = false, appliances = [], num, onAddAppliance, sarim
                                     <DurationInput
                                         key={index}
                                         num={index}
-                                        onChangeInputHander={durationChangeInputHandler}
+                                        onChangeInputHander={durationOnBlurHandler}
                                     />
                                 );
                             })}

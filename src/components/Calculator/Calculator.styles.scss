@@ -14,6 +14,40 @@
         transition: all 0.15s ease-in-out;
     }
 
+    .manual-input-container {
+        border-top: 1px solid #555;
+        padding-top: 1rem;
+        margin-top: 2rem;
+        h3 {
+            color: #000;
+            text-transform: uppercase;
+            font-weight: 500;
+        }
+
+        .note {
+            margin-top: 0.6rem;
+            font-size: 1rem;
+            color: #000;
+            font-style: italic;
+        }
+
+        .appliance {
+            border-bottom: 1px solid #999;
+            padding-bottom: 1rem;
+        }
+
+        .new-btn {
+            transition: all 0.15s ease-in-out;
+            margin: 0 0 0 auto;
+            display: block;
+            margin-top: 1.5rem;
+            font-size: 1.1rem;
+            padding: 0.5rem 0.9rem;
+            font-weight: 500;
+            justify-self: flex-end;
+        }
+    }
+
     &__btn {
         display: flex;
         align-items: center;

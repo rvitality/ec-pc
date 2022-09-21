@@ -5,7 +5,6 @@ import { IoMdAdd } from "react-icons/io";
 
 import "./Calculator.styles.scss";
 import { useApplianceContext } from "../../context/ApplianceContext";
-import { logDOM } from "@testing-library/react";
 
 const initialState = {
     totalBill: 0,
@@ -77,7 +76,9 @@ const reducer = (state, action) => {
 const Calculator = () => {
     const { setAppliances, sarimaRate } = useApplianceContext();
     const [state, dispatch] = useReducer(reducer, initialState);
-    const [applianceHolders, setApplianceHolders] = useState(Array(3).fill());
+    const [applianceHolders, setApplianceHolders] = useState(Array(1).fill());
+
+    console.log();
 
     const addAppliance = (previousAppliance = {}, currentAppliance = {}) => {
         // console.log("previousAppliance: ", previousAppliance);
@@ -140,17 +141,29 @@ const Calculator = () => {
                     <IoMdAdd />
                 </button>
 
-                <div className="manual-input">
-                    <p>Manual Input:</p>
+                <div className="manual-input-container">
+                    <h3>Manual Input:</h3>
+                    <p className="note">
+                        Add a <b>new</b> appliance if it's not included with the provided ones.
+                    </p>
 
                     <Appliance
-                        key={15}
-                        num={15 + 1}
+                        key={applianceHolders.length + 1}
                         manual={true}
                         appliances={state.selectedAppliances}
                         onAddAppliance={addAppliance}
                         sarimaRate={sarimaRate}
                     />
+
+                    {/* <Appliance
+                        key={applianceHolders.length + 2}
+                        manual={true}
+                        appliances={state.selectedAppliances}
+                        onAddAppliance={addAppliance}
+                        sarimaRate={sarimaRate}
+                    /> */}
+
+                    <button className="new-btn">New</button>
                 </div>
 
                 <div className="calcu__bottom">
