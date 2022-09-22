@@ -33,7 +33,6 @@ const Modal = () => {
                         <li key={item.applianceID}>
                             <p className="appliance-name">
                                 <span>{item.applianceName}</span>
-                                <span> {item.size?.slice(0, 1) === "0" ? "" : item.size} </span>
                             </p>
                             <div className="info">
                                 <ul className="lvl2">

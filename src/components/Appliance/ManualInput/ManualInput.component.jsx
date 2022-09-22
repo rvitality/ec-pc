@@ -14,10 +14,6 @@ const ManualInput = ({ onSelectAppliance }) => {
     let applianceName = applianceNameRef.current?.value || "";
     let wattage = wattageRef.current?.value || 1;
 
-    let sizeValue = sizeValueRef.current?.value || "";
-    let sizeMeasurement = sizeMeasurementRef.current?.value || "";
-    let size = `${sizeValue} (${sizeMeasurement})`;
-
     const applianceNameOnBlurHandler = e => {
         applianceName = e.target.value;
 
@@ -45,38 +41,6 @@ const ManualInput = ({ onSelectAppliance }) => {
         onSelectAppliance(newAppliance);
     };
 
-    const sizeValueOnBlurHandler = e => {
-        sizeValue = +e.target.value;
-
-        size = `${sizeValue} ${sizeMeasurement}`;
-
-        const newAppliance = {
-            ...appliance,
-            wattage,
-            size,
-        };
-
-        setAppliance(prevState => ({ ...prevState, size }));
-
-        onSelectAppliance(newAppliance);
-    };
-
-    const sizeMeasurementChangeHandler = e => {
-        sizeMeasurement = e.target.value;
-
-        size = `${sizeValue} ${sizeMeasurement}`;
-
-        const newAppliance = {
-            ...appliance,
-            wattage,
-            size,
-        };
-
-        setAppliance(prevState => ({ ...prevState, size }));
-
-        onSelectAppliance(newAppliance);
-    };
-
     return (
         <div className="manual">
             <input
@@ -100,33 +64,6 @@ const ManualInput = ({ onSelectAppliance }) => {
                         onBlur={wattageOnBlurHandler}
                         required
                     />
-                </div>
-                <div className="size">
-                    <div className="form-control">
-                        <label htmlFor="size">Size:</label>
-                        <input
-                            className="value"
-                            id="size"
-                            ref={sizeValueRef}
-                            placeholder="Value"
-                            type="number"
-                            min={1}
-                            max={1000}
-                            onBlur={sizeValueOnBlurHandler}
-                        />
-                    </div>
-
-                    <div className="form-control">
-                        <select
-                            ref={sizeMeasurementRef}
-                            name="cars"
-                            id="size-measurement"
-                            onChange={sizeMeasurementChangeHandler}
-                        >
-                            <option value="in.">inches</option>
-                            <option value="ft.">feet</option>
-                        </select>
-                    </div>
                 </div>
             </div>
         </div>

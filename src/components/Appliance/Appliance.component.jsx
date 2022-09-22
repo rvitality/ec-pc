@@ -118,7 +118,6 @@ const Appliance = ({ manual = false, appliances = [], num, onAddAppliance, sarim
     const [appliancesOptions, setAppliancesOptions] = useState();
 
     const selectApplianceHandler = appliance => {
-        console.log(appliance);
         if (!appliance.applianceName?.trim() || !appliance.applianceID) return;
 
         const previousAppliance = prevSelectedAppliance.current;
