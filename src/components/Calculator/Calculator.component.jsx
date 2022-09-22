@@ -76,9 +76,8 @@ const reducer = (state, action) => {
 const Calculator = () => {
     const { setAppliances, sarimaRate } = useApplianceContext();
     const [state, dispatch] = useReducer(reducer, initialState);
-    const [applianceHolders, setApplianceHolders] = useState(Array(1).fill());
-
-    console.log();
+    const [applianceHolders, setApplianceHolder] = useState(Array(3).fill(0));
+    const [manualApplianceHolders, setManualApplianceHolders] = useState([]);
 
     const addAppliance = (previousAppliance = {}, currentAppliance = {}) => {
         // console.log("previousAppliance: ", previousAppliance);
@@ -100,16 +99,11 @@ const Calculator = () => {
     };
 
     const newApplianceHolderHandler = () => {
-        setApplianceHolders(prevState => [
-            ...prevState,
-            <Appliance
-                key={prevState.length - 1}
-                num={prevState.length}
-                appliances={state.selectedAppliances}
-                onAddAppliance={addAppliance}
-                sarimaRate={sarimaRate}
-            />,
-        ]);
+        setApplianceHolder(prevState => [...prevState, 0]);
+    };
+
+    const newManualApplianceHolderHandler = () => {
+        setManualApplianceHolders(prevState => [...prevState, 0]);
     };
 
     const submitDataHandler = e => {
@@ -123,7 +117,7 @@ const Calculator = () => {
             <h2>Calculator</h2>
 
             <form onSubmit={submitDataHandler}>
-                {applianceHolders.map((_, index) => (
+                {applianceHolders?.map((_, index) => (
                     <Appliance
                         key={index}
                         num={index + 1}
@@ -147,23 +141,23 @@ const Calculator = () => {
                         Add a <b>new</b> appliance if it's not included with the provided ones.
                     </p>
 
-                    <Appliance
-                        key={applianceHolders.length + 1}
-                        manual={true}
-                        appliances={state.selectedAppliances}
-                        onAddAppliance={addAppliance}
-                        sarimaRate={sarimaRate}
-                    />
+                    {manualApplianceHolders.map((_, index) => (
+                        <Appliance
+                            key={index}
+                            manual={true}
+                            appliances={state.selectedAppliances}
+                            onAddAppliance={addAppliance}
+                            sarimaRate={sarimaRate}
+                        />
+                    ))}
 
-                    {/* <Appliance
-                        key={applianceHolders.length + 2}
-                        manual={true}
-                        appliances={state.selectedAppliances}
-                        onAddAppliance={addAppliance}
-                        sarimaRate={sarimaRate}
-                    /> */}
-
-                    <button className="new-btn">New</button>
+                    <button
+                        type="button"
+                        className="new-btn"
+                        onClick={newManualApplianceHolderHandler}
+                    >
+                        New
+                    </button>
                 </div>
 
                 <div className="calcu__bottom">
