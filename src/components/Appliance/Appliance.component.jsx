@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 
 import { AiFillCaretDown } from "react-icons/ai";
+import { AiFillDelete } from "react-icons/ai";
 
 import "./Appliance.styles.scss";
 import DurationInput from "./DurationInput/DurationInput.component";
@@ -33,13 +34,13 @@ const reducer = (state, action) => {
             return { ...state, selectedAppliance: appliance };
         }
 
-        const existingAppliance = appliances.find(
-            item => item.applianceID === appliance.applianceID
-        );
+        // const existingAppliance = appliances.find(
+        //     item => item.applianceID === appliance.applianceID
+        // );
 
-        if (existingAppliance) {
-            return { ...state, message: { status: "error", msg: "Appliance already exists." } };
-        }
+        // if (existingAppliance && Object.keys(existingAppliance).length > 0) {
+        //     return { ...state, message: { status: "error", msg: "Appliance already exists." } };
+        // }
 
         // return {...state, appliance}
         // setSelectedAppliance(appliance);
@@ -77,6 +78,14 @@ const reducer = (state, action) => {
         return { ...state, totalDuration: newTotalDuration, inputDurations: newInputDurations };
     }
 
+    if (type === "DISPLAY_ERROR") {
+        return { ...state, message: { status: "error", msg: "Appliance already exists." } };
+    }
+
+    if (type === "RESET") {
+        return initialState;
+    }
+
     return state;
 };
 
@@ -92,7 +101,14 @@ const getCurrentAppliance = ({ selectedAppliance, duration, quantity, sarimaRate
     };
 };
 
-const Appliance = ({ manual = false, appliances = [], num, onAddAppliance, sarimaRate }) => {
+const Appliance = ({
+    manual = false,
+    appliances = [],
+    num,
+    onAddAppliance,
+    sarimaRate,
+    onRemoveAppliance,
+}) => {
     const [state, dispatch] = useReducer(reducer, initialState);
     const {
         inputDurations,
@@ -104,21 +120,32 @@ const Appliance = ({ manual = false, appliances = [], num, onAddAppliance, sarim
         isAppliedToAllDuration,
     } = state;
 
-    console.log(selectedAppliance);
-
     const selectedApplianceExists = Object.keys(selectedAppliance).length > 0;
     const showMessage = Object.keys(message).length > 0;
 
     const prevSelectedAppliance = useRef();
+    const applianceNameRef = useRef();
+    const wattageRef = useRef();
 
     const [quantity, setQuantity] = useState(1);
-    // const quantityRef = useRef();
-    // const quantity = quantityRef.current?.value || 1;
 
     const [appliancesOptions, setAppliancesOptions] = useState();
 
     const selectApplianceHandler = appliance => {
         if (!appliance.applianceName?.trim() || !appliance.applianceID) return;
+
+        const existingAppliance = appliances.find(
+            item => item.applianceID === appliance.applianceID
+        );
+
+        if (existingAppliance && Object.keys(existingAppliance).length > 0) {
+            dispatch({
+                type: "DISPLAY_ERROR",
+            });
+
+            // return early, else the "new item" will replace the appliance that caused the "message", which is the `existingAppliance`
+            return;
+        }
 
         const previousAppliance = prevSelectedAppliance.current;
 
@@ -128,10 +155,6 @@ const Appliance = ({ manual = false, appliances = [], num, onAddAppliance, sarim
             quantity: previousAppliance ? previousAppliance.quantity : 1,
             sarimaRate,
         });
-
-        // if(manual){
-        //     currentAppliance = {...currentAppliance, wattage}
-        // }
 
         prevSelectedAppliance.current = currentAppliance;
         onAddAppliance(previousAppliance, currentAppliance);
@@ -298,6 +321,18 @@ const Appliance = ({ manual = false, appliances = [], num, onAddAppliance, sarim
         );
     };
 
+    const removeAppliance = appliance => {
+        prevSelectedAppliance.current = undefined;
+        setQuantity(1);
+
+        //  manual input refs
+        applianceNameRef.current = undefined;
+        wattageRef.current = undefined;
+
+        onRemoveAppliance(appliance, num);
+        dispatch({ type: "RESET" });
+    };
+
     useEffect(() => {
         if (Object.keys(message).length === 0) return;
 
@@ -323,12 +358,27 @@ const Appliance = ({ manual = false, appliances = [], num, onAddAppliance, sarim
             {appliancesOptions && <div className="appliance__options">{appliancesOptions}</div>}
         </>
     ) : (
-        <ManualInput onSelectAppliance={selectApplianceHandler} />
+        <ManualInput
+            onSelectAppliance={selectApplianceHandler}
+            applianceNameRef={applianceNameRef}
+            wattageRef={wattageRef}
+        />
     );
 
     return (
         <div className="appliance">
-            <div className="appliance__selection">{optionNewAppliance}</div>
+            <div className="appliance__selection">
+                {optionNewAppliance}
+                {selectedApplianceExists && (
+                    <button
+                        type="button"
+                        className="appliance__delete-btn"
+                        onClick={() => removeAppliance(selectedAppliance)}
+                    >
+                        <AiFillDelete />
+                    </button>
+                )}
+            </div>
 
             {selectedApplianceExists && (
                 <div className="extra-inputs">

@@ -48,6 +48,7 @@ const reducer = (state, action) => {
     }
 
     if (type === "REPLACE") {
+        console.log("REPLACE");
         const { previousAppliance, newAppliance, sarimaRate } = payload;
 
         const { wattage, quantity, duration } = newAppliance;
@@ -71,13 +72,29 @@ const reducer = (state, action) => {
 
         return { ...state, selectedAppliances: newAppliances };
     }
+
+    if (type === "REMOVE") {
+        const { appliance } = payload;
+        console.log(appliance.applianceName);
+
+        const filteredAppliances = state.selectedAppliances.filter(
+            item => item.applianceID !== appliance.applianceID
+        );
+
+        return { ...state, selectedAppliances: filteredAppliances };
+    }
+
+    return initialState;
 };
 
 const Calculator = () => {
     const { setAppliances, sarimaRate } = useApplianceContext();
     const [state, dispatch] = useReducer(reducer, initialState);
+
     const [applianceHolders, setApplianceHolder] = useState(Array(3).fill(0));
     const [manualApplianceHolders, setManualApplianceHolders] = useState([]);
+
+    // console.log(state.selectedAppliances);
 
     const addAppliance = (previousAppliance = {}, currentAppliance = {}) => {
         // console.log("previousAppliance: ", previousAppliance);
@@ -103,7 +120,24 @@ const Calculator = () => {
     };
 
     const newManualApplianceHolderHandler = () => {
-        setManualApplianceHolders(prevState => [...prevState, 0]);
+        setManualApplianceHolders(prevState => {
+            const lastValue = parseInt(prevState.slice(-1)) + 1;
+            const toAddValue = isNaN(lastValue) ? 0 : lastValue;
+            return [...prevState, toAddValue];
+        });
+    };
+
+    const removeAppliance = (appliance, num = undefined) => {
+        if (num !== undefined) {
+            setManualApplianceHolders(prevState => {
+                return prevState.filter(itemNum => {
+                    console.log(itemNum, num);
+                    return itemNum !== num;
+                });
+            });
+        }
+
+        dispatch({ type: "REMOVE", payload: { appliance } });
     };
 
     const submitDataHandler = e => {
@@ -123,6 +157,7 @@ const Calculator = () => {
                         num={index + 1}
                         appliances={state.selectedAppliances}
                         onAddAppliance={addAppliance}
+                        onRemoveAppliance={removeAppliance}
                         sarimaRate={sarimaRate}
                     />
                 ))}
@@ -141,12 +176,14 @@ const Calculator = () => {
                         Add a <b>new</b> appliance if it's not included with the provided ones.
                     </p>
 
-                    {manualApplianceHolders.map((_, index) => (
+                    {manualApplianceHolders.map(num => (
                         <Appliance
-                            key={index}
+                            key={num}
+                            manualNum={num}
                             manual={true}
                             appliances={state.selectedAppliances}
                             onAddAppliance={addAppliance}
+                            onRemoveAppliance={removeAppliance}
                             sarimaRate={sarimaRate}
                         />
                     ))}

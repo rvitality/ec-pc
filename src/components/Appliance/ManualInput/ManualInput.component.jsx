@@ -1,15 +1,10 @@
-import React, { useRef } from "react";
+import React from "react";
 import { useState } from "react";
 
 import { v4 as uuidv4 } from "uuid";
 
-const ManualInput = ({ onSelectAppliance }) => {
+const ManualInput = ({ onSelectAppliance, applianceNameRef, wattageRef }) => {
     const [appliance, setAppliance] = useState({ applianceID: uuidv4() });
-
-    const applianceNameRef = useRef();
-    const wattageRef = useRef();
-    const sizeValueRef = useRef();
-    const sizeMeasurementRef = useRef();
 
     let applianceName = applianceNameRef.current?.value || "";
     let wattage = wattageRef.current?.value || 1;

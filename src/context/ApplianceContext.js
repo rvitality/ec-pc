@@ -1,7 +1,7 @@
 import { createContext, useContext, useState } from "react";
 
 const initialState = {
-    sarimaRate: 8,
+    sarimaRate: 6.9,
     totalBill: 0,
     selectedAppliances: [],
 };
