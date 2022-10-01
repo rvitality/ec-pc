@@ -1,12 +1,16 @@
 import React from "react";
+import { createPortal } from "react-dom";
+
 import { useApplianceContext } from "../../context/ApplianceContext";
 
 import "./Modal.styles.scss";
 
-const Modal = () => {
-    const { totalBill, appliances, sarimaRate } = useApplianceContext();
+const Backdrop = ({ onCloseModal }) => {
+    return <div className="backdrop" onClick={onCloseModal}></div>;
+};
 
-    console.log(appliances);
+const ModalContent = props => {
+    const { totalBill, sarimaRate, appliances, onCloseModal } = props;
 
     return (
         <div className="modal">
@@ -52,7 +56,7 @@ const Modal = () => {
                                     Total:{" "}
                                     <span className="value">
                                         ₱
-                                        {item.applianceBill.toLocaleString("en", {
+                                        {item.applianceBill?.toLocaleString("en", {
                                             minimumFractionDigits: 2,
                                         })}
                                     </span>
@@ -63,8 +67,41 @@ const Modal = () => {
                 </ul>
             </div>
 
-            {/* <button className="result__close-btn">Close</button> */}
+            <button className="modal__close-btn" onClick={onCloseModal}>
+                Close
+            </button>
         </div>
+    );
+};
+
+const Modal = () => {
+    const { totalBill, appliances, sarimaRate, modalIsOpen, setModalIsOpen } =
+        useApplianceContext();
+
+    const closeModalHandler = () => {
+        setModalIsOpen(false);
+    };
+
+    return (
+        <>
+            {modalIsOpen && (
+                <>
+                    {createPortal(
+                        <Backdrop onCloseModal={closeModalHandler} />,
+                        document.getElementById("backdrop-root")
+                    )}
+                    {createPortal(
+                        <ModalContent
+                            totalBill={totalBill}
+                            appliances={appliances}
+                            sarimaRate={sarimaRate}
+                            onCloseModal={closeModalHandler}
+                        />,
+                        document.getElementById("modal-root")
+                    )}
+                </>
+            )}
+        </>
     );
 };
 

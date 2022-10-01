@@ -88,7 +88,7 @@ const reducer = (state, action) => {
 };
 
 const Calculator = () => {
-    const { setAppliances, sarimaRate } = useApplianceContext();
+    const { setAppliances, sarimaRate, setModalIsOpen } = useApplianceContext();
     const [state, dispatch] = useReducer(reducer, initialState);
 
     const [applianceHolders, setApplianceHolder] = useState(Array(3).fill(0));
@@ -145,6 +145,7 @@ const Calculator = () => {
         e.preventDefault();
         // console.log("submit");
         setAppliances(state.selectedAppliances);
+        setModalIsOpen(true);
     };
 
     return (
