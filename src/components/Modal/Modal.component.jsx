@@ -6,6 +6,8 @@ import "./Modal.styles.scss";
 const Modal = () => {
     const { totalBill, appliances, sarimaRate } = useApplianceContext();
 
+    console.log(appliances);
+
     return (
         <div className="modal">
             <div className="forecasted-bill">

@@ -48,7 +48,7 @@ const reducer = (state, action) => {
     }
 
     if (type === "REPLACE") {
-        console.log("REPLACE");
+        // console.log("REPLACE");
         const { previousAppliance, newAppliance, sarimaRate } = payload;
 
         const { wattage, quantity, duration } = newAppliance;
@@ -74,12 +74,12 @@ const reducer = (state, action) => {
     }
 
     if (type === "REMOVE") {
-        const { appliance } = payload;
-        console.log(appliance.applianceName);
+        const { filteredAppliances } = payload;
+        // const { appliance } = payload;
 
-        const filteredAppliances = state.selectedAppliances.filter(
-            item => item.applianceID !== appliance.applianceID
-        );
+        // const filteredAppliances = state.selectedAppliances.filter(
+        //     item => item.applianceID !== appliance.applianceID
+        // );
 
         return { ...state, selectedAppliances: filteredAppliances };
     }
@@ -93,8 +93,6 @@ const Calculator = () => {
 
     const [applianceHolders, setApplianceHolder] = useState(Array(3).fill(0));
     const [manualApplianceHolders, setManualApplianceHolders] = useState([]);
-
-    // console.log(state.selectedAppliances);
 
     const addAppliance = (previousAppliance = {}, currentAppliance = {}) => {
         // console.log("previousAppliance: ", previousAppliance);
@@ -127,22 +125,25 @@ const Calculator = () => {
         });
     };
 
-    const removeAppliance = (appliance, num = undefined) => {
-        if (num !== undefined) {
-            setManualApplianceHolders(prevState => {
-                return prevState.filter(itemNum => {
-                    console.log(itemNum, num);
-                    return itemNum !== num;
-                });
-            });
+    const removeAppliance = (appliance, manualNum = undefined) => {
+        if (manualNum !== undefined) {
+            setManualApplianceHolders(prevState =>
+                prevState.filter(itemNum => itemNum !== manualNum)
+            );
         }
 
-        dispatch({ type: "REMOVE", payload: { appliance } });
+        const filteredAppliances = state.selectedAppliances.filter(
+            item => item.applianceID !== appliance.applianceID
+        );
+
+        setAppliances(filteredAppliances);
+
+        dispatch({ type: "REMOVE", payload: { filteredAppliances } });
     };
 
     const submitDataHandler = e => {
         e.preventDefault();
-        console.log("submit");
+        // console.log("submit");
         setAppliances(state.selectedAppliances);
     };
 
@@ -154,7 +155,7 @@ const Calculator = () => {
                 {applianceHolders?.map((_, index) => (
                     <Appliance
                         key={index}
-                        num={index + 1}
+                        indexNum={index + 1}
                         appliances={state.selectedAppliances}
                         onAddAppliance={addAppliance}
                         onRemoveAppliance={removeAppliance}

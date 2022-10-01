@@ -1,13 +1,13 @@
-import React from "react";
+import React, { useRef } from "react";
 import { useState } from "react";
 
 import { v4 as uuidv4 } from "uuid";
 
-const ManualInput = ({ onSelectAppliance, applianceNameRef, wattageRef }) => {
+const ManualInput = ({ onBlurApplianceNameHandler, onBlurWattageHandler, applianceNameRef }) => {
     const [appliance, setAppliance] = useState({ applianceID: uuidv4() });
 
+    const wattageRef = useRef();
     let applianceName = applianceNameRef.current?.value || "";
-    let wattage = wattageRef.current?.value || 1;
 
     const applianceNameOnBlurHandler = e => {
         applianceName = e.target.value;
@@ -18,22 +18,24 @@ const ManualInput = ({ onSelectAppliance, applianceNameRef, wattageRef }) => {
             wattage: 1,
         };
 
-        setAppliance(prevState => ({ ...prevState, applianceName, wattage }));
+        const wattageValue = parseInt(wattageRef.current?.value) || 1;
 
-        onSelectAppliance(newAppliance);
+        setAppliance(prevState => ({ ...prevState, applianceName, wattage: wattageValue }));
+
+        onBlurApplianceNameHandler(newAppliance);
     };
 
     const wattageOnBlurHandler = e => {
-        wattage = +e.target.value;
+        const wattageValue = +e.target.value;
 
-        const newAppliance = {
-            ...appliance,
-            wattage,
-        };
+        // const newAppliance = {
+        //     ...appliance,
+        //     wattage: wattageValue,
+        // };
 
-        setAppliance(prevState => ({ ...prevState, wattage }));
+        setAppliance(prevState => ({ ...prevState, wattage: wattageValue }));
 
-        onSelectAppliance(newAppliance);
+        onBlurWattageHandler(wattageValue);
     };
 
     return (

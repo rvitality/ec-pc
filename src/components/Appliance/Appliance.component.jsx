@@ -89,22 +89,11 @@ const reducer = (state, action) => {
     return state;
 };
 
-const getCurrentAppliance = ({ selectedAppliance, duration, quantity, sarimaRate }) => {
-    const { wattage } = selectedAppliance;
-    const applianceBill = ((wattage * (duration * 30) * quantity) / 1000) * sarimaRate;
-
-    return {
-        ...selectedAppliance,
-        quantity,
-        duration,
-        applianceBill,
-    };
-};
-
 const Appliance = ({
     manual = false,
     appliances = [],
-    num,
+    indexNum,
+    manualNum,
     onAddAppliance,
     sarimaRate,
     onRemoveAppliance,
@@ -125,18 +114,38 @@ const Appliance = ({
 
     const prevSelectedAppliance = useRef();
     const applianceNameRef = useRef();
-    const wattageRef = useRef();
 
+    const wattageRef = useRef();
     const [quantity, setQuantity] = useState(1);
 
     const [appliancesOptions, setAppliancesOptions] = useState();
 
+    const getCurrentAppliance = ({
+        appliance = selectedAppliance,
+        duration = totalDuration,
+        quantityValue = quantity,
+        wattage = +wattageRef.current?.value || 1,
+    }) => {
+        const applianceBill = ((wattage * (duration * 30) * quantity) / 1000) * sarimaRate;
+
+        return {
+            ...appliance,
+            quantity: quantityValue,
+            duration,
+            applianceBill,
+        };
+    };
+
     const selectApplianceHandler = appliance => {
         if (!appliance.applianceName?.trim() || !appliance.applianceID) return;
 
-        const existingAppliance = appliances.find(
-            item => item.applianceID === appliance.applianceID
-        );
+        const existingAppliance = appliances.find(item => {
+            return (
+                item.applianceID === appliance.applianceID &&
+                item.applianceName.trim().toLowerCase() ===
+                    appliance.applianceName.trim().toLowerCase()
+            );
+        });
 
         if (existingAppliance && Object.keys(existingAppliance).length > 0) {
             dispatch({
@@ -150,10 +159,9 @@ const Appliance = ({
         const previousAppliance = prevSelectedAppliance.current;
 
         let currentAppliance = getCurrentAppliance({
-            selectedAppliance: appliance,
+            appliance,
             duration: previousAppliance ? previousAppliance.duration : 1,
-            quantity: previousAppliance ? previousAppliance.quantity : 1,
-            sarimaRate,
+            quantityValue: previousAppliance ? previousAppliance.quantity : 1,
         });
 
         prevSelectedAppliance.current = currentAppliance;
@@ -163,6 +171,14 @@ const Appliance = ({
             type: "SELECT_APPLIANCE",
             payload: { appliance, appliances, manual },
         });
+    };
+
+    const wattageOnBlurHandler = wattageValue => {
+        const previousAppliance = prevSelectedAppliance.current;
+        const currentAppliance = { ...selectedAppliance, wattage: wattageValue };
+
+        prevSelectedAppliance.current = currentAppliance;
+        onAddAppliance(previousAppliance, currentAppliance);
     };
 
     const quantityInputChangeHandler = e => {
@@ -217,10 +233,8 @@ const Appliance = ({
         const previousAppliance = prevSelectedAppliance.current;
 
         const currentAppliance = getCurrentAppliance({
-            selectedAppliance,
             duration: newTotalDurations,
-            quantity: inputValue,
-            sarimaRate,
+            quantityValue: inputValue,
         });
 
         prevSelectedAppliance.current = currentAppliance;
@@ -251,10 +265,7 @@ const Appliance = ({
         const previousAppliance = prevSelectedAppliance.current;
 
         const currentAppliance = getCurrentAppliance({
-            selectedAppliance,
             duration: newTotalDurations,
-            quantity,
-            sarimaRate,
         });
 
         prevSelectedAppliance.current = currentAppliance;
@@ -296,10 +307,7 @@ const Appliance = ({
         const previousAppliance = prevSelectedAppliance.current;
 
         const currentAppliance = getCurrentAppliance({
-            selectedAppliance,
             duration: newTotalDurations,
-            quantity,
-            sarimaRate,
         });
 
         prevSelectedAppliance.current = currentAppliance;
@@ -325,12 +333,13 @@ const Appliance = ({
         prevSelectedAppliance.current = undefined;
         setQuantity(1);
 
+        dispatch({ type: "RESET" });
+
         //  manual input refs
         applianceNameRef.current = undefined;
-        wattageRef.current = undefined;
 
-        onRemoveAppliance(appliance, num);
-        dispatch({ type: "RESET" });
+        //  manual input removal
+        onRemoveAppliance(appliance, manualNum);
     };
 
     useEffect(() => {
@@ -352,16 +361,18 @@ const Appliance = ({
                 className="calcu__btn appliance__btn"
                 onClick={setAppliancesOptionHandler}
             >
-                {selectedApplianceExists ? selectedAppliance.applianceName : `Appliance #${num}`}
+                {selectedApplianceExists
+                    ? selectedAppliance.applianceName
+                    : `Appliance #${indexNum}`}
                 <AiFillCaretDown />
             </button>
             {appliancesOptions && <div className="appliance__options">{appliancesOptions}</div>}
         </>
     ) : (
         <ManualInput
-            onSelectAppliance={selectApplianceHandler}
+            onBlurApplianceNameHandler={selectApplianceHandler}
+            onBlurWattageHandler={wattageOnBlurHandler}
             applianceNameRef={applianceNameRef}
-            wattageRef={wattageRef}
         />
     );
 
