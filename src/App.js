@@ -1,9 +1,10 @@
 import React from "react";
 import Calculator from "./components/Calculator/Calculator.component";
 import Header from "./components/Header/Header.component";
-import Modal from "./components/Modal/Modal.component";
+import Graph from "./components/Graph/Graph.component";
 
 import "./App.styles.scss";
+import Modal from "./components/Modal/Modal.component";
 
 const App = () => {
     return (
@@ -11,8 +12,9 @@ const App = () => {
             <Header />
             <section className="main-content">
                 <Calculator />
-                <Modal />
+                <Graph />
             </section>
+            <Modal />
         </main>
     );
 };
