@@ -115,7 +115,8 @@ const Appliance = ({
     const prevSelectedAppliance = useRef();
     const applianceNameRef = useRef();
 
-    const wattageRef = useRef();
+    // const wattageRef = useRef();
+    const [wattage, setWattage] = useState(1);
     const [quantity, setQuantity] = useState(1);
 
     const [appliancesOptions, setAppliancesOptions] = useState();
@@ -124,14 +125,15 @@ const Appliance = ({
         appliance = selectedAppliance,
         duration = totalDuration,
         quantityValue = quantity,
-        wattage = +wattageRef.current?.value || 1,
+        wattageValue = wattage,
     }) => {
-        const applianceBill = ((wattage * (duration * 30) * quantity) / 1000) * sarimaRate;
+        const applianceBill = ((wattageValue * (duration * 30) * quantity) / 1000) * sarimaRate;
 
         return {
             ...appliance,
             quantity: quantityValue,
             duration,
+            wattage: wattageValue,
             applianceBill,
         };
     };
@@ -158,11 +160,16 @@ const Appliance = ({
 
         const previousAppliance = prevSelectedAppliance.current;
 
+        const wattageValue = manual ? wattage : appliance.wattage;
+
         let currentAppliance = getCurrentAppliance({
             appliance,
             duration: previousAppliance ? previousAppliance.duration : 1,
             quantityValue: previousAppliance ? previousAppliance.quantity : 1,
+            wattageValue,
         });
+
+        setWattage(wattageValue);
 
         prevSelectedAppliance.current = currentAppliance;
         onAddAppliance(previousAppliance, currentAppliance);
@@ -177,6 +184,7 @@ const Appliance = ({
         const previousAppliance = prevSelectedAppliance.current;
         const currentAppliance = { ...selectedAppliance, wattage: wattageValue };
 
+        setWattage(wattageValue);
         prevSelectedAppliance.current = currentAppliance;
         onAddAppliance(previousAppliance, currentAppliance);
     };

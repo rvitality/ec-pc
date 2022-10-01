@@ -48,7 +48,6 @@ const reducer = (state, action) => {
     }
 
     if (type === "REPLACE") {
-        // console.log("REPLACE");
         const { previousAppliance, newAppliance, sarimaRate } = payload;
 
         const { wattage, quantity, duration } = newAppliance;
