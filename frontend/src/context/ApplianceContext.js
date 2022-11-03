@@ -10,7 +10,7 @@ const initialState = {
 const ApplianceContext = createContext(initialState);
 
 export const ApplianceContextProvider = props => {
-    const sarimaRate = 8;
+    const [sarimaRate, setSarimaRate] = useState(1);
     const [appliances, setAppliances] = useState([]);
     const totalBill = appliances.reduce((sum, item) => sum + item.applianceBill, 0);
 
@@ -20,6 +20,7 @@ export const ApplianceContextProvider = props => {
         appliances,
         setAppliances,
         sarimaRate,
+        setSarimaRate,
         totalBill,
         modalIsOpen,
         setModalIsOpen,
