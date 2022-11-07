@@ -1,0 +1,19 @@
+.official-rate-form {
+    &__control {
+        label {
+            font-size: 1.25rem;
+        }
+
+        input {
+            font-family: inherit;
+            font-size: 1rem;
+            padding: 0.5rem;
+        }
+    }
+
+    button[type="submit"] {
+        padding: 0.5rem 1rem;
+        font-size: 1rem;
+        margin-top: 0.5rem;
+    }
+}
