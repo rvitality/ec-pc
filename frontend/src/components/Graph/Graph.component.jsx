@@ -1,6 +1,7 @@
 import React from "react";
 import { Line } from "react-chartjs-2";
-import { Chart as ChartJS } from "chart.js/auto";
+
+import { Chart } from "chart.js/auto";
 
 import "./Graph.styles.scss";
 
@@ -20,16 +21,30 @@ import "./Graph.styles.scss";
 // ];
 const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
+const rates = [
+    9.3373, 9.309411, 9.1076, 9.5415, 10.6559, 10.830914, 11.487409, 10.7406, 10.689505, 10.65632,
+    10.8854, 11.878485, 13.626412, 13.936211, 12.895415, 12.886791, 12.900309, 13.185409, 15.049805,
+    15.137605, 15.012016, 16.515005, 14.123213,
+];
+
 const Graph = () => {
     const data = {
-        labels: months.slice(0, 9),
+        labels: months,
         datasets: [
             {
-                label: "Electic Bill",
-                data: [5135, 4953, 5160, 5020, 5142, 5230, 5058, 4930, 5305],
-                fill: true,
-                borderColor: "#47AAEC",
-                tension: 0.1,
+                label: "2021",
+                data: rates.slice(0, 12),
+                borderColor: "purple",
+            },
+            {
+                label: "2022",
+                data: rates.slice(13),
+                borderColor: "#00B526",
+            },
+            {
+                label: "Predicted",
+                data: [...rates.slice(13), 17.2323],
+                borderColor: "red",
             },
         ],
     };
@@ -37,10 +52,14 @@ const Graph = () => {
     const options = {
         responsive: true,
         lineTension: 0.5,
+        interaction: {
+            mode: "index",
+            intersect: false,
+        },
         plugins: {
             title: {
                 display: true,
-                text: "2022 Electric Bills",
+                text: "Official Rates",
                 padding: {
                     top: 10,
                     bottom: 20,
@@ -54,7 +73,8 @@ const Graph = () => {
             x: {
                 title: {
                     display: true,
-                    text: "Month",
+                    text: "Months",
+                    crossAlign: "far",
                     font: {
                         weight: "bold",
                     },
@@ -66,7 +86,7 @@ const Graph = () => {
             y: {
                 title: {
                     display: true,
-                    text: "Bills",
+                    text: "Rate",
                     font: {
                         weight: "bold",
                     },
