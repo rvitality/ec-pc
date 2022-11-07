@@ -15,11 +15,11 @@ const App = () => {
     // fetch sarima rate
     useEffect(() => {
         const sendRequest = async () => {
-            const response = await fetch("/sarima_rate");
+            const response = await fetch("/get_sarima_rate");
             if (!response.ok) return "Something went wrong!";
             const data = await response.json();
             console.log(data);
-            const { accuracy, sarima_rate } = data;
+            const { sarima_rate } = data;
             setSarimaRate(sarima_rate);
         };
         sendRequest();
@@ -32,7 +32,7 @@ const App = () => {
                 <Calculator />
                 <div className="right-side">
                     <Graph />
-                    {/* <OfficialRateForm /> */}
+                    <OfficialRateForm />
                 </div>
             </section>
             <Modal />
