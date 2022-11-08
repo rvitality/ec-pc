@@ -1,62 +1,35 @@
-import React, { useState, useRef } from "react";
+import React, { useState } from "react";
+
+import { signInWithGooglePopup, signOutUser } from "../../utils/firebase.utils";
+import { useAuthContext } from "../../context/AuthContext";
 
 import "./Header.styles.scss";
-
-import { signInAuthWithEmailAndPassword } from "../../utils/firebase.utils";
-import { useAuthContext } from "../../context/AuthContext";
 
 const Header = () => {
     const { isAuthenticated, user, login, logout } = useAuthContext();
 
-    const emailRef = useRef();
-    const passwordRef = useRef();
-
     const [error, setError] = useState("");
 
-    console.log(error, isAuthenticated);
+    const loginHandler = async () => {
+        try {
+            const response = await signInWithGooglePopup();
 
-    const loginFormHandler = e => {
-        e.preventDefault();
+            const { accessToken, uid, email, metadata, photoURL } = response.user;
+            const userData = { token: accessToken, id: uid, email, metadata, photoURL };
 
-        const enteredEmail = emailRef.current.value;
-        const enteredPassword = passwordRef.current.value;
-
-        const sendLoginRequest = async () => {
-            try {
-                setError("");
-
-                const response = await signInAuthWithEmailAndPassword(
-                    enteredEmail,
-                    enteredPassword
-                );
-
-                const user = { email: enteredEmail, password: enteredPassword };
-                console.log("------------------eqwewqew");
-
-                if (enteredEmail.trim().toLowerCase().includes("admin")) {
-                    console.log(1);
-                    login({ ...user, role: "admin" });
-                } else {
-                    console.log(2);
-                    login({ ...user, role: "user" });
-                }
-            } catch (err) {
-                console.log(err.message);
-                const errorMsg = err.message.split("auth")[1];
-                console.log(errorMsg);
-                setError(
-                    errorMsg
-                        .slice(1, errorMsg.length - 2)
-                        .split("-")
-                        .join(" ")
-                );
+            if (email === "daedalusquintus00@gmail.com") {
+                login({ ...userData, role: "admin" });
+            } else {
+                login({ ...userData, role: "user" });
             }
-        };
-
-        sendLoginRequest();
+        } catch (err) {
+            console.log(err.message);
+            setError(err.message);
+        }
     };
 
-    const logoutHandler = () => {
+    const logoutHandler = async () => {
+        await signOutUser();
         logout();
     };
 
@@ -74,18 +47,7 @@ const Header = () => {
             </div>
 
             <div className="right">
-                {!isAuthenticated && (
-                    <form onSubmit={loginFormHandler}>
-                        <div className="groups">
-                            <div className="control">
-                                <input placeholder="Email" type="email" ref={emailRef} />
-                                <input placeholder="Password" type="password" ref={passwordRef} />
-                            </div>
-                            {error && <div className="error">{error}</div>}
-                        </div>
-                        <button type="submit">Sign In</button>
-                    </form>
-                )}
+                {!isAuthenticated && <button onClick={loginHandler}>Sign In</button>}
 
                 {!error && isAuthenticated && (
                     <div className="profile">
