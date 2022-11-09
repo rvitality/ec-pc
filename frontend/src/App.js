@@ -1,11 +1,10 @@
 import React, { useEffect } from "react";
-import Calculator from "./components/Calculator/Calculator.component";
-import Header from "./components/Header/Header.component";
-import Graph from "./components/Graph/Graph.component";
+import { Routes, Route } from "react-router-dom";
 
-import "./App.styles.scss";
-import Modal from "./components/Modal/Modal.component";
-import OfficialRateForm from "./components/OfficialRateForm/OfficialRateForm.component";
+import Header from "./routes/Header/Header.component";
+import CalculatorGraph from "./routes/CalculatorGraph/CalculatorGraph.route";
+import Account from "./routes/Account/Account.route";
+import Admin from "./routes/Admin/Admin.route";
 
 import { useApplianceContext } from "./context/ApplianceContext";
 
@@ -26,17 +25,22 @@ const App = () => {
     }, []);
 
     return (
-        <main>
-            <Header />
-            <section className="main-content">
-                <Calculator />
-                <div className="right-side">
-                    <Graph />
-                    <OfficialRateForm />
-                </div>
-            </section>
-            <Modal />
-        </main>
+        <Routes>
+            <Route path="/" element={<Header />}>
+                <Route index element={<CalculatorGraph />} />
+                <Route path="/account" element={<Account />} />
+                <Route path="/admin" element={<Admin />} />
+            </Route>
+            <Route
+                path="*"
+                element={
+                    <>
+                        <Header />
+                        <p>There is nothing here!</p>
+                    </>
+                }
+            />
+        </Routes>
     );
 };
 
