@@ -1,0 +1,65 @@
+@use "./styles/typography.scss" as *;
+@use "./styles/utils.scss" as *;
+@use "./styles/mixins.scss" as *;
+
+*,
+*::after,
+*::before {
+    margin: 0;
+    padding: 0;
+    box-sizing: inherit;
+}
+
+::-webkit-scrollbar {
+    display: none;
+}
+
+html {
+    font-size: 110%;
+
+    @include respond(tab-land) {
+        // width < 1200?
+        font-size: 75%;
+    }
+
+    @include respond(tab-port) {
+        // width < 900?
+        font-size: 60%;
+    }
+
+    @include respond(phone) {
+        font-size: 50%;
+    }
+}
+
+body {
+    box-sizing: border-box;
+    font-family: "Poppins", sans-serif;
+}
+
+ul li {
+    list-style: none;
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+    transition: all 0.25s ease-in-out;
+
+    &:hover {
+        filter: brightness(1.35);
+    }
+}
+
+input,
+textarea {
+    font-family: inherit;
+}
+
+button {
+    cursor: pointer;
+}
+
+img {
+    max-width: 100%;
+}
