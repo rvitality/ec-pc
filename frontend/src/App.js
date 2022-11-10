@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import { Routes, Route } from "react-router-dom";
 
 import Header from "./routes/Header/Header.component";
+import Home from "./routes/Home/Home.route";
 import CalculatorGraph from "./routes/CalculatorGraph/CalculatorGraph.route";
 import Account from "./routes/Account/Account.route";
 import Admin from "./routes/Admin/Admin.route";
@@ -27,7 +28,8 @@ const App = () => {
     return (
         <Routes>
             <Route path="/" element={<Header />}>
-                <Route index element={<CalculatorGraph />} />
+                <Route index element={<Home />} />
+                <Route path="/calculator" element={<CalculatorGraph />} />
                 <Route path="/account" element={<Account />} />
                 <Route path="/admin" element={<Admin />} />
             </Route>
