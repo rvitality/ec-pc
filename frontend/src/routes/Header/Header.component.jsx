@@ -50,9 +50,11 @@ const Header = () => {
                                 <li>
                                     <Link to="/account">Account</Link>
                                 </li>
-                                <li>
-                                    <Link to="/admin">Admin</Link>
-                                </li>
+                                {user.role === "admin" && (
+                                    <li>
+                                        <Link to="/admin">Admin</Link>
+                                    </li>
+                                )}
                             </ul>
                         </nav>
                     )}
