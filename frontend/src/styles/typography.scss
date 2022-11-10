@@ -1,0 +1,45 @@
+.heading-primary {
+    font-size: 3.8rem;
+    line-height: 1.1;
+}
+
+.highlight {
+    color: #2eb9fe;
+}
+
+.heading-secondary {
+    font-size: 2rem;
+    font-weight: 500;
+    line-height: 1.2;
+    margin: 0 auto;
+}
+.heading-tertiary {
+    font-weight: 500;
+    letter-spacing: 0.25rem;
+    color: #27bbad;
+    font-size: 1.3rem;
+    text-transform: uppercase;
+}
+
+.section-paragraph {
+    margin: 1rem 0;
+    font-size: 1.1rem;
+    color: #4e4d4d;
+}
+
+.primary-btn {
+    border: none;
+    letter-spacing: 0.05rem;
+    color: #fff;
+    padding: 0.7rem 1.6rem;
+    font-size: 1rem;
+    text-transform: capitalize;
+    border-radius: 2rem;
+    background-image: linear-gradient(to right, #2eb9fe, rgb(41, 105, 215));
+    transition: all 0.25s ease-in-out;
+    display: inline-block;
+
+    &:hover {
+        filter: brightness(0.9);
+    }
+}
