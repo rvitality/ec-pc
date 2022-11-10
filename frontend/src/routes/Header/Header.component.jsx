@@ -38,7 +38,12 @@ const Header = () => {
         <>
             <header>
                 <div className="left">
-                    <h1>EC-PC</h1>
+                    <Link to="/" className="logo">
+                        LOGO
+                    </Link>
+                </div>
+
+                <div className="right">
                     <nav>
                         <ul>
                             <li>
@@ -49,23 +54,17 @@ const Header = () => {
                             </li>
                         </ul>
                     </nav>
-                </div>
 
-                <div className="right">
-                    {!isAuthenticated && <button onClick={loginHandler}>Sign In</button>}
+                    {!isAuthenticated && (
+                        <button className="primary-btn" onClick={loginHandler}>
+                            Sign In
+                        </button>
+                    )}
 
                     {!error && isAuthenticated && (
-                        <div className="profile">
-                            <div>
-                                <div>
-                                    <span className="label">Email:</span> {user.email}
-                                </div>
-                                <div>
-                                    <span className="label">Role:</span> {user.role}
-                                </div>
-                            </div>
-                            <button onClick={logoutHandler}>Sign Out</button>
-                        </div>
+                        <button className="primary-btn" onClick={logoutHandler}>
+                            Sign Out
+                        </button>
                     )}
                 </div>
             </header>
