@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 
 import Header from "./routes/Header/Header.component";
 import Home from "./routes/Home/Home.route";
@@ -8,8 +8,10 @@ import Account from "./routes/Account/Account.route";
 import Admin from "./routes/Admin/Admin.route";
 
 import { useApplianceContext } from "./context/ApplianceContext";
+import { useAuthContext } from "./context/AuthContext";
 
 const App = () => {
+    const { isAuthenticated, user } = useAuthContext();
     const { setSarimaRate } = useApplianceContext();
 
     // fetch sarima rate
@@ -29,9 +31,20 @@ const App = () => {
         <Routes>
             <Route path="/" element={<Header />}>
                 <Route index element={<Home />} />
-                <Route path="/calculator" element={<CalculatorGraph />} />
-                <Route path="/account" element={<Account />} />
-                <Route path="/admin" element={<Admin />} />
+                <Route
+                    path="/calculator"
+                    element={isAuthenticated ? <CalculatorGraph /> : <Navigate to="/" />}
+                />
+                <Route
+                    path="/account"
+                    element={isAuthenticated ? <Account /> : <Navigate to="/" />}
+                />
+                <Route
+                    path="/admin"
+                    element={
+                        isAuthenticated && user.role === "admin" ? <Admin /> : <Navigate to="/" />
+                    }
+                />
             </Route>
             <Route
                 path="*"
