@@ -44,25 +44,27 @@ const Header = () => {
                 </div>
 
                 <div className="right">
-                    <nav>
-                        <ul>
-                            <li>
-                                <Link to="/account">Account</Link>
-                            </li>
-                            <li>
-                                <Link to="/admin">Admin</Link>
-                            </li>
-                        </ul>
-                    </nav>
+                    {isAuthenticated && (
+                        <nav>
+                            <ul>
+                                <li>
+                                    <Link to="/account">Account</Link>
+                                </li>
+                                <li>
+                                    <Link to="/admin">Admin</Link>
+                                </li>
+                            </ul>
+                        </nav>
+                    )}
 
                     {!isAuthenticated && (
-                        <button className="primary-btn" onClick={loginHandler}>
+                        <button className="btn secondary" onClick={loginHandler}>
                             Sign In
                         </button>
                     )}
 
                     {!error && isAuthenticated && (
-                        <button className="primary-btn" onClick={logoutHandler}>
+                        <button className="btn secondary" onClick={logoutHandler}>
                             Sign Out
                         </button>
                     )}
