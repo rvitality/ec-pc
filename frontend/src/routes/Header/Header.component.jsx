@@ -14,15 +14,7 @@ const Header = () => {
     const loginHandler = async () => {
         try {
             const response = await signInWithGooglePopup();
-
-            const { accessToken, uid, email, metadata, photoURL } = response.user;
-            const userData = { token: accessToken, id: uid, email, metadata, photoURL };
-
-            if (email === "daedalusquintus00@gmail.com") {
-                login({ ...userData, role: "admin" });
-            } else {
-                login({ ...userData, role: "user" });
-            }
+            login(response?.user);
         } catch (err) {
             console.log(err.message);
             setError(err.message);
