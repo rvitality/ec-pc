@@ -1,4 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
+import { v4 as uuidv4 } from "uuid";
+
+import DataTable from "../../components/DataTable/DataTable.component";
+import BillsTable from "./BillsTable/BillsTable.component";
 
 import { FaChartLine } from "react-icons/fa";
 import { RiLightbulbFlashFill } from "react-icons/ri";
@@ -8,7 +12,81 @@ import { TbTarget } from "react-icons/tb";
 import { useAuthContext } from "../../context/AuthContext";
 
 import "./Account.styles.scss";
-import { useState } from "react";
+
+const DUMMY_LOGS = [
+    {
+        id: uuidv4(),
+        month: "January",
+        year: 2022,
+        forecasted: 153425.4322,
+        actual: 142425.3214,
+        accuracy: 93.53,
+        status: "good",
+    },
+    {
+        id: uuidv4(),
+        month: "February",
+        year: 2022,
+        forecasted: 153425.4322,
+        actual: 142425.3214,
+        accuracy: 93.53,
+        status: "bad",
+    },
+    {
+        id: uuidv4(),
+        month: "March",
+        year: 2022,
+        forecasted: 153425.4322,
+        actual: 142425.3214,
+        accuracy: 93.53,
+        status: "late",
+    },
+    {
+        id: uuidv4(),
+        month: "April",
+        year: 2022,
+        forecasted: 153425.4322,
+        actual: 142425.3214,
+        accuracy: 93.53,
+        status: "good",
+    },
+    {
+        id: uuidv4(),
+        month: "May",
+        year: 2022,
+        forecasted: 153425.4322,
+        actual: 142425.3214,
+        accuracy: 93.53,
+        status: "late",
+    },
+    {
+        id: uuidv4(),
+        month: "June",
+        year: 2022,
+        forecasted: 153425.4322,
+        actual: 142425.3214,
+        accuracy: 93.53,
+        status: "good",
+    },
+    {
+        id: uuidv4(),
+        month: "July",
+        year: 2022,
+        forecasted: 153425.4322,
+        actual: 142425.3214,
+        accuracy: 93.53,
+        status: "late",
+    },
+    {
+        id: uuidv4(),
+        month: "August",
+        year: 2022,
+        forecasted: 153425.4322,
+        actual: 142425.3214,
+        accuracy: 93.53,
+        status: "good",
+    },
+];
 const Account = () => {
     const [accuracy, setAccuracy] = useState(0);
     const { user } = useAuthContext();
@@ -134,6 +212,12 @@ const Account = () => {
                         </div>
                     </div>
                 </div>
+                {/* ------------- DATA TABLE --------------- */}
+                <DataTable
+                    logs={DUMMY_LOGS}
+                    // onFilterBySearch={filterBySearchHandler}
+                    Table={BillsTable}
+                />
             </div>
         </section>
     );
