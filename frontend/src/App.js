@@ -9,12 +9,25 @@ import Admin from "./routes/Admin/Admin.route";
 
 import { useApplianceContext } from "./context/ApplianceContext";
 import { useAuthContext } from "./context/AuthContext";
+import { onAuthStateChangedListener } from "./utils/firebase.utils";
 
 const App = () => {
-    const { isAuthenticated, user } = useAuthContext();
+    const { isAuthenticated, user, login } = useAuthContext();
     const { setSarimaRate } = useApplianceContext();
 
-    // fetch sarima rate
+    // ! AUTHENTICATIOH
+    useEffect(() => {
+        const unsubscribe = onAuthStateChangedListener(user => {
+            console.log(user);
+            if (user) {
+                login(user);
+            }
+        });
+
+        return unsubscribe;
+    }, []);
+
+    // ! fetch sarima rate
     useEffect(() => {
         const sendRequest = async () => {
             const response = await fetch("/get_sarima_rate");
