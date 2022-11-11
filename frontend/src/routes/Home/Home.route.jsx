@@ -18,7 +18,7 @@ const Home = () => {
                         Lorem ipsum, dolor sit amet consectetur adipisicing elit. distinctio,
                         possimus ex obcaecati reprehenderit tempora perspiciatis fugit at.
                     </p>
-                    <Link to="/" className="primary-btn">
+                    <Link to="/" className="btn primary">
                         Learn more
                     </Link>
                 </div>
