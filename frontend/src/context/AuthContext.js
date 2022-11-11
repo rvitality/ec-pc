@@ -13,7 +13,22 @@ export const AuthContextProvider = props => {
 
     const loginHandler = user => {
         setIsAuthenticated(true);
-        setUser(user);
+
+        const { displayName, accessToken, uid, email, metadata, photoURL } = user;
+        const userData = {
+            name: displayName,
+            token: accessToken,
+            id: uid,
+            email,
+            metadata,
+            photoURL,
+        };
+
+        if (email === "daedalusquintus00@gmail.com" || uid === "KgGL9ntc4IRouwtjBSGfusfd28r1") {
+            setUser({ ...userData, role: "admin" });
+        } else {
+            setUser({ ...userData, role: "user" });
+        }
     };
 
     const logoutHandler = () => {
