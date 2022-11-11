@@ -1,12 +1,13 @@
 .home {
     align-items: center;
     display: flex;
-    height: 100vh;
-    margin-top: -25vh;
-    padding-top: 6rem;
+    // height: 100vh;
+    // margin-top: -15vh;
+    // padding-top: 6rem;
     max-height: 100vh;
     overflow-y: hidden;
     position: relative;
+    padding-top: 0;
 
     &__texts {
         width: 50%;
@@ -15,6 +16,7 @@
 
         .section-paragraph {
             max-width: 75%;
+            margin-bottom: 2rem;
         }
     }
     &__img-container {
