@@ -1,0 +1,80 @@
+.data-table {
+    position: relative;
+
+    .main-content {
+        &.hide {
+            display: none;
+        }
+
+        &__upper {
+            margin-bottom: 2rem;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+        }
+    }
+
+    .search {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #eee;
+        border: 1px solid rgba(0, 0, 0, 0.15);
+        border-radius: 10%;
+        color: #000;
+        padding: 0.85rem 1rem 1rem 1rem;
+        width: 30%;
+
+        svg {
+            font-size: 2.5rem;
+        }
+
+        input {
+            width: 100%;
+            font-size: 1.5rem;
+            font-family: inherit;
+            padding: 0.5rem 0.85rem;
+            background: none;
+            outline: none;
+            border: none;
+        }
+    }
+
+    .pagination {
+        padding: 0 1rem;
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        gap: 1rem;
+        margin-top: 4rem;
+
+        button {
+            border: 1px solid #777;
+            // border: none;
+            cursor: pointer;
+            outline: none;
+            border-radius: 50%;
+            height: 2rem;
+            width: 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease-in-out;
+
+            svg {
+                font-weight: bold;
+                font-size: 1.6rem;
+            }
+
+            &.active {
+                background-color: #2eb9fe;
+                border-color: transparent;
+                color: #fff;
+            }
+
+            &:hover {
+                filter: brightness(1.1);
+            }
+        }
+    }
+}
