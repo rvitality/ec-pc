@@ -1,0 +1,119 @@
+.account {
+    padding-top: 0;
+    .cover {
+        background-image: url("https://source.unsplash.com/random/?nature,city");
+        background-repeat: no-repeat;
+        height: 20rem;
+        background-position: center;
+        background-size: cover;
+    }
+
+    .photo-container {
+        display: flex;
+        align-items: center;
+        gap: 10rem;
+        position: relative;
+        z-index: 3;
+        margin-top: -3rem;
+
+        .left {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+
+            .photo {
+                box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+                object-fit: cover;
+                width: 6rem;
+                height: 6rem;
+            }
+
+            .name {
+                text-transform: capitalize;
+                font-weight: 600;
+            }
+            .role {
+                text-transform: uppercase;
+                letter-spacing: 0.1rem;
+                font-weight: 500;
+                font-size: 0.8rem;
+                color: #333;
+            }
+        }
+
+        .right {
+            .label {
+                color: #333;
+                font-size: 0.9rem;
+                margin-right: 0.5rem;
+            }
+        }
+    }
+
+    .group {
+        display: flex;
+        gap: 3rem;
+    }
+
+    .prediction {
+        margin-top: 2rem;
+    }
+
+    .control {
+        display: flex;
+        align-items: center;
+        gap: 1.25rem;
+        margin: 1rem 0;
+        min-width: 50%;
+
+        &__icon {
+            align-items: center;
+            background: #2eb9fe;
+            border-radius: 50%;
+            display: flex;
+            font-size: 1.15rem;
+            height: 2.5rem;
+            justify-content: center;
+            width: 2.5rem;
+            color: #fff;
+        }
+
+        .label {
+            color: #333;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+        }
+
+        .value {
+            text-transform: capitalize;
+        }
+    }
+
+    .comparison {
+        border-top: 1px solid #aaa;
+        padding-top: 0.5rem;
+
+        .input-bill-container {
+            min-width: 50%;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 1rem;
+
+            .btn {
+                font-size: 0.9rem;
+            }
+
+            .input-bill {
+                .control__texts {
+                    input {
+                        display: block;
+                        font-size: inherit;
+                        padding: 0.35rem;
+                        margin-top: 0.3rem;
+                    }
+                }
+            }
+        }
+    }
+}
