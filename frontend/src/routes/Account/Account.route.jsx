@@ -10,13 +10,12 @@ import { useAuthContext } from "../../context/AuthContext";
 import "./Account.styles.scss";
 import { useState } from "react";
 const Account = () => {
-    const [inputBill, setInputBill] = useState(0);
     const [accuracy, setAccuracy] = useState(0);
     const { user } = useAuthContext();
     const { email, name, photoURL, role, metadata } = user || {};
     const accountCreationTime = metadata?.createdAt ? new Date(+metadata.createdAt) : "";
 
-    const forecastedBill = 15734;
+    const forecastedBill = 15734.63;
 
     const options = {
         weekday: "short", //to display the full name of the day, you can use short to indicate an abbreviation of the day
@@ -27,10 +26,9 @@ const Account = () => {
 
     const billChangeHandler = e => {
         const officialBill = +e.target.value;
-        var regex = /[0-9]|\./;
-        if (!regex.test(officialBill)) return;
-
-        setInputBill(officialBill);
+        // console.log(officialBill);
+        // var regex = /[0-9]|\./;
+        // if (!regex.test(officialBill)) return;
 
         const errorRate = (Math.abs(officialBill - forecastedBill) / forecastedBill) * 100;
         const res = (100 - errorRate).toFixed(2);
@@ -112,12 +110,10 @@ const Account = () => {
                                         Enter your bill this month
                                     </label>
                                     <input
-                                        value={inputBill}
                                         onChange={billChangeHandler}
-                                        type="text"
+                                        type="number"
                                         name="bill"
                                         id="bill"
-                                        maxLength={`${forecastedBill}`.length}
                                     />
                                 </div>
                             </div>
