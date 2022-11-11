@@ -1,0 +1,46 @@
+.data-bills {
+    text-align: center;
+    width: 100%;
+
+    thead tr {
+        border: 1px solid #d0d1d5;
+    }
+
+    tr {
+        grid-template-columns: repeat(6, 1fr);
+        border-radius: 1rem;
+        margin-top: 1rem;
+        display: grid;
+        gap: 1rem;
+        padding: 1rem;
+        align-items: center;
+    }
+
+    .status {
+        padding: 0.4rem 0.8rem;
+        width: fit-content;
+        justify-self: center;
+        text-transform: capitalize;
+        color: #000;
+    }
+
+    .today {
+        background-color: #512da9;
+        // color: #fff;
+    }
+
+    .good {
+        background-color: #69edb6;
+        // color: #257056;
+    }
+
+    .bad {
+        background-color: #ffb97b;
+        // color: #c65322;
+    }
+
+    .late {
+        background-color: #feec4f;
+        // color: #93742a;
+    }
+}
