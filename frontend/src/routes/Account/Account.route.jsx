@@ -10,6 +10,7 @@ import { useAuthContext } from "../../context/AuthContext";
 import "./Account.styles.scss";
 import { useState } from "react";
 const Account = () => {
+    const [inputBill, setInputBill] = useState(0);
     const [accuracy, setAccuracy] = useState(0);
     const { user } = useAuthContext();
     const { email, name, photoURL, role, metadata } = user || {};
@@ -26,6 +27,11 @@ const Account = () => {
 
     const billChangeHandler = e => {
         const officialBill = +e.target.value;
+        var regex = /[0-9]|\./;
+        if (!regex.test(officialBill)) return;
+
+        setInputBill(officialBill);
+
         const errorRate = (Math.abs(officialBill - forecastedBill) / forecastedBill) * 100;
         const res = (100 - errorRate).toFixed(2);
         setAccuracy(res);
@@ -106,10 +112,12 @@ const Account = () => {
                                         Enter your bill this month
                                     </label>
                                     <input
+                                        value={inputBill}
                                         onChange={billChangeHandler}
-                                        type="number"
+                                        type="text"
                                         name="bill"
                                         id="bill"
+                                        maxLength={`${forecastedBill}`.length}
                                     />
                                 </div>
                             </div>
