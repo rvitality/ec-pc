@@ -10,8 +10,8 @@ const BillsTable = ({ dataToDisplay }) => {
                     <th>No.</th>
                     <th>Month</th>
                     <th>Year</th>
-                    <th>Forecasted Bills</th>
-                    <th>Actual Bills</th>
+                    <th>Forecasted Bill</th>
+                    <th>Actual Bill</th>
                     <th>Accuracy</th>
                 </tr>
             </thead>
