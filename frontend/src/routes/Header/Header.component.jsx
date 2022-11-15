@@ -40,6 +40,9 @@ const Header = () => {
                         <nav>
                             <ul>
                                 <li>
+                                    <Link to="/calculator">Calculator</Link>
+                                </li>
+                                <li>
                                     <Link to="/account">Account</Link>
                                 </li>
                                 {user.role === "admin" && (
