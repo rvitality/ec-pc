@@ -101,3 +101,19 @@ export const getAppliancesAndDocuments = async () => {
         ...docSnapshot.data(),
     }));
 };
+
+// ! GET SINGLE DOCUMENT/USER
+export const getUserData = async userID => {
+    // console.log(userID);
+    const docRef = doc(db, "users", userID);
+    const docSnap = await getDoc(docRef);
+
+    if (docSnap.exists()) {
+        // console.log("Document data:", docSnap.data());
+        return docSnap.data();
+    } else {
+        // doc.data() will be undefined in this case
+        console.log("No such document!");
+        return {};
+    }
+};
