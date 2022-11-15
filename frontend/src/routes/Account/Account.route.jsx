@@ -1,5 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { v4 as uuidv4 } from "uuid";
+import { getUserData } from "../../utils/firebase.utils";
+
+import useFetchUserRecords from "../../hooks/useFetchUserRecords";
 
 import DataTable from "../../components/DataTable/DataTable.component";
 import BillsTable from "./BillsTable/BillsTable.component";
@@ -41,55 +44,73 @@ const DUMMY_LOGS = [
         accuracy: 93.53,
         status: "late",
     },
-    {
-        id: uuidv4(),
-        month: "April",
-        year: 2022,
-        forecasted: 153425.4322,
-        actual: 142425.3214,
-        accuracy: 93.53,
-        status: "good",
-    },
-    {
-        id: uuidv4(),
-        month: "May",
-        year: 2022,
-        forecasted: 153425.4322,
-        actual: 142425.3214,
-        accuracy: 93.53,
-        status: "late",
-    },
-    {
-        id: uuidv4(),
-        month: "June",
-        year: 2022,
-        forecasted: 153425.4322,
-        actual: 142425.3214,
-        accuracy: 93.53,
-        status: "good",
-    },
-    {
-        id: uuidv4(),
-        month: "July",
-        year: 2022,
-        forecasted: 153425.4322,
-        actual: 142425.3214,
-        accuracy: 93.53,
-        status: "late",
-    },
-    {
-        id: uuidv4(),
-        month: "August",
-        year: 2022,
-        forecasted: 153425.4322,
-        actual: 142425.3214,
-        accuracy: 93.53,
-        status: "good",
-    },
+    // {
+    //     id: uuidv4(),
+    //     month: "April",
+    //     year: 2022,
+    //     forecasted: 153425.4322,
+    //     actual: 142425.3214,
+    //     accuracy: 93.53,
+    //     status: "good",
+    // },
+    // {
+    //     id: uuidv4(),
+    //     month: "May",
+    //     year: 2022,
+    //     forecasted: 153425.4322,
+    //     actual: 142425.3214,
+    //     accuracy: 93.53,
+    //     status: "late",
+    // },
+    // {
+    //     id: uuidv4(),
+    //     month: "June",
+    //     year: 2022,
+    //     forecasted: 153425.4322,
+    //     actual: 142425.3214,
+    //     accuracy: 93.53,
+    //     status: "good",
+    // },
+    // {
+    //     id: uuidv4(),
+    //     month: "July",
+    //     year: 2022,
+    //     forecasted: 153425.4322,
+    //     actual: 142425.3214,
+    //     accuracy: 93.53,
+    //     status: "late",
+    // },
+    // {
+    //     id: uuidv4(),
+    //     month: "August",
+    //     year: 2022,
+    //     forecasted: 153425.4322,
+    //     actual: 142425.3214,
+    //     accuracy: 93.53,
+    //     status: "good",
+    // },
 ];
+
 const Account = () => {
-    const [accuracy, setAccuracy] = useState(0);
     const { user } = useAuthContext();
+    const officialBillsRequest = useFetchUserRecords(user || {});
+
+    const dateObj = new Date();
+    const currentMonth = dateObj.toLocaleDateString("en-US", { month: "long" });
+    const currentYear = dateObj.getFullYear();
+    const [currentRecord, setCurrentRecord] = useState({
+        id: uuidv4(),
+        month: currentMonth,
+        year: currentYear,
+    });
+
+    const [records, setRecords] = useState([]);
+
+    useEffect(() => {
+        setRecords(officialBillsRequest.data || []);
+    }, [officialBillsRequest.data]);
+
+    const [accuracy, setAccuracy] = useState(0);
     const { email, name, photoURL, role, metadata } = user || {};
     const accountCreationTime = metadata?.createdAt ? new Date(+metadata.createdAt) : "";
 
@@ -109,8 +130,40 @@ const Account = () => {
         // if (!regex.test(officialBill)) return;
 
         const errorRate = (Math.abs(officialBill - forecastedBill) / forecastedBill) * 100;
-        const res = (100 - errorRate).toFixed(2);
-        setAccuracy(res);
+        const accuracy = (100 - errorRate).toFixed(2);
+        setAccuracy(accuracy);
+    };
+
+    const billOnBlurHandler = e => {
+        console.log("blur");
+
+        const officialBill = +e.target.value;
+
+        const errorRate = (Math.abs(officialBill - forecastedBill) / forecastedBill) * 100;
+        const accuracy = (100 - errorRate).toFixed(2);
+        const newUserRecord = {
+            accuracy: +accuracy,
+            forecasted: forecastedBill,
+            actual: officialBill,
+            status: "good",
+            ...currentRecord,
+        };
+
+        setRecords(prevState => {
+            const existingRecordIndex = prevState.findIndex(
+                record => record.id === newUserRecord.id
+            );
+            if (existingRecordIndex > 0) {
+                prevState[existingRecordIndex] = newUserRecord;
+                // return prevState; // wont cause a rerender because it's the same reference
+                return [...prevState];
+            } else {
+                // add new
+                return [...prevState, newUserRecord];
+            }
+        });
+
+        // console.log(records);
     };
 
     return (
@@ -189,6 +242,7 @@ const Account = () => {
                                     </label>
                                     <input
                                         onChange={billChangeHandler}
+                                        onBlur={billOnBlurHandler}
                                         type="number"
                                         name="bill"
                                         id="bill"
@@ -213,11 +267,15 @@ const Account = () => {
                     </div>
                 </div>
                 {/* ------------- DATA TABLE --------------- */}
-                <DataTable
-                    logs={DUMMY_LOGS}
-                    // onFilterBySearch={filterBySearchHandler}
-                    Table={BillsTable}
-                />
+                {officialBillsRequest.isLoading ? (
+                    <h2>Loading...</h2>
+                ) : (
+                    <DataTable
+                        data={records}
+                        Table={BillsTable}
+                        // onFilterBySearch={filterBySearchHandler}
+                    />
+                )}
             </div>
         </section>
     );
