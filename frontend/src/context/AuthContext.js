@@ -1,3 +1,6 @@
+import { useEffect } from "react";
+import { onAuthStateChangedListener, createUserDocumentFromAuth } from "../utils/firebase.utils";
+
 import { createContext, useContext, useState } from "react";
 
 const initialState = {
@@ -11,11 +14,9 @@ export const AuthContextProvider = props => {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [user, setUser] = useState({ email: "", password: "", role: "" });
 
-    const loginHandler = user => {
-        setIsAuthenticated(true);
-
+    const formatUserData = user => {
         const { displayName, accessToken, uid, email, metadata, photoURL } = user;
-        const userData = {
+        let userData = {
             name: displayName,
             token: accessToken,
             id: uid,
@@ -25,16 +26,36 @@ export const AuthContextProvider = props => {
         };
 
         if (email === "daedalusquintus00@gmail.com" || uid === "KgGL9ntc4IRouwtjBSGfusfd28r1") {
-            setUser({ ...userData, role: "admin" });
+            userData = { ...userData, role: "admin" };
         } else {
-            setUser({ ...userData, role: "user" });
+            userData = { ...userData, role: "user" };
         }
+        return userData;
+    };
+
+    const loginHandler = user => {
+        setIsAuthenticated(true);
+        const formattedUserData = formatUserData(user);
+        setUser(formattedUserData);
     };
 
     const logoutHandler = () => {
         setIsAuthenticated(false);
         setUser({});
     };
+
+    useEffect(() => {
+        const unsubscribe = onAuthStateChangedListener(user => {
+            if (user) {
+                loginHandler(user);
+                createUserDocumentFromAuth(user);
+            }
+
+            // setUser(user);
+        });
+
+        return unsubscribe;
+    }, []);
 
     const contextValue = {
         isAuthenticated,
