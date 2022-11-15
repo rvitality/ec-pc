@@ -86,3 +86,18 @@ export const createUserDocumentFromAuth = async (userAuth, additionalInfo) => {
 
     return userSnapshot;
 };
+
+// ! FIRESTORE DATABASE =============================
+
+export const getAppliancesAndDocuments = async () => {
+    const collectionRef = collection(db, "appliances");
+    const q = query(collectionRef);
+
+    const querySnapshot = await getDocs(q);
+
+    return querySnapshot.docs.map(docSnapshot => ({
+        id: uuidv4(),
+        category: docSnapshot.id,
+        ...docSnapshot.data(),
+    }));
+};
