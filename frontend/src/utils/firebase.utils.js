@@ -1,4 +1,5 @@
 import { initializeApp } from "firebase/app";
+import { v4 as uuidv4 } from "uuid";
 import {
     getAuth,
     signInWithEmailAndPassword,
@@ -7,6 +8,18 @@ import {
     signOut,
     onAuthStateChanged,
 } from "firebase/auth";
+
+import {
+    getFirestore,
+    doc,
+    getDoc,
+    setDoc,
+    collection,
+    writeBatch,
+    updateDoc,
+    query,
+    getDocs,
+} from "firebase/firestore";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -19,13 +32,15 @@ const firebaseConfig = {
 };
 
 const firebaseApp = initializeApp(firebaseConfig);
-
 export const auth = getAuth();
+export const db = getFirestore();
 
 const googleProvider = new GoogleAuthProvider();
 googleProvider.setCustomParameters({
     prompt: "select_account",
 });
+
+// ! AUTHENTICATION =============================
 
 export const signInAuthWithEmailAndPassword = async (email, password) => {
     if (!email || !password) return;
@@ -38,3 +53,36 @@ export const signInWithGooglePopup = () => signInWithPopup(auth, googleProvider)
 export const signOutUser = async () => await signOut(auth);
 
 export const onAuthStateChangedListener = callback => onAuthStateChanged(auth, callback);
+
+export const createUserDocumentFromAuth = async (userAuth, additionalInfo) => {
+    console.log(userAuth);
+    const userDocRef = doc(db, "users", userAuth.uid);
+
+    const userSnapshot = await getDoc(userDocRef);
+
+    if (!userSnapshot.exists()) {
+        const { displayName, accessToken, uid, email, metadata, photoURL } = userAuth;
+        const userData = {
+            name: displayName,
+            email,
+            photoURL,
+        };
+
+        if (uid === "KgGL9ntc4IRouwtjBSGfusfd28r1") {
+            userData["role"] = "admin";
+        } else {
+            userData["role"] = "user";
+        }
+
+        try {
+            await setDoc(userDocRef, {
+                ...userData,
+                ...additionalInfo,
+            });
+        } catch (err) {
+            console.log(err.message);
+        }
+    }
+
+    return userSnapshot;
+};
