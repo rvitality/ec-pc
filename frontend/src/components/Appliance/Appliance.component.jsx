@@ -97,6 +97,7 @@ const Appliance = ({
     onAddAppliance,
     sarimaRate,
     onRemoveAppliance,
+    fetchedApplianceOptions,
 }) => {
     const [state, dispatch] = useReducer(reducer, initialState);
     const {
@@ -333,6 +334,7 @@ const Appliance = ({
                 duration={totalDuration}
                 applianceBill={applianceBill}
                 onSelectAppliance={selectApplianceHandler}
+                choices={fetchedApplianceOptions}
             />
         );
     };
