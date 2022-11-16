@@ -1,5 +1,5 @@
 import React, { useRef } from "react";
-import { useApplianceContext } from "../../context/ApplianceContext";
+import { useApplianceContext } from "../../../context/ApplianceContext";
 
 import "./OfficialRateForm.styles.scss";
 
