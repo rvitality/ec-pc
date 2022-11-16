@@ -33,7 +33,7 @@ const firebaseConfig = {
 
 const firebaseApp = initializeApp(firebaseConfig);
 export const auth = getAuth();
-export const db = getFirestore();
+export const db = getFirestore(firebaseApp);
 
 const googleProvider = new GoogleAuthProvider();
 googleProvider.setCustomParameters({
@@ -55,7 +55,6 @@ export const signOutUser = async () => await signOut(auth);
 export const onAuthStateChangedListener = callback => onAuthStateChanged(auth, callback);
 
 export const createUserDocumentFromAuth = async (userAuth, additionalInfo) => {
-    console.log(userAuth);
     const userDocRef = doc(db, "users", userAuth.uid);
 
     const userSnapshot = await getDoc(userDocRef);
@@ -104,7 +103,6 @@ export const getAppliancesAndDocuments = async () => {
 
 // ! GET SINGLE DOCUMENT/USER
 export const getUserData = async userID => {
-    // console.log(userID);
     const docRef = doc(db, "users", userID);
     const docSnap = await getDoc(docRef);
 
@@ -115,5 +113,17 @@ export const getUserData = async userID => {
         // doc.data() will be undefined in this case
         console.log("No such document!");
         return {};
+    }
+};
+
+// ! UPDATE USER DATA, ADD NEW ELECTRIC BILL
+export const updateUserData = async userData => {
+    console.log(userData.records);
+    try {
+        const { id } = userData;
+        const documentRef = doc(db, "users", id);
+        await updateDoc(documentRef, { records: userData.records });
+    } catch (err) {
+        console.log(err);
     }
 };
