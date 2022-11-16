@@ -4,7 +4,7 @@ import "./BillsTable.styles.scss";
 
 const BillsTable = ({ dataToDisplay }) => {
     return (
-        <table className="data-bills">
+        <table className="data-table-bills table">
             <thead>
                 <tr>
                     <th>No.</th>
