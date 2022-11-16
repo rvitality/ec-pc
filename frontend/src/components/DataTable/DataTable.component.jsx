@@ -106,7 +106,7 @@ const DataTable = ({ data, onFilterBySearch, Table, userRole }) => {
             </>
         );
     } else {
-        dataToShow = <h2 className="no-result-heading">No results.</h2>;
+        dataToShow = <div className="no-result-heading">No records.</div>;
     }
 
     return (
