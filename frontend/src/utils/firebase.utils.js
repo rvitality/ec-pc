@@ -101,6 +101,18 @@ export const getAppliancesAndDocuments = async () => {
     }));
 };
 
+export const getUsers = async () => {
+    const collectionRef = collection(db, "users");
+    const q = query(collectionRef);
+
+    const querySnapshot = await getDocs(q);
+
+    return querySnapshot.docs.map(docSnapshot => ({
+        id: docSnapshot.id,
+        ...docSnapshot.data(),
+    }));
+};
+
 // ! GET SINGLE DOCUMENT/USER
 export const getUserData = async userID => {
     const docRef = doc(db, "users", userID);
