@@ -1,0 +1,34 @@
+.admin-dashboard {
+    background: #fff5f5;
+
+    nav {
+        margin-top: 2rem;
+        ul {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+
+            li {
+                cursor: pointer;
+                font-weight: 500;
+                font-size: 1.15rem;
+                padding-bottom: 1rem;
+                transition: all 0.2s ease-in-out;
+                border-bottom: 2px solid transparent;
+
+                &.active {
+                    border-color: #ed7575;
+                }
+
+                &:hover {
+                    border-color: #ed7575;
+                }
+            }
+        }
+    }
+
+    .content {
+        margin: 2rem 0;
+        position: relative;
+    }
+}
