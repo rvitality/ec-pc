@@ -1,0 +1,23 @@
+.users-table.data-logs {
+    tr {
+        // grid-template-columns: repeat(5, 1fr);
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+
+    td {
+        word-break: break-all;
+    }
+
+    .role {
+        text-transform: uppercase;
+        font-weight: 500;
+    }
+
+    .photo {
+        img {
+            width: 3rem;
+            height: 3rem;
+            object-fit: cover;
+        }
+    }
+}
