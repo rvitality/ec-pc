@@ -1,5 +1,9 @@
 import { useEffect } from "react";
-import { onAuthStateChangedListener, createUserDocumentFromAuth } from "../utils/firebase.utils";
+import {
+    onAuthStateChangedListener,
+    createUserDocumentFromAuth,
+    getUserData,
+} from "../utils/firebase.utils";
 
 import { createContext, useContext, useState } from "react";
 
@@ -36,7 +40,7 @@ export const AuthContextProvider = props => {
     const loginHandler = user => {
         setIsAuthenticated(true);
         const formattedUserData = formatUserData(user);
-        setUser(formattedUserData);
+        setUser(prevState => ({ ...prevState, ...formattedUserData }));
     };
 
     const logoutHandler = () => {
@@ -49,9 +53,8 @@ export const AuthContextProvider = props => {
             if (user) {
                 loginHandler(user);
                 createUserDocumentFromAuth(user);
+                getUserData(user.uid).then(res => setUser(prevState => ({ ...prevState, ...res })));
             }
-
-            // setUser(user);
         });
 
         return unsubscribe;
