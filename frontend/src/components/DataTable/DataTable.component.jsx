@@ -9,15 +9,15 @@ import { HiOutlineChevronRight } from "react-icons/hi";
 
 import "./DataTable.styles.scss";
 
-const DataTable = ({ logs, onFilterBySearch, Table, userRole }) => {
-    const billsCopy = [...logs];
+const DataTable = ({ data, onFilterBySearch, Table, userRole }) => {
+    const billsCopy = [...data];
     const chunkData = chunkArray(billsCopy, 5);
 
     const [billsToDisplay, setBillsToDisplay] = useState(chunkData[0]);
 
     useEffect(() => {
         setBillsToDisplay(chunkData[0]);
-    }, [logs]);
+    }, [data]);
 
     const [paginationArray, setPaginationArray] = useState(getPageArrayInitialState(chunkData));
     const [paginationSetIndex, setPaginationSetIndex] = useState(1);
