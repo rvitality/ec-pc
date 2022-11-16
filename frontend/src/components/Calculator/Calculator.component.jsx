@@ -1,10 +1,14 @@
-import React, { useState, useReducer } from "react";
+import React, { useState, useReducer, useEffect } from "react";
+
+
 import Appliance from "../Appliance/Appliance.component";
 
 import { IoMdAdd } from "react-icons/io";
+import { useApplianceContext } from "../../context/ApplianceContext";
+
+import { getAppliancesAndDocuments } from "../../utils/firebase.utils";
 
 import "./Calculator.styles.scss";
-import { useApplianceContext } from "../../context/ApplianceContext";
 
 const initialState = {
     totalBill: 0,
@@ -86,12 +90,26 @@ const reducer = (state, action) => {
     return initialState;
 };
 
+
+
 const Calculator = () => {
+    const [applianceOptions, setApplianceOptions] = useState([]);
     const { setAppliances, sarimaRate, setModalIsOpen } = useApplianceContext();
     const [state, dispatch] = useReducer(reducer, initialState);
 
     const [applianceHolders, setApplianceHolder] = useState(Array(3).fill(0));
     const [manualApplianceHolders, setManualApplianceHolders] = useState([]);
+
+    // FETCH APPLIANCE OPTIONS
+    useEffect(() => {
+        const getCategoriesMap = async () => {
+            const categoriesMap = await getAppliancesAndDocuments();
+            console.log(categoriesMap);
+            setApplianceOptions(categoriesMap);
+        };
+
+        getCategoriesMap();
+    }, []);
 
     const addAppliance = (previousAppliance = {}, currentAppliance = {}) => {
         // console.log("previousAppliance: ", previousAppliance);
@@ -160,6 +178,7 @@ const Calculator = () => {
                         onAddAppliance={addAppliance}
                         onRemoveAppliance={removeAppliance}
                         sarimaRate={sarimaRate}
+                        fetchedApplianceOptions={applianceOptions}
                     />
                 ))}
 
