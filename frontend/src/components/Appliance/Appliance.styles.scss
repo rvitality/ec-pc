@@ -3,6 +3,7 @@
     margin: 2rem 0;
 
     &__selection {
+        font-family: inherit;
         position: relative;
 
         &:hover .calcu__btn {
