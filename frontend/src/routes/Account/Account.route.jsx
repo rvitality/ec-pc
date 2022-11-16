@@ -114,21 +114,24 @@ const Account = () => {
 
         // check if the last element of the user's `records` array is the same as the current month, if it is then set isCurrentMonthBillExists to true
         const lastElementRecord =
-            user.records.length > 0 ? user.records[user.records.length - 1] : [];
-        if (
-            lastElementRecord.month.toLowerCase() === currentMonth.toLowerCase() &&
-            +lastElementRecord.year === +currentYear
-        ) {
-            //  if the current month's bill is already entered, get the 2nd to the last of the `records`, else get the last one in the array `records`
-            // console.log([user.records.length - 2]);
-            const userRecords = user.records;
-            const lastSecondRecord = userRecords[userRecords.length - 2];
-            setLastMonthBill(lastSecondRecord.actual);
-            setIsCurrentMonthBillExists(true);
-        } else {
-            const userRecords = user.records;
-            const lastRecord = userRecords[userRecords.length - 1];
-            setLastMonthBill(lastRecord.actual);
+            user.records?.length > 0 ? user.records[user.records.length - 1] : {};
+        if (Object.keys(lastElementRecord).length > 0) {
+            if (
+                lastElementRecord.month.toLowerCase() === currentMonth.toLowerCase() &&
+                +lastElementRecord.year === +currentYear
+            ) {
+                //  if the current month's bill is already entered, get the 2nd to the last of the `records`, else get the last one in the array `records`
+                // console.log([user.records.length - 2]);
+                const userRecords = user.records;
+                const lastSecondRecord =
+                    userRecords.length >= 2 ? userRecords[userRecords.length - 2] : { actual: 0 };
+                setLastMonthBill(lastSecondRecord.actual);
+                setIsCurrentMonthBillExists(true);
+            } else {
+                const userRecords = user.records;
+                const lastRecord = userRecords[userRecords.length - 1];
+                setLastMonthBill(lastRecord.actual);
+            }
         }
     }, [officialBillsRequest.data]);
 
@@ -178,7 +181,7 @@ const Account = () => {
                     +record.year === +newUserRecord.year
             );
 
-            if (existingRecordIndex > 0) {
+            if (existingRecordIndex >= 0) {
                 prevState[existingRecordIndex] = newUserRecord;
 
                 updateUserData({ ...user, records: prevState }); // firestore db
