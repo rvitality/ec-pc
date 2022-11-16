@@ -1,5 +1,4 @@
 import React from "react";
-
 import { v4 as uuidv4 } from "uuid";
 
 import { BsChevronRight } from "react-icons/bs";
@@ -122,10 +121,10 @@ const DUMMY_DATA = [
     },
 ];
 
-const Options = ({ onSelectAppliance }) => {
+const Options = ({ onSelectAppliance, choices }) => {
     return (
         <ul className="lvl1">
-            {DUMMY_DATA.map(({ id, category, data }) => {
+            {choices.map(({ id, category, data }) => {
                 return (
                     <li key={id}>
                         <h3>
@@ -134,7 +133,7 @@ const Options = ({ onSelectAppliance }) => {
                         </h3>
 
                         <ul className="lvl2">
-                            {data.map(itemData => {
+                            {data.map((itemData, index) => {
                                 const {
                                     id,
                                     applianceID,
@@ -154,20 +153,22 @@ const Options = ({ onSelectAppliance }) => {
 
                                             <ul className="lvl3">
                                                 {subData.map(
-                                                    ({ applianceID, applianceName, wattage }) => (
-                                                        <li
-                                                            key={applianceID}
-                                                            onClick={() =>
-                                                                onSelectAppliance({
-                                                                    applianceID,
-                                                                    applianceName,
-                                                                    wattage,
-                                                                })
-                                                            }
-                                                        >
-                                                            <h3>{applianceName}</h3>
-                                                        </li>
-                                                    )
+                                                    ({ applianceID, applianceName, wattage }) => {
+                                                        return (
+                                                            <li
+                                                                key={applianceID}
+                                                                onClick={() =>
+                                                                    onSelectAppliance({
+                                                                        applianceID,
+                                                                        applianceName,
+                                                                        wattage,
+                                                                    })
+                                                                }
+                                                            >
+                                                                <h3>{applianceName}</h3>
+                                                            </li>
+                                                        );
+                                                    }
                                                 )}
                                             </ul>
                                         </li>
