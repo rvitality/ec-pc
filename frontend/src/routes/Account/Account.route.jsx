@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { v4 as uuidv4 } from "uuid";
-import { getUserData } from "../../utils/firebase.utils";
+import { getUserData, updateUserData } from "../../utils/firebase.utils";
 
 import useFetchUserRecords from "../../hooks/useFetchUserRecords";
 
@@ -94,9 +94,9 @@ const DUMMY_LOGS = [
 const Account = () => {
     const { user } = useAuthContext();
     const officialBillsRequest = useFetchUserRecords(user || {});
-
     const dateObj = new Date();
     const currentMonth = dateObj.toLocaleDateString("en-US", { month: "long" });
+
     const currentYear = dateObj.getFullYear();
     const [currentRecord, setCurrentRecord] = useState({
         id: uuidv4(),
@@ -104,10 +104,32 @@ const Account = () => {
         year: currentYear,
     });
 
+    const [isCurrentMonthBillExists, setIsCurrentMonthBillExists] = useState(false);
+    const [lastMonthBill, setLastMonthBill] = useState(0);
+
     const [records, setRecords] = useState([]);
 
     useEffect(() => {
         setRecords(officialBillsRequest.data || []);
+
+        // check if the last element of the user's `records` array is the same as the current month, if it is then set isCurrentMonthBillExists to true
+        const lastElementRecord =
+            user.records.length > 0 ? user.records[user.records.length - 1] : [];
+        if (
+            lastElementRecord.month.toLowerCase() === currentMonth.toLowerCase() &&
+            +lastElementRecord.year === +currentYear
+        ) {
+            //  if the current month's bill is already entered, get the 2nd to the last of the `records`, else get the last one in the array `records`
+            // console.log([user.records.length - 2]);
+            const userRecords = user.records;
+            const lastSecondRecord = userRecords[userRecords.length - 2];
+            setLastMonthBill(lastSecondRecord.actual);
+            setIsCurrentMonthBillExists(true);
+        } else {
+            const userRecords = user.records;
+            const lastRecord = userRecords[userRecords.length - 1];
+            setLastMonthBill(lastRecord.actual);
+        }
     }, [officialBillsRequest.data]);
 
     const [accuracy, setAccuracy] = useState(0);
@@ -135,8 +157,7 @@ const Account = () => {
     };
 
     const billOnBlurHandler = e => {
-        console.log("blur");
-
+        if (e.target.value.trim() === "") return;
         const officialBill = +e.target.value;
 
         const errorRate = (Math.abs(officialBill - forecastedBill) / forecastedBill) * 100;
@@ -149,21 +170,31 @@ const Account = () => {
             ...currentRecord,
         };
 
+        // ! better way to update state but we need that updateUserData
         setRecords(prevState => {
             const existingRecordIndex = prevState.findIndex(
-                record => record.id === newUserRecord.id
+                record =>
+                    record.month.toLowerCase() === newUserRecord.month.toLowerCase() &&
+                    +record.year === +newUserRecord.year
             );
+
             if (existingRecordIndex > 0) {
                 prevState[existingRecordIndex] = newUserRecord;
+
+                updateUserData({ ...user, records: prevState }); // firestore db
+
                 // return prevState; // wont cause a rerender because it's the same reference
                 return [...prevState];
             } else {
                 // add new
-                return [...prevState, newUserRecord];
+                const updatedRecords = [...prevState, newUserRecord];
+                updateUserData({ ...user, records: updatedRecords });
+
+                return updatedRecords;
             }
         });
 
-        // console.log(records);
+        setIsCurrentMonthBillExists(true);
     };
 
     return (
@@ -209,7 +240,9 @@ const Account = () => {
                                     </div>
                                     <div className="control__texts">
                                         <p className="label">Your Bill Last Month</p>
-                                        <div className="value">₱ 123, 456.00</div>
+                                        <div className="value">
+                                            ₱ {lastMonthBill.toLocaleString()}
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -238,7 +271,10 @@ const Account = () => {
                                 </div>
                                 <div className="control__texts">
                                     <label className="label" htmlFor="bill">
-                                        Enter your bill this month
+                                        <strong>
+                                            {isCurrentMonthBillExists ? "Update" : "Enter"}
+                                        </strong>{" "}
+                                        your bill this month
                                     </label>
                                     <input
                                         onChange={billChangeHandler}
