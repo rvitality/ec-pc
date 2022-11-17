@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { v4 as uuidv4 } from "uuid";
-import { getUserData, updateUserData } from "../../utils/firebase.utils";
+import { getUserData, updateUserRecords } from "../../utils/firebase.utils";
 
 import useFetchUserRecords from "../../hooks/useFetchUserRecords";
 
@@ -15,6 +15,7 @@ import { TbTarget } from "react-icons/tb";
 import { useAuthContext } from "../../context/AuthContext";
 
 import "./Account.styles.scss";
+import { useApplianceContext } from "../../context/ApplianceContext";
 
 const DUMMY_LOGS = [
     {
@@ -93,6 +94,7 @@ const DUMMY_LOGS = [
 
 const Account = () => {
     const { user } = useAuthContext();
+    const { forecastedBill } = useApplianceContext();
     const officialBillsRequest = useFetchUserRecords(user || {});
     const dateObj = new Date();
     const currentMonth = dateObj.toLocaleDateString("en-US", { month: "long" });
@@ -139,8 +141,6 @@ const Account = () => {
     const { email, name, photoURL, role, metadata } = user || {};
     const accountCreationTime = metadata?.createdAt ? new Date(+metadata.createdAt) : "";
 
-    const forecastedBill = 15734.63;
-
     const options = {
         weekday: "short", //to display the full name of the day, you can use short to indicate an abbreviation of the day
         day: "numeric",
@@ -173,7 +173,7 @@ const Account = () => {
             ...currentRecord,
         };
 
-        // ! better way to update state but we need that updateUserData
+        // ! better way to update state but we need that updateUserRecords
         setRecords(prevState => {
             const existingRecordIndex = prevState.findIndex(
                 record =>
@@ -184,14 +184,14 @@ const Account = () => {
             if (existingRecordIndex >= 0) {
                 prevState[existingRecordIndex] = newUserRecord;
 
-                updateUserData({ ...user, records: prevState }); // firestore db
+                updateUserRecords({ ...user, records: prevState }); // firestore db
 
                 // return prevState; // wont cause a rerender because it's the same reference
                 return [...prevState];
             } else {
                 // add new
                 const updatedRecords = [...prevState, newUserRecord];
-                updateUserData({ ...user, records: updatedRecords });
+                updateUserRecords({ ...user, records: updatedRecords });
 
                 return updatedRecords;
             }
