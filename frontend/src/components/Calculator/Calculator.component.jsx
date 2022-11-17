@@ -1,17 +1,18 @@
 import React, { useState, useReducer, useEffect } from "react";
 
-
 import Appliance from "../Appliance/Appliance.component";
 
 import { IoMdAdd } from "react-icons/io";
 import { useApplianceContext } from "../../context/ApplianceContext";
 
-import { getAppliancesAndDocuments } from "../../utils/firebase.utils";
+import { getAppliancesAndDocuments, updateUserRecords } from "../../utils/firebase.utils";
+
+import { useAuthContext } from "../../context/AuthContext";
 
 import "./Calculator.styles.scss";
 
 const initialState = {
-    totalBill: 0,
+    forecastedBill: 0,
     selectedAppliances: [],
 };
 
@@ -27,13 +28,13 @@ const reducer = (state, action) => {
             //  ADD
             const newSelectedAppliances = [...state.selectedAppliances, payload.item];
 
-            const totalBill = newSelectedAppliances.reduce(
+            const forecastedBill = newSelectedAppliances.reduce(
                 (sum, item) => sum + item.applianceBill,
                 0
             );
             return {
                 ...state,
-                totalBill,
+                forecastedBill,
                 selectedAppliances: newSelectedAppliances,
             };
         }
@@ -47,8 +48,8 @@ const reducer = (state, action) => {
             return currentItem;
         });
 
-        const totalBill = mappedItems.reduce((sum, item) => sum + item.applianceBill, 0);
-        return { ...state, totalBill, selectedAppliances: mappedItems };
+        const forecastedBill = mappedItems.reduce((sum, item) => sum + item.applianceBill, 0);
+        return { ...state, forecastedBill, selectedAppliances: mappedItems };
     }
 
     if (type === "REPLACE") {
@@ -90,12 +91,14 @@ const reducer = (state, action) => {
     return initialState;
 };
 
-
-
 const Calculator = () => {
-    const [applianceOptions, setApplianceOptions] = useState([]);
     const { setAppliances, sarimaRate, setModalIsOpen } = useApplianceContext();
+
     const [state, dispatch] = useReducer(reducer, initialState);
+
+    const { user, setUserRecords } = useAuthContext();
+
+    const [applianceOptions, setApplianceOptions] = useState([]);
 
     const [applianceHolders, setApplianceHolder] = useState(Array(3).fill(0));
     const [manualApplianceHolders, setManualApplianceHolders] = useState([]);
@@ -104,7 +107,6 @@ const Calculator = () => {
     useEffect(() => {
         const getCategoriesMap = async () => {
             const categoriesMap = await getAppliancesAndDocuments();
-            console.log(categoriesMap);
             setApplianceOptions(categoriesMap);
         };
 
@@ -160,9 +162,23 @@ const Calculator = () => {
 
     const submitDataHandler = e => {
         e.preventDefault();
-        // console.log("submit");
         setAppliances(state.selectedAppliances);
+
+        const forecastedBill = state.selectedAppliances.reduce(
+            (sum, item) => sum + item.applianceBill,
+            0
+        );
+
         setModalIsOpen(true);
+
+        if (!user.records) return;
+
+        if (user.records.length > 0) {
+            const newRecords = [...user.records];
+            const lastRecord = newRecords[newRecords.length - 1];
+            lastRecord.forecasted = forecastedBill;
+            setUserRecords(newRecords);
+        }
     };
 
     return (
