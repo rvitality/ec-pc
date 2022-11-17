@@ -10,16 +10,16 @@ const Backdrop = ({ onCloseModal }) => {
 };
 
 const ModalContent = props => {
-    const { totalBill, sarimaRate, appliances, onCloseModal } = props;
+    const { forecastedBill, sarimaRate, appliances, onCloseModal } = props;
 
     return (
         <div className="modal">
             <div className="forecasted-bill">
                 <div>
                     <h3>Forecasted electric bill: </h3>
-                    {totalBill > 0 && (
+                    {forecastedBill > 0 && (
                         <p className="value">
-                            ₱{totalBill.toLocaleString("en", { minimumFractionDigits: 2 })}
+                            ₱{forecastedBill.toLocaleString("en", { minimumFractionDigits: 2 })}
                         </p>
                     )}
                 </div>
@@ -75,7 +75,7 @@ const ModalContent = props => {
 };
 
 const Modal = () => {
-    const { totalBill, appliances, sarimaRate, modalIsOpen, setModalIsOpen } =
+    const { forecastedBill, appliances, sarimaRate, modalIsOpen, setModalIsOpen } =
         useApplianceContext();
 
     const closeModalHandler = () => {
@@ -92,7 +92,7 @@ const Modal = () => {
                     )}
                     {createPortal(
                         <ModalContent
-                            totalBill={totalBill}
+                            forecastedBill={forecastedBill}
                             appliances={appliances}
                             sarimaRate={sarimaRate}
                             onCloseModal={closeModalHandler}
