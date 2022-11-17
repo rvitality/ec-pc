@@ -65,6 +65,7 @@ export const createUserDocumentFromAuth = async (userAuth, additionalInfo) => {
             name: displayName,
             email,
             photoURL,
+            records: [],
         };
 
         if (uid === "KgGL9ntc4IRouwtjBSGfusfd28r1") {
@@ -129,12 +130,22 @@ export const getUserData = async userID => {
 };
 
 // ! UPDATE USER DATA, ADD NEW ELECTRIC BILL
-export const updateUserData = async userData => {
-    console.log(userData.records);
+export const updateUserRecords = async userData => {
+    // console.log(userData);
     try {
-        const { id } = userData;
+        const { id, records } = userData;
         const documentRef = doc(db, "users", id);
-        await updateDoc(documentRef, { records: userData.records });
+        await updateDoc(documentRef, { records });
+    } catch (err) {
+        console.log(err);
+    }
+};
+
+export const updateUserForecastedBill = async userData => {
+    try {
+        const { id, forecastedBill } = userData;
+        const documentRef = doc(db, "users", id);
+        await updateDoc(documentRef, { forecastedBill });
     } catch (err) {
         console.log(err);
     }
