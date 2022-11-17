@@ -1,19 +1,31 @@
 .official-rate-form {
+    font-size: 1.15rem;
+
     &__control {
         label {
-            font-size: 1.25rem;
+            margin-right: 1rem;
         }
 
         input {
             font-family: inherit;
-            font-size: 1rem;
-            padding: 0.5rem;
+            font-size: 1.05rem;
+            padding: 0.3rem 0.5rem;
+        }
+    }
+
+    .date {
+        margin-bottom: 1rem;
+        border-bottom: 2px dashed rgb(41, 105, 215);
+        padding-bottom: 1rem;
+        width: fit-content;
+
+        .label {
+            display: inline-block;
+            margin-right: 0.5rem;
         }
     }
 
     button[type="submit"] {
-        padding: 0.5rem 1rem;
-        font-size: 1rem;
-        margin-top: 0.5rem;
+        margin-top: 1rem;
     }
 }
