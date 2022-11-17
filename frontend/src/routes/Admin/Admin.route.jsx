@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 
 import Users from "./Users/Users.component";
+import Graph from "../../components/Graph/Graph.component";
 import OfficialRateForm from "./OfficialRateForm/OfficialRateForm.component";
 
 import useFetchUsers from "../../hooks/useFetchUsers";
@@ -19,7 +20,12 @@ const Admin = () => {
     let contentToShow;
 
     if (selectedCategory === "rate-form") {
-        contentToShow = <OfficialRateForm />;
+        contentToShow = (
+            <div className="rate-container">
+                <OfficialRateForm />
+                <Graph />
+            </div>
+        );
     } else if (selectedCategory === "users") {
         contentToShow = <Users response={usersRequestResponse} />;
     }
