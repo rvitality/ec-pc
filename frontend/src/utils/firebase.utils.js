@@ -141,12 +141,12 @@ export const updateUserRecords = async userData => {
     }
 };
 
-export const updateUserForecastedBill = async userData => {
-    try {
-        const { id, forecastedBill } = userData;
-        const documentRef = doc(db, "users", id);
-        await updateDoc(documentRef, { forecastedBill });
-    } catch (err) {
-        console.log(err);
-    }
-};
+// export const updateUserForecastedBill = async userData => {
+//     try {
+//         const { id, forecastedBill } = userData;
+//         const documentRef = doc(db, "users", id);
+//         await updateDoc(documentRef, { forecastedBill });
+//     } catch (err) {
+//         console.log(err);
+//     }
+// };
