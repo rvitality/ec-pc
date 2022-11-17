@@ -1,8 +1,10 @@
 .admin-dashboard {
-    background: #fff5f5;
+    h1 {
+        padding-bottom: 1rem;
+    }
 
     nav {
-        margin-top: 2rem;
+        margin-top: 1rem;
         ul {
             display: flex;
             align-items: center;
@@ -17,11 +19,11 @@
                 border-bottom: 2px solid transparent;
 
                 &.active {
-                    border-color: #ed7575;
+                    border-color: rgb(31, 87, 183);
                 }
 
                 &:hover {
-                    border-color: #ed7575;
+                    border-color: rgb(41, 105, 215);
                 }
             }
         }
@@ -30,5 +32,16 @@
     .content {
         margin: 2rem 0;
         position: relative;
+    }
+
+    .rate-container {
+        align-items: flex-start;
+        justify-content: space-between;
+        display: flex;
+        gap: 2rem;
+
+        .graph-container {
+            width: 60%;
+        }
     }
 }
