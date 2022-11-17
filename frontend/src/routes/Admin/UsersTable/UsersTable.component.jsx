@@ -7,7 +7,7 @@ const UsersTable = ({ dataToDisplay }) => {
         <table className="table users-table data-logs">
             <thead>
                 <tr>
-                    <th>Display Picture</th>
+                    <th>Photo</th>
                     <th>Name</th>
                     <th>Email</th>
                     <th>Role</th>
