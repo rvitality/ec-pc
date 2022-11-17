@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { v4 as uuidv4 } from "uuid";
-import { getUserData, updateUserRecords } from "../../utils/firebase.utils";
-
-import useFetchUserRecords from "../../hooks/useFetchUserRecords";
+import { updateUserRecords } from "../../utils/firebase.utils";
 
 import DataTable from "../../components/DataTable/DataTable.component";
 import BillsTable from "./BillsTable/BillsTable.component";
@@ -15,127 +13,11 @@ import { TbTarget } from "react-icons/tb";
 import { useAuthContext } from "../../context/AuthContext";
 
 import "./Account.styles.scss";
-import { useApplianceContext } from "../../context/ApplianceContext";
-
-const DUMMY_LOGS = [
-    {
-        id: uuidv4(),
-        month: "January",
-        year: 2022,
-        forecasted: 153425.4322,
-        actual: 142425.3214,
-        accuracy: 93.53,
-        status: "good",
-    },
-    {
-        id: uuidv4(),
-        month: "February",
-        year: 2022,
-        forecasted: 153425.4322,
-        actual: 142425.3214,
-        accuracy: 93.53,
-        status: "bad",
-    },
-    {
-        id: uuidv4(),
-        month: "March",
-        year: 2022,
-        forecasted: 153425.4322,
-        actual: 142425.3214,
-        accuracy: 93.53,
-        status: "late",
-    },
-    // {
-    //     id: uuidv4(),
-    //     month: "April",
-    //     year: 2022,
-    //     forecasted: 153425.4322,
-    //     actual: 142425.3214,
-    //     accuracy: 93.53,
-    //     status: "good",
-    // },
-    // {
-    //     id: uuidv4(),
-    //     month: "May",
-    //     year: 2022,
-    //     forecasted: 153425.4322,
-    //     actual: 142425.3214,
-    //     accuracy: 93.53,
-    //     status: "late",
-    // },
-    // {
-    //     id: uuidv4(),
-    //     month: "June",
-    //     year: 2022,
-    //     forecasted: 153425.4322,
-    //     actual: 142425.3214,
-    //     accuracy: 93.53,
-    //     status: "good",
-    // },
-    // {
-    //     id: uuidv4(),
-    //     month: "July",
-    //     year: 2022,
-    //     forecasted: 153425.4322,
-    //     actual: 142425.3214,
-    //     accuracy: 93.53,
-    //     status: "late",
-    // },
-    // {
-    //     id: uuidv4(),
-    //     month: "August",
-    //     year: 2022,
-    //     forecasted: 153425.4322,
-    //     actual: 142425.3214,
-    //     accuracy: 93.53,
-    //     status: "good",
-    // },
-];
 
 const Account = () => {
     const { user } = useAuthContext();
-    const { forecastedBill } = useApplianceContext();
-    const officialBillsRequest = useFetchUserRecords(user || {});
-    const dateObj = new Date();
-    const currentMonth = dateObj.toLocaleDateString("en-US", { month: "long" });
 
-    const currentYear = dateObj.getFullYear();
-    const [currentRecord, setCurrentRecord] = useState({
-        id: uuidv4(),
-        month: currentMonth,
-        year: currentYear,
-    });
-
-    const [isCurrentMonthBillExists, setIsCurrentMonthBillExists] = useState(false);
-    const [lastMonthBill, setLastMonthBill] = useState(0);
-
-    const [records, setRecords] = useState([]);
-
-    useEffect(() => {
-        setRecords(officialBillsRequest.data || []);
-
-        // check if the last element of the user's `records` array is the same as the current month, if it is then set isCurrentMonthBillExists to true
-        const lastElementRecord =
-            user.records?.length > 0 ? user.records[user.records.length - 1] : {};
-        if (Object.keys(lastElementRecord).length > 0) {
-            if (
-                lastElementRecord.month.toLowerCase() === currentMonth.toLowerCase() &&
-                +lastElementRecord.year === +currentYear
-            ) {
-                //  if the current month's bill is already entered, get the 2nd to the last of the `records`, else get the last one in the array `records`
-                // console.log([user.records.length - 2]);
-                const userRecords = user.records;
-                const lastSecondRecord =
-                    userRecords.length >= 2 ? userRecords[userRecords.length - 2] : { actual: 0 };
-                setLastMonthBill(lastSecondRecord.actual);
-                setIsCurrentMonthBillExists(true);
-            } else {
-                const userRecords = user.records;
-                const lastRecord = userRecords[userRecords.length - 1];
-                setLastMonthBill(lastRecord.actual);
-            }
-        }
-    }, [officialBillsRequest.data]);
+    const [showError, setShowError] = useState(false);
 
     const [accuracy, setAccuracy] = useState(0);
     const { email, name, photoURL, role, metadata } = user || {};
@@ -148,9 +30,36 @@ const Account = () => {
         year: "numeric",
     };
 
+    const dateObj = new Date();
+    // const currentMonth = dateObj.toLocaleDateString("en-US", { month: "long" });
+    const currentMonth = "December";
+
+    const currentYear = dateObj.getFullYear();
+    const lastUserRecord = user.records ? user.records[user.records.length - 1] : [];
+    const [currentRecord, setCurrentRecord] = useState(lastUserRecord);
+
+    const forecastedBill = lastUserRecord?.forecasted || 0;
+
+    // const [forecastedBill, setForecastedBill] = useState(lastUserRecord?.forecasted);
+
+    const [records, setRecords] = useState(user.records || []);
+
+    // const [lastMonthBill, setLastMonthBill] = useState(0);
+    console.log(user);
+    console.log(user.records);
+    const lastMonthBill =
+        user.records.length >= 2 ? user.records[user.records.length - 2].actual : 0;
+    console.log(lastMonthBill);
+
     const billChangeHandler = e => {
+        if (!forecastedBill) {
+            setShowError(true);
+            return;
+        }
+
+        setShowError(false);
+
         const officialBill = +e.target.value;
-        // console.log(officialBill);
         // var regex = /[0-9]|\./;
         // if (!regex.test(officialBill)) return;
 
@@ -160,17 +69,26 @@ const Account = () => {
     };
 
     const billOnBlurHandler = e => {
-        if (e.target.value.trim() === "") return;
+        if (e.target.value.trim() === "") {
+            return;
+        }
+
+        if (!forecastedBill) {
+            setShowError(true);
+            return;
+        }
+
+        setShowError(false);
         const officialBill = +e.target.value;
 
         const errorRate = (Math.abs(officialBill - forecastedBill) / forecastedBill) * 100;
         const accuracy = (100 - errorRate).toFixed(2);
         const newUserRecord = {
+            ...currentRecord,
             accuracy: +accuracy,
             forecasted: forecastedBill,
             actual: officialBill,
             status: "good",
-            ...currentRecord,
         };
 
         // ! better way to update state but we need that updateUserRecords
@@ -196,8 +114,6 @@ const Account = () => {
                 return updatedRecords;
             }
         });
-
-        setIsCurrentMonthBillExists(true);
     };
 
     return (
@@ -256,7 +172,10 @@ const Account = () => {
                                         <FaChartLine />
                                     </div>
                                     <div className="control__texts">
-                                        <p className="label">Forecasted bill for this month</p>
+                                        <p className="label">
+                                            Forecasted bill this month{" "}
+                                            <strong>({currentMonth})</strong>
+                                        </p>
                                         <div className="value">
                                             ₱ {forecastedBill.toLocaleString()}
                                         </div>
@@ -274,10 +193,7 @@ const Account = () => {
                                 </div>
                                 <div className="control__texts">
                                     <label className="label" htmlFor="bill">
-                                        <strong>
-                                            {isCurrentMonthBillExists ? "Update" : "Enter"}
-                                        </strong>{" "}
-                                        your bill this month
+                                        Your bill this month <strong>({currentMonth})</strong>
                                     </label>
                                     <input
                                         onChange={billChangeHandler}
@@ -286,6 +202,15 @@ const Account = () => {
                                         name="bill"
                                         id="bill"
                                     />
+                                    {showError && (
+                                        <div className="error">
+                                            Forecast a bill first using the{" "}
+                                            <em>
+                                                <strong>calculator</strong>
+                                            </em>{" "}
+                                            app .
+                                        </div>
+                                    )}
                                 </div>
                             </div>
                         </div>
@@ -298,7 +223,7 @@ const Account = () => {
                                     <TbTarget />
                                 </div>
                                 <div className="control__texts">
-                                    <p className="label">Prediction Accuracy:</p>
+                                    <p className="label">Prediction Accuracy</p>
                                     <div className="value">{accuracy}%</div>
                                 </div>
                             </div>
@@ -306,7 +231,7 @@ const Account = () => {
                     </div>
                 </div>
                 {/* ------------- DATA TABLE --------------- */}
-                {officialBillsRequest.isLoading ? (
+                {Object.keys(user).length < 0 ? (
                     <h2>Loading...</h2>
                 ) : (
                     <DataTable
