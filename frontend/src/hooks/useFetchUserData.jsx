@@ -2,10 +2,10 @@ import { useEffect } from "react";
 import { useState } from "react";
 import { getUserData } from "../utils/firebase.utils";
 
-const useFetchUserRecords = user => {
+const useFetchUserData = user => {
     const [error, setError] = useState("");
     const [isLoading, setIsLoading] = useState(false);
-    const [records, setRecords] = useState([]);
+    const [userData, setUserData] = useState([]);
 
     // ! FETCH USER BILLS FROM FIRESTORE DB
     useEffect(() => {
@@ -15,10 +15,9 @@ const useFetchUserRecords = user => {
                 if (user) {
                     const response = await getUserData(user.id);
                     if (response) {
-                        setRecords(response.records);
+                        setUserData(response);
                     }
                 }
-                // setRecords
             } catch (err) {
                 setError(err.message);
                 console.log(err.message);
@@ -29,7 +28,7 @@ const useFetchUserRecords = user => {
         fetchBills();
     }, []);
 
-    return { error, isLoading, data: records };
+    return { error, isLoading, data: userData };
 };
 
-export default useFetchUserRecords;
+export default useFetchUserData;
