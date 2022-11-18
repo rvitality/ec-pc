@@ -114,7 +114,7 @@ def predict_rate():
     print("The Root Mean Squared Error of the forecasts is {}".format(round(rmse, 2)))
 
     forecast = results.forecast(
-        steps=3
+        steps=1
     )  # making a forecast of 1 days later of the last date in the 'Order Date' column
     # print(forecast.astype("int"))  # displays the sales forecast as type integer
     pred_uc = results.get_forecast(steps=1)
