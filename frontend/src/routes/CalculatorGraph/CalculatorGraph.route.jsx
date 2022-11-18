@@ -9,7 +9,7 @@ import Graph from "../../components/Graph/Graph.component";
 import "./CalculatorGraph.styles.scss";
 
 const CalculatorGraph = () => {
-    const { setSarimaRate } = useApplianceContext();
+    const { setSarimaRate, sarimaRate } = useApplianceContext();
 
     // ! fetch sarima rate
     useEffect(() => {
@@ -25,7 +25,12 @@ const CalculatorGraph = () => {
                 console.log(err.message);
             }
         };
-        sendRequest();
+
+        // run python predict rate if sarimaRate hasn't been changed in the admin route
+        // 1 being the default value
+        if (sarimaRate === 1) {
+            sendRequest();
+        }
     }, []);
 
     return (
