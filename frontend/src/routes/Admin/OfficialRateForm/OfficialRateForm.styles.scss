@@ -1,5 +1,19 @@
 .official-rate-form {
     font-size: 1.15rem;
+    width: 45%;
+
+    .rate {
+        margin-bottom: 2rem;
+
+        .sarima-rate {
+            margin-top: 0.5rem;
+            font-weight: 500;
+            width: 62%;
+            border-left: 5px solid rgb(41, 105, 215);
+            background: rgb(0, 0, 0, 0.1);
+            padding: 0.7rem;
+        }
+    }
 
     &__control {
         label {
@@ -14,10 +28,9 @@
     }
 
     .date {
-        margin-bottom: 1rem;
+        margin-bottom: 2rem;
         border-bottom: 2px dashed rgb(41, 105, 215);
         padding-bottom: 1rem;
-        width: fit-content;
 
         .label {
             display: inline-block;
