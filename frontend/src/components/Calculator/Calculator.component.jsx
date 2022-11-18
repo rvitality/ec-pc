@@ -114,9 +114,6 @@ const Calculator = () => {
     }, []);
 
     const addAppliance = (previousAppliance = {}, currentAppliance = {}) => {
-        // console.log("previousAppliance: ", previousAppliance);
-        // console.log("currentAppliance: ", currentAppliance);
-
         const { applianceID: prevApplianceID } = previousAppliance;
         const { applianceID: currentApplianceID } = currentAppliance;
 
