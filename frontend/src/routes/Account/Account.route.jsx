@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from "react";
-import { v4 as uuidv4 } from "uuid";
+import React, { useState } from "react";
 import { updateUserRecords } from "../../utils/firebase.utils";
 
 import DataTable from "../../components/DataTable/DataTable.component";
@@ -45,11 +44,8 @@ const Account = () => {
     const [records, setRecords] = useState(user.records || []);
 
     // const [lastMonthBill, setLastMonthBill] = useState(0);
-    console.log(user);
-    console.log(user.records);
     const lastMonthBill =
         user.records.length >= 2 ? user.records[user.records.length - 2].actual : 0;
-    console.log(lastMonthBill);
 
     const billChangeHandler = e => {
         if (!forecastedBill) {
