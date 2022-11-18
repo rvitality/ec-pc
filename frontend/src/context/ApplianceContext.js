@@ -1,7 +1,7 @@
 import { createContext, useContext, useState } from "react";
 
 const initialState = {
-    sarimaRate: 6.9,
+    sarimaRate: 1,
     forecastedBill: 0,
     selectedAppliances: [],
     modalIsOpen: false,
