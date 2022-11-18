@@ -7,10 +7,8 @@ const useFetchUsers = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [users, setUsers] = useState([]);
 
-    // ! FETCH USER BILLS FROM FIRESTORE DB
+    // ! FETCH USERS FROM FIRESTORE DB
     useEffect(() => {
-        console.log(123);
-
         setIsLoading(true);
         const fetchBills = async () => {
             try {
