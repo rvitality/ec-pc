@@ -68,7 +68,7 @@ const ModalContent = props => {
             </div>
 
             <button className="modal__close-btn" onClick={onCloseModal}>
-                Close
+                Save
             </button>
         </div>
     );
