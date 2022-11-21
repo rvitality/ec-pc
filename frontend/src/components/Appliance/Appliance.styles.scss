@@ -8,7 +8,7 @@
 
         &:hover .calcu__btn {
             color: #000;
-            background: #aaa;
+            background: #a39ed0;
         }
 
         &:hover .appliance__options {
@@ -120,20 +120,20 @@
             }
         }
 
-        button[type="submit"] {
-            background: #898989;
-            border: none;
-            border-radius: 0.5rem;
-            color: #fff;
-            width: fit-content;
-            text-transform: uppercase;
-            font-size: 1.25rem;
-            padding: 0.7rem 1.5rem;
+        // button[type="submit"] {
+        //     border: none;
+        //     border: 10px solid !important;
+        //     border-radius: 0.5rem;
+        //     color: #fff;
+        //     width: fit-content;
+        //     text-transform: uppercase;
+        //     font-size: 1.25rem;
+        //     padding: 0.7rem 1.5rem;
 
-            &:hover {
-                background: #666565;
-            }
-        }
+        //     &:hover {
+        //         background: #494377;
+        //     }
+        // }
 
         .durations-container {
             display: flex;
@@ -148,7 +148,7 @@
                 justify-content: flex-end;
                 gap: 0.85rem;
                 margin: 0.75rem 0 1rem 0;
-                color: #1d91e3;
+                color: #000;
 
                 label {
                     font-size: 1.05rem;
@@ -218,7 +218,7 @@
         cursor: pointer;
         font-style: italic;
         align-self: flex-end;
-        color: rgb(54, 54, 131);
+        color: #333;
         transition: 0.25 ease-in-out;
 
         span {
