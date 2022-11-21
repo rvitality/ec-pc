@@ -107,6 +107,7 @@ const Calculator = () => {
     useEffect(() => {
         const getCategoriesMap = async () => {
             const categoriesMap = await getAppliancesAndDocuments();
+            console.log(categoriesMap);
             setApplianceOptions(categoriesMap);
         };
 
@@ -168,7 +169,7 @@ const Calculator = () => {
 
         setModalIsOpen(true);
 
-        if (!user.records) return;
+        if (!user.records || state.selectedAppliances.length === 0) return;
 
         if (user.records.length > 0) {
             const newRecords = [...user.records];
@@ -180,7 +181,7 @@ const Calculator = () => {
 
     return (
         <aside className="calcu">
-            <h2>Calculator</h2>
+            <h1 className="heading-secondary">Calculator</h1>
 
             <form onSubmit={submitDataHandler}>
                 {applianceHolders?.map((_, index) => (
