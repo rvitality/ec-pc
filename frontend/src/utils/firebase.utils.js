@@ -23,12 +23,12 @@ import {
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-    apiKey: "AIzaSyBMOS0BuvMJID8zhCDIYjaQRxBc5Y4bSEI",
-    authDomain: "ec-pc-d04a2.firebaseapp.com",
-    projectId: "ec-pc-d04a2",
-    storageBucket: "ec-pc-d04a2.appspot.com",
-    messagingSenderId: "802468401688",
-    appId: "1:802468401688:web:b132ee38674f31485ae96d",
+    apiKey: "AIzaSyAieV3qJe6kTSBvYKsXryBwQoVUASjXbQ8",
+    authDomain: "ec-pc-1d3b2.firebaseapp.com",
+    projectId: "ec-pc-1d3b2",
+    storageBucket: "ec-pc-1d3b2.appspot.com",
+    messagingSenderId: "796667821318",
+    appId: "1:796667821318:web:ac588da1b14de6835eb287",
 };
 
 const firebaseApp = initializeApp(firebaseConfig);
