@@ -1,12 +1,14 @@
+@import "../../styles/variables.scss";
+
 .calcu {
-    background: #dbdbdb;
+    background-image: linear-gradient(to bottom, $base-color, #b4afe0);
     width: 50%;
     padding: 2.5rem;
-    border-radius: 3rem;
+    border-radius: 2rem;
 
-    h2 {
+    h1 {
         font-size: 2.5rem;
-        color: #000;
+        color: #fff;
         font-weight: normal;
     }
 
@@ -15,7 +17,7 @@
     }
 
     .manual-input-container {
-        border-top: 1px solid #555;
+        border-top: 2px solid #222;
         padding-top: 1rem;
         margin-top: 2rem;
         h3 {
@@ -49,13 +51,14 @@
     }
 
     &__btn {
+        border: 1px solid #ccc;
         display: flex;
         align-items: center;
         justify-content: space-between;
         font-size: 1.25rem;
         width: 100%;
-        color: #fff;
-        background: #505050;
+        color: #000;
+        background: #fff;
         padding: 1rem 1.45rem;
         margin: 0.5rem 0;
 
@@ -81,7 +84,7 @@
             color: #fff;
             max-width: 65%;
             text-align: center;
-            background: rgb(118, 92, 92);
+            background: #494377;
             font-size: 1rem;
             padding: 1rem;
             border-radius: 1rem;
@@ -90,10 +93,15 @@
 
         .submit-btn {
             width: fit-content;
-            font-weight: bold;
+            font-weight: 500;
             text-transform: uppercase;
             border-radius: 1rem;
             padding: 1rem 1.5rem;
+
+            &:hover {
+                background: #494377;
+                color: #fff;
+            }
         }
     }
 }
