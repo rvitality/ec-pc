@@ -15,10 +15,13 @@ const OfficialRateForm = () => {
     useEffect(() => {
         const sendRequest = async () => {
             try {
-                const response = await fetch("/get_last_rate_data");
+                const response = await fetch(
+                    "https://ec-pc-flaskapi.onrender.com/api/get_last_rate_data"
+                );
                 if (!response.ok) return "Something went wrong!";
                 const data = await response.json();
                 const { last_rate_data } = data;
+                console.log(last_rate_data);
                 setCurrentOfficialRate(last_rate_data);
 
                 // const rateInput = rateInputRef.current?.value;
@@ -42,35 +45,39 @@ const OfficialRateForm = () => {
         e.preventDefault();
 
         const rateInput = rateInputRef.current?.value;
-
         setCurrentOfficialRate(prevState => {
             prevState[prevState.length - 1] = rateInput;
             return [...prevState];
         });
 
         const month = currentDate.getMonth() + 1;
-        const date = `${yr}/${month}/1`;
+        const dateToday = `${yr}/${month}/1`;
 
         const sendRequest = async () => {
             try {
-                const response = await fetch("/push_official_rate", {
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                    method: "POST",
-                    body: JSON.stringify({
-                        date,
-                        rate: rateInput,
-                    }),
-                });
+                const response = await fetch(
+                    "https://ec-pc-flaskapi.onrender.com/api/add_official_rate",
+                    {
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                        method: "POST",
+                        body: JSON.stringify({
+                            date: dateToday,
+                            rate: rateInput,
+                        }),
+                    }
+                );
+                console.log(response);
 
                 if (!response.ok) throw Error("Something went wrong");
 
                 const data = await response.json();
-                const { sarima_rate } = data;
+                console.log(data);
+                const { last_rate_data, sarima_rate } = data;
 
-                console.log("Official Rate Form: ", data);
                 setSarimaRate(sarima_rate);
+                setCurrentOfficialRate(last_rate_data);
             } catch (err) {
                 console.log(err);
             }
