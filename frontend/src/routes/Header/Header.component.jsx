@@ -4,6 +4,8 @@ import { Link, Outlet } from "react-router-dom";
 import { signInWithGooglePopup, signOutUser } from "../../utils/firebase.utils";
 import { useAuthContext } from "../../context/AuthContext";
 
+import logoSrc from "../../assets/images/logo.png";
+
 import "./Header.styles.scss";
 
 const Header = () => {
@@ -31,7 +33,7 @@ const Header = () => {
             <header>
                 <div className="left">
                     <Link to="/" className="logo">
-                        LOGO
+                        <img src={logoSrc} alt="Logo" />
                     </Link>
                 </div>
 
