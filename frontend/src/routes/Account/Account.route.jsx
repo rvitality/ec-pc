@@ -30,8 +30,8 @@ const Account = () => {
     };
 
     const dateObj = new Date();
-    // const currentMonth = dateObj.toLocaleDateString("en-US", { month: "long" });
-    const currentMonth = "December";
+    const currentMonth = dateObj.toLocaleDateString("en-US", { month: "long" });
+    // const currentMonth = "December";
 
     const currentYear = dateObj.getFullYear();
     const lastUserRecord = user.records ? user.records[user.records.length - 1] : [];
@@ -45,7 +45,9 @@ const Account = () => {
 
     // const [lastMonthBill, setLastMonthBill] = useState(0);
     const lastMonthBill =
-        user.records.length >= 2 ? user.records[user.records.length - 2].actual : 0;
+        user?.records && user?.records.length >= 2
+            ? user.records[user.records.length - 2].actual
+            : 0;
 
     const billChangeHandler = e => {
         if (!forecastedBill) {
