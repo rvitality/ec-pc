@@ -11,12 +11,12 @@ const Home = () => {
             <div className="home section-px section-py">
                 <div className="home__texts">
                     <h1 className="heading-primary">
-                        Lorem ipsum sit <br /> <span className="highlight">dolor sit</span> amet
-                        consectetur.
+                        Let's <span className="highlight">predict</span> your next electric bill!
                     </h1>
                     <p className="section-paragraph">
-                        Lorem ipsum, dolor sit amet consectetur adipisicing elit. distinctio,
-                        possimus ex obcaecati reprehenderit tempora perspiciatis fugit at.
+                        EC-PC or <strong>"Electric Consumption - Price Calculator"</strong> is an
+                        application that predicts a household's electric bill for the current month
+                        using the previous bills using SARIMA.
                     </p>
                     <Link to="/" className="btn primary">
                         Learn more
