@@ -20,7 +20,7 @@ const UsersTable = ({ dataToDisplay }) => {
                     return (
                         <tr key={id}>
                             <td className="photo">
-                                <img src={photoURL} alt={name} />
+                                <img src={photoURL} alt={name} referrerPolicy="no-referrer" />
                             </td>
                             <td>
                                 <strong>{name}</strong>{" "}
