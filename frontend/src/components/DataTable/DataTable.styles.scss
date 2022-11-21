@@ -1,3 +1,5 @@
+@import "../../styles/variables.scss";
+
 .data-table {
     position: relative;
 
@@ -67,7 +69,7 @@
             }
 
             &.active {
-                background-color: #2eb9fe;
+                background-color: $base-color;
                 border-color: transparent;
                 color: #fff;
             }
