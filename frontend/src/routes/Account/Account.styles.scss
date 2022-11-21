@@ -1,3 +1,5 @@
+@import "../../styles/variables.scss";
+
 .account {
     padding-top: 0;
     .cover {
@@ -68,7 +70,7 @@
 
         &__icon {
             align-items: center;
-            background: #2eb9fe;
+            background: $base-color;
             border-radius: 50%;
             display: flex;
             font-size: 1.15rem;
