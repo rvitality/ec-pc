@@ -15,10 +15,11 @@ const CalculatorGraph = () => {
     useEffect(() => {
         const sendRequest = async () => {
             try {
-                const response = await fetch("/get_sarima_rate");
+                const response = await fetch(
+                    "https://ec-pc-flaskapi.onrender.com/api/get_sarima_rate"
+                );
                 if (!response.ok) return "Something went wrong!";
                 const data = await response.json();
-                console.log(data);
                 const { sarima_rate } = data;
                 setSarimaRate(sarima_rate);
             } catch (err) {
