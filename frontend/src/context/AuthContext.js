@@ -32,7 +32,7 @@ export const AuthContextProvider = props => {
             photoURL,
         };
 
-        if (email === "daedalusquintus00@gmail.com" || uid === "KgGL9ntc4IRouwtjBSGfusfd28r1") {
+        if (email === "daedalusquintus00@gmail.com" || uid === "dwKcA6GulSd0uZ95lPlGjQ4i3Br1") {
             userData = { ...userData, role: "admin" };
         } else {
             userData = { ...userData, role: "user" };
@@ -89,7 +89,7 @@ export const AuthContextProvider = props => {
                         setUser(prevState => ({ ...prevState, ...res, records: newRecords }));
                     };
 
-                    if (records.length > 0) {
+                    if (records?.length > 0) {
                         const lastRecordElement = records[records.length - 1];
 
                         // check if this month's data already exists, else create the basic values like month and year so that `Calculator` & `Account` will fetch the records
