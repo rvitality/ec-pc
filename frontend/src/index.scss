@@ -1,6 +1,7 @@
-@use "./styles/typography.scss" as *;
-@use "./styles/utils.scss" as *;
-@use "./styles/mixins.scss" as *;
+@import "./styles/variables.scss";
+@import "./styles/utils.scss";
+@import "./styles/mixins.scss";
+@import "./styles/typography.scss";
 
 *,
 *::after,
@@ -15,7 +16,7 @@
 }
 
 html {
-    font-size: 110%;
+    font-size: 100%;
 
     @include respond(tab-land) {
         // width < 1200?
