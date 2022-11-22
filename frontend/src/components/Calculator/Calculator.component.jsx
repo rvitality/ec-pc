@@ -94,6 +94,8 @@ const reducer = (state, action) => {
 const Calculator = () => {
     const { setAppliances, sarimaRate, setModalIsOpen } = useApplianceContext();
 
+    const [error, setError] = useState("");
+
     const [state, dispatch] = useReducer(reducer, initialState);
 
     const { user, setUserRecords } = useAuthContext();
@@ -159,6 +161,12 @@ const Calculator = () => {
 
     const submitDataHandler = e => {
         e.preventDefault();
+
+        if (sarimaRate === 1 || !sarimaRate) {
+            setError("Please wait for the Predicted Rate (SARIMA).");
+            return;
+        }
+
         setAppliances(state.selectedAppliances);
 
         const forecastedBill = state.selectedAppliances.reduce(
@@ -236,9 +244,12 @@ const Calculator = () => {
                         1000) * SARIMA_RATE)
                     </p>
 
-                    <button className="calcu__btn submit-btn" type="submit">
-                        Submit
-                    </button>
+                    <div className="submit-btn-container">
+                        <button className="calcu__btn submit-btn" type="submit">
+                            Submit
+                        </button>
+                        {sarimaRate === 1 && error && <p className="error">{error}</p>}
+                    </div>
                 </div>
             </form>
         </aside>
