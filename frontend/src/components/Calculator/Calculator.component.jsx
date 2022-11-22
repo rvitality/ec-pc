@@ -107,7 +107,6 @@ const Calculator = () => {
     useEffect(() => {
         const getCategoriesMap = async () => {
             const categoriesMap = await getAppliancesAndDocuments();
-            console.log(categoriesMap);
             setApplianceOptions(categoriesMap);
         };
 
@@ -118,7 +117,7 @@ const Calculator = () => {
         const { applianceID: prevApplianceID } = previousAppliance;
         const { applianceID: currentApplianceID } = currentAppliance;
 
-        // replace what is in the appliances array if the user the appliance with a new one
+        // replace what is in the appliances array with a new one
         if (prevApplianceID && prevApplianceID !== currentApplianceID) {
             dispatch({
                 type: "REPLACE",
