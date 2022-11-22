@@ -2,6 +2,7 @@ import React from "react";
 import { createPortal } from "react-dom";
 
 import { useApplianceContext } from "../../context/ApplianceContext";
+import Spinner from "../../ui/Spinner/Spinner.ui";
 
 import "./Modal.styles.scss";
 
@@ -16,60 +17,94 @@ const ModalContent = props => {
         <div className="modal">
             <div className="forecasted-bill">
                 <div>
-                    <h3>Forecasted electric bill: </h3>
+                    <div className="heading">Forecasted electric bill: </div>
                     {forecastedBill > 0 && (
-                        <p className="value">
-                            ₱{forecastedBill.toLocaleString("en", { minimumFractionDigits: 2 })}
+                        <p className="forecasted-bill__value">
+                            ₱ {forecastedBill.toLocaleString("en", { minimumFractionDigits: 2 })}
                         </p>
                     )}
                 </div>
                 <div className="divider"></div>
                 <div>
-                    <h3>SARIMA Rate: </h3>
-                    <p className="value">
-                        ₱{sarimaRate.toLocaleString("en", { minimumFractionDigits: 2 })}
-                    </p>
+                    <div className="heading">SARIMA Rate: </div>
+                    <div>
+                        {sarimaRate !== 1 ? (
+                            <>
+                                <div className="forecasted-bill__value">
+                                    ₱{" "}
+                                    {sarimaRate.toLocaleString("en", { minimumFractionDigits: 2 })}
+                                </div>
+                                <div className="small">You can save your prediction now.</div>
+                            </>
+                        ) : (
+                            <>
+                                <Spinner />
+                                <div className="small">Please wait ...</div>
+                            </>
+                        )}
+                    </div>
                 </div>
             </div>
 
             <div className="breakdown">
-                <h3>Appliances: </h3>
+                <div className="heading">Appliances </div>
                 <ul className="lvl1">
-                    {appliances.map(item => (
-                        <li key={item.applianceID}>
-                            <p className="appliance-name">
-                                <span>{item.applianceName}</span>
-                            </p>
-                            <div className="info">
-                                <ul className="lvl2">
-                                    <li>
-                                        Wattage: <span className="value">{item.wattage}</span>
-                                    </li>
-                                    <li>
-                                        Quantity: <span className="value">{item.quantity}</span>
-                                    </li>
-                                    <li>
-                                        Duration(hr): <span className="value">{item.duration}</span>
-                                    </li>
-                                </ul>
-                                <div className="total">
-                                    Total:{" "}
-                                    <span className="value">
-                                        ₱
-                                        {item.applianceBill?.toLocaleString("en", {
-                                            minimumFractionDigits: 2,
-                                        })}
-                                    </span>
+                    {appliances.map(item => {
+                        const {
+                            applianceID,
+                            applianceName,
+                            wattage,
+                            quantity,
+                            duration,
+                            applianceBill,
+                            inputDurations,
+                        } = item;
+
+                        return (
+                            <li key={applianceID}>
+                                <p className="appliance-name">
+                                    <span>{applianceName}:</span>
+                                </p>
+                                <div className="info">
+                                    <ul className="lvl2">
+                                        <li>
+                                            Wattage: <span className="value">{wattage}</span>
+                                        </li>
+                                        <li>
+                                            Quantity: <span className="value">{quantity}</span>
+                                        </li>
+                                        <li>
+                                            Duration(hr):{" "}
+                                            <span className="value">
+                                                {inputDurations.join(", ")}
+                                            </span>
+                                        </li>
+                                    </ul>
+                                    <div>
+                                        Total:{" "}
+                                        <span className="total">
+                                            ₱{" "}
+                                            {applianceBill?.toLocaleString("en", {
+                                                minimumFractionDigits: 2,
+                                            })}
+                                        </span>
+                                    </div>
                                 </div>
-                            </div>
-                        </li>
-                    ))}
+                            </li>
+                        );
+                    })}
                 </ul>
             </div>
 
-            <button className="modal__close-btn" onClick={onCloseModal}>
-                Save
-            </button>
+            <div className="actions">
+                <button className="actions__btn actions__save-btn" onClick={onCloseModal}>
+                    Save
+                </button>
+
+                <button className="actions__btn actions__close-btn" onClick={onCloseModal}>
+                    Close
+                </button>
+            </div>
         </div>
     );
 };
