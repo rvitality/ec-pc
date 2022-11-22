@@ -1,0 +1,17 @@
+.predictions-table.data-logs {
+    tr {
+        grid-template-columns: repeat(7, minmax(0, 1fr));
+    }
+
+    td {
+        word-break: break-all;
+    }
+
+    .photo {
+        img {
+            width: 3rem;
+            height: 3rem;
+            object-fit: cover;
+        }
+    }
+}
