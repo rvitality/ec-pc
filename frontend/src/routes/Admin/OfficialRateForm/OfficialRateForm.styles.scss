@@ -2,13 +2,37 @@
     font-size: 1.15rem;
     width: 45%;
 
+    .date {
+        margin-bottom: 1.5rem;
+        border-bottom: 2px dashed rgb(41, 105, 215);
+        padding-bottom: 1rem;
+
+        .label {
+            font-weight: 500;
+            display: inline-block;
+            margin-right: 0.5rem;
+        }
+    }
+
     .rate {
+        display: flex;
+        gap: 15%;
+        align-items: center;
         margin-bottom: 2rem;
+
+        .loading {
+            margin-top: 1rem;
+            align-self: center;
+            gap: 0.5rem;
+            font-size: 1rem;
+            font-weight: lighter;
+            text-align: center;
+            padding-right: 1rem;
+        }
 
         .sarima-rate {
             margin-top: 0.5rem;
             font-weight: 500;
-            width: 62%;
             border-left: 5px solid #262261;
             background: rgb(0, 0, 0, 0.1);
             padding: 0.7rem;
@@ -18,23 +42,13 @@
     &__control {
         label {
             margin-right: 1rem;
+            font-weight: 500;
         }
 
         input {
             font-family: inherit;
             font-size: 1.05rem;
             padding: 0.3rem 0.5rem;
-        }
-    }
-
-    .date {
-        margin-bottom: 2rem;
-        border-bottom: 2px dashed rgb(41, 105, 215);
-        padding-bottom: 1rem;
-
-        .label {
-            display: inline-block;
-            margin-right: 0.5rem;
         }
     }
 
