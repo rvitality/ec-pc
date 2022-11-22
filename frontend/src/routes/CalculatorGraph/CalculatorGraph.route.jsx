@@ -7,24 +7,42 @@ import Modal from "../../components/Modal/Modal.component";
 import Graph from "../../components/Graph/Graph.component";
 
 import "./CalculatorGraph.styles.scss";
+import { useAuthContext } from "../../context/AuthContext";
+import { useState } from "react";
+import Spinner from "../../ui/Spinner/Spinner.ui";
 
 const CalculatorGraph = () => {
+    const { user } = useAuthContext();
+    const { forecasted, actual, month, year } = user.records?.length > 0 ? user.records[0] : {};
+
+    const [loading, setIsLoading] = useState(false);
+    const [error, setError] = useState();
     const { setSarimaRate, sarimaRate } = useApplianceContext();
+
+    // const [accuracy, setAccuracy] = useState()
+    const errorRate = (Math.abs(actual - forecasted) / forecasted) * 100;
+    const accuracy = (100 - errorRate).toFixed(2);
+    // setAccuracy(accuracy);
 
     // ! fetch sarima rate
     useEffect(() => {
         const sendRequest = async () => {
+            setIsLoading(true);
+            setError("");
             try {
                 const response = await fetch(
                     "https://ec-pc-flaskapi.onrender.com/api/get_sarima_rate"
                 );
-                if (!response.ok) return "Something went wrong!";
+                if (!response.ok) return "Failed to get sarima rate!";
                 const data = await response.json();
+                console.log(data);
                 const { sarima_rate } = data;
                 setSarimaRate(sarima_rate);
             } catch (err) {
                 console.log(err.message);
+                setError(err.message);
             }
+            setIsLoading(false);
         };
 
         // run python predict rate if sarimaRate hasn't been changed in the admin route
@@ -37,9 +55,54 @@ const CalculatorGraph = () => {
     return (
         <>
             <section className="main-content">
-                <Calculator />
+                <div className="left-side">
+                    {loading ? (
+                        <div className="loading">
+                            <p>Getting SARIMA rate...</p>
+                            <Spinner />
+                        </div>
+                    ) : (
+                        <Calculator />
+                    )}
+                </div>
+
                 <div className="right-side">
                     <Graph />
+
+                    <div className="current-data">
+                        <div className="control">
+                            <div className="control__label">
+                                Predicted Rate{" "}
+                                <div className="date">
+                                    ({month}, {year})
+                                </div>
+                            </div>
+                            <div className="control__value">
+                                {loading ? (
+                                    <div className="loading">
+                                        <p>Getting SARIMA rate...</p>
+                                        <Spinner />
+                                    </div>
+                                ) : (
+                                    `₱ ${sarimaRate?.toLocaleString()}`
+                                )}
+                            </div>
+                        </div>
+
+                        <div className="control">
+                            <div className="control__label">Current Forecasted Bill</div>
+                            <div className="control__value">₱ {forecasted?.toLocaleString()}</div>
+                        </div>
+
+                        <div className="control">
+                            <div className="control__label">Current Actual Bill</div>
+                            <div className="control__value">₱ {actual?.toLocaleString()}</div>
+                        </div>
+                        <div className="control">
+                            <div className="control__label">Accuracy</div>
+                            <div className="control__value">{accuracy}%</div>
+                        </div>
+                    </div>
                 </div>
             </section>
             <Modal />
