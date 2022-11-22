@@ -42,10 +42,10 @@
         filter: brightness(0.9);
     }
 
-    &.primary {
+    &__primary {
         background-image: linear-gradient(to right, $base-color-light, $base-color);
     }
-    &.secondary {
+    &__secondary {
         background: #222;
 
         &:hover {
