@@ -4,13 +4,10 @@ import Users from "./Users/Users.component";
 import Graph from "../../components/Graph/Graph.component";
 import OfficialRateForm from "./OfficialRateForm/OfficialRateForm.component";
 
-import useFetchUsers from "../../hooks/useFetchUsers";
-
 import "./Admin.styles.scss";
+import Predictions from "./Predictions/Predictions.component";
 
 const Admin = () => {
-    const usersRequestResponse = useFetchUsers();
-
     const [selectedCategory, setSelectedCategory] = useState("users");
 
     const clickCategoryHandler = category => {
@@ -27,7 +24,9 @@ const Admin = () => {
             </div>
         );
     } else if (selectedCategory === "users") {
-        contentToShow = <Users response={usersRequestResponse} />;
+        contentToShow = <Users />;
+    } else if (selectedCategory === "predictions") {
+        contentToShow = <Predictions />;
     }
 
     return (
@@ -42,6 +41,14 @@ const Admin = () => {
                     >
                         Users
                     </li>
+
+                    <li
+                        className={selectedCategory === "predictions" ? "active" : ""}
+                        onClick={() => clickCategoryHandler("predictions")}
+                    >
+                        Predictions
+                    </li>
+
                     <li
                         className={selectedCategory === "rate-form" ? "active" : ""}
                         onClick={() => clickCategoryHandler("rate-form")}
