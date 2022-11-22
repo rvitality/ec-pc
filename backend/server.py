@@ -10,7 +10,14 @@ app = Flask(__name__)
 def get_sarima_rate():
     forecast = predict_rate()
     sarima_rate = forecast.values[0]
-    return {"sarima_rate": sarima_rate}
+
+    with open("official_rates.csv") as f:
+        mycsv = csv.reader(f)
+        mycsv = list(mycsv)
+        lastRowData = mycsv[-1]
+        # print(lastRowData)
+
+    return {"sarima_rate": sarima_rate, "last_rate_data": lastRowData}
 
 
 @app.route("/get_last_rate_data")
@@ -20,7 +27,7 @@ def get_last_rate_data():
         mycsv = csv.reader(f)
         mycsv = list(mycsv)
         lastRowData = mycsv[-1]
-        print(lastRowData)
+        # print(lastRowData)
 
     return {"last_rate_data": lastRowData}
 
