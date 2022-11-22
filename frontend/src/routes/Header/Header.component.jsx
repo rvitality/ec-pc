@@ -57,13 +57,13 @@ const Header = () => {
                     )}
 
                     {!isAuthenticated && (
-                        <button className="btn secondary" onClick={loginHandler}>
+                        <button className="btn btn__secondary" onClick={loginHandler}>
                             Sign In
                         </button>
                     )}
 
                     {!error && isAuthenticated && (
-                        <button className="btn secondary" onClick={logoutHandler}>
+                        <button className="btn btn__secondary" onClick={logoutHandler}>
                             Sign Out
                         </button>
                     )}
