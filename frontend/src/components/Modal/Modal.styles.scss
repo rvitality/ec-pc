@@ -8,7 +8,7 @@
     width: 100%;
     top: 0;
     bottom: 0;
-    z-index: 10;
+    z-index: 999;
 }
 
 .modal {
@@ -16,8 +16,8 @@
     height: 90%;
     top: 50%;
     left: 50%;
-    width: 50%;
-    z-index: 100;
+    width: 60%;
+    z-index: 9999;
     transform: translate(-50%, -50%);
     margin: auto;
     overflow: hidden;
@@ -26,27 +26,29 @@
     padding: 2.5rem 3rem;
     border-radius: 3rem;
 
-    &__close-btn {
-        background: #fff;
-        font-weight: bold;
-        text-transform: capitalize;
-        border-radius: 0.5rem;
-        font-size: 1.15rem;
-        padding: 0.7rem 3.25rem;
-        border: none;
-        transition: all 0.25s ease-in-out;
-        display: block;
-        margin: 5rem auto 0 auto;
-        cursor: pointer;
-
-        &:hover {
-            background: #000;
-            color: #fff;
-        }
-    }
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 1.5rem;
 
     .value {
         font-weight: 500;
+        text-align: center;
+        font-size: 1.5rem;
+
+        .sarima {
+            margin-bottom: 0.5rem;
+        }
+
+        .small {
+            font-weight: lighter;
+            font-size: 0.8rem;
+        }
+    }
+
+    .heading {
+        font-weight: 500;
+        font-size: 1.5rem;
     }
 
     .forecasted-bill {
@@ -55,16 +57,16 @@
         justify-content: center;
         gap: 2rem;
 
-        h3 {
-            font-weight: 500;
-
-            text-transform: capitalize;
-            font-size: 1.5rem;
-        }
-
-        p {
+        &__value {
+            font-weight: bold;
             font-size: 1.35rem;
             margin-top: 1rem;
+        }
+
+        .small {
+            margin-top: 0.5rem;
+            font-weight: lighter;
+            font-size: 0.8rem;
         }
 
         .divider {
@@ -75,10 +77,15 @@
     }
 
     .breakdown {
-        height: 48%;
+        height: 100%;
         overflow-y: auto;
-        margin-top: 2.5rem;
         padding-right: 2rem;
+
+        .heading {
+            border-bottom: 1px solid #ccc;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+        }
 
         /* width */
         &::-webkit-scrollbar {
@@ -100,18 +107,6 @@
             background: #111;
         }
 
-        .value {
-            margin-left: 0.35rem;
-        }
-
-        h3 {
-            font-weight: 500;
-            font-size: 1.5rem;
-            margin-bottom: 1rem;
-            border-bottom: 1px solid #ccc;
-            padding-bottom: 0.5rem;
-        }
-
         ul {
             font-size: 1.15rem;
 
@@ -119,12 +114,18 @@
                 margin-top: 0.25rem;
             }
 
+            .value {
+                font-weight: 300;
+                font-size: 1.15rem;
+                margin-left: 0.5rem;
+            }
+
             &.lvl1 {
-                margin-left: 1.25rem;
+                margin-left: 1.15rem;
             }
 
             &.lvl2 {
-                margin-left: 3rem;
+                margin-left: 2.5rem;
             }
 
             &.lvl1 > li {
@@ -140,6 +141,52 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
+        }
+
+        .total {
+            font-weight: bold;
+            font-size: 1.25rem;
+            margin-left: 0.5rem;
+        }
+    }
+
+    .loading-spinner {
+        margin-left: 2rem;
+    }
+
+    .actions {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 1rem;
+
+        &__btn {
+            background: #fff;
+            font-weight: bold;
+            text-transform: capitalize;
+            border-radius: 0.5rem;
+            font-size: 1.15rem;
+            padding: 0.7rem 3.25rem;
+            border: 1px solid #fff;
+            transition: all 0.25s ease-in-out;
+            display: block;
+            cursor: pointer;
+            align-self: center;
+
+            &:hover {
+                background: #000;
+                color: #fff;
+            }
+        }
+
+        &__close-btn {
+            background: transparent;
+            color: #fff;
+
+            &:hover {
+                background: #fff;
+                color: #000;
+            }
         }
     }
 }
