@@ -19,7 +19,7 @@ const initialState = {
     isExpanded: true,
     isAppliedToAllDuration: false,
     durationElements: Array(1).fill(),
-    inputDurations: [],
+    inputDurations: [1],
     message: { status: "", msg: "" },
 };
 
@@ -127,9 +127,11 @@ const Appliance = ({
         duration = totalDuration,
         quantityValue = quantity,
         wattageValue = wattage,
+        inputDurations = [1],
     }) => {
-        const applianceBill = ((wattageValue * (duration * 30)) / 1000) * sarimaRate;
+        console.log(inputDurations);
 
+        const applianceBill = ((wattageValue * (duration * 30)) / 1000) * sarimaRate;
         return {
             ...appliance,
             quantity: quantityValue,
@@ -247,9 +249,12 @@ const Appliance = ({
         const currentAppliance = getCurrentAppliance({
             duration: newTotalDurations,
             quantityValue: inputValue,
+            inputDurations: newInputDurations,
         });
 
         prevSelectedAppliance.current = currentAppliance;
+
+        console.log(currentAppliance);
 
         onAddAppliance(previousAppliance, currentAppliance);
     };
@@ -278,6 +283,7 @@ const Appliance = ({
 
         const currentAppliance = getCurrentAppliance({
             duration: newTotalDurations,
+            inputDurations: newInputDurations,
         });
 
         prevSelectedAppliance.current = currentAppliance;
