@@ -128,7 +128,7 @@ const Appliance = ({
         quantityValue = quantity,
         wattageValue = wattage,
     }) => {
-        const applianceBill = ((wattageValue * (duration * 30) * quantity) / 1000) * sarimaRate;
+        const applianceBill = ((wattageValue * (duration * 30)) / 1000) * sarimaRate;
 
         return {
             ...appliance,
@@ -136,9 +136,11 @@ const Appliance = ({
             duration,
             wattage: wattageValue,
             applianceBill,
+            inputDurations,
         };
     };
 
+    // selecting an option/appliance
     const selectApplianceHandler = appliance => {
         if (!appliance.applianceName?.trim() || !appliance.applianceID) return;
 
@@ -231,7 +233,8 @@ const Appliance = ({
                 payload: { newInputDurations },
             });
         } else {
-            newTotalDurations = newInputDurations[0] * inputValue;
+            // newTotalDurations = newInputDurations[0] * inputValue;
+            newTotalDurations = newInputDurations.reduce((acc, el) => acc + el);
 
             dispatch({
                 type: "SET_INPUT_DURATIONS",
