@@ -1,9 +1,14 @@
 import React, { useRef, useEffect, useState } from "react";
 import { useApplianceContext } from "../../../context/ApplianceContext";
 
+import Spinner from "../../../ui/Spinner/Spinner.ui";
+
 import "./OfficialRateForm.styles.scss";
 
 const OfficialRateForm = () => {
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState("");
+
     const { setSarimaRate } = useApplianceContext();
     const rateInputRef = useRef();
 
@@ -14,24 +19,23 @@ const OfficialRateForm = () => {
     // ! fetch last rate from csv file official rates
     useEffect(() => {
         const sendRequest = async () => {
+            setLoading(true);
+            setError("");
             try {
                 const response = await fetch(
                     "https://ec-pc-flaskapi.onrender.com/api/get_last_rate_data"
                 );
-                if (!response.ok) return "Something went wrong!";
+                if (!response.ok) return "Failed to fetch last rate data.";
                 const data = await response.json();
                 const { last_rate_data } = data;
                 console.log(last_rate_data);
                 setCurrentOfficialRate(last_rate_data);
-
-                // const rateInput = rateInputRef.current?.value;
-                // setCurrentOfficialRate(prevState => {
-                //     last_rate_data[-1] = rateInput;
-                //     return [...last_rate_data];
-                // });
             } catch (err) {
                 console.log(err.message);
+                setError(err.message);
             }
+
+            setLoading(false);
         };
         sendRequest();
     }, []);
@@ -55,6 +59,9 @@ const OfficialRateForm = () => {
 
         const sendRequest = async () => {
             try {
+                setLoading(true);
+                setError("");
+
                 const response = await fetch(
                     "https://ec-pc-flaskapi.onrender.com/api/add_official_rate",
                     {
@@ -68,7 +75,6 @@ const OfficialRateForm = () => {
                         }),
                     }
                 );
-                console.log(response);
 
                 if (!response.ok) throw Error("Something went wrong");
 
@@ -80,7 +86,10 @@ const OfficialRateForm = () => {
                 setCurrentOfficialRate(last_rate_data);
             } catch (err) {
                 console.log(err);
+                setError(err.message);
             }
+
+            setLoading(false);
         };
 
         sendRequest();
@@ -92,18 +101,26 @@ const OfficialRateForm = () => {
                 <span className="label">Date Today: </span> {monthLong} {day}, {yr}
             </div>
             <div className="official-rate-form__control rate">
-                <label>
-                    Current Rate <small>({date}): </small>
-                </label>
-                <div className="sarima-rate">₱ {rate.toFixed(2)}</div>
+                <div>
+                    <label>
+                        Current Rate <small>({date}): </small>
+                    </label>
+                    <div className="sarima-rate">₱ {rate.toFixed(2)}</div>
+                </div>
+                <div className="loading">
+                    {loading && (
+                        <>
+                            <p>Loading ...</p>
+                            <Spinner />
+                        </>
+                    )}
+                </div>
             </div>
             <div className="official-rate-form__control">
-                <label>
-                    <strong>{123 !== 1 ? "Update" : "Enter"}</strong> Rate:{" "}
-                </label>
-                <input type="number" step="any" ref={rateInputRef} required />
+                <label htmlFor="rate">Update Rate:</label>
+                <input type="number" id="rate" step="any" ref={rateInputRef} required />
             </div>
-            <button type="submit" className="btn primary">
+            <button type="submit" className="btn btn__primary">
                 Submit
             </button>
         </form>
