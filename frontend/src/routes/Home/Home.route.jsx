@@ -18,7 +18,7 @@ const Home = () => {
                         application that predicts a household's electric bill for the current month
                         using the previous bills using SARIMA.
                     </p>
-                    <Link to="/" className="btn primary">
+                    <Link to="/" className="btn btn__primary">
                         Learn more
                     </Link>
                 </div>
