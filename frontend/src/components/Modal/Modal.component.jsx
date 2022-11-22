@@ -34,7 +34,6 @@ const ModalContent = props => {
                                     ₱{" "}
                                     {sarimaRate.toLocaleString("en", { minimumFractionDigits: 2 })}
                                 </div>
-                                <div className="small">You can save your prediction now.</div>
                             </>
                         ) : (
                             <>
