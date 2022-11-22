@@ -10,13 +10,13 @@ import { HiOutlineChevronRight } from "react-icons/hi";
 import "./DataTable.styles.scss";
 
 const DataTable = ({ data, onFilterBySearch, Table, userRole }) => {
-    const billsCopy = [...data];
-    const chunkData = chunkArray(billsCopy, 5);
+    const dataCopy = [...data];
+    const chunkData = chunkArray(dataCopy, 5);
 
-    const [billsToDisplay, setBillsToDisplay] = useState(chunkData[0]);
+    const [dataToDisplay, setDataToDisplay] = useState(chunkData[0]);
 
     useEffect(() => {
-        setBillsToDisplay(chunkData[0]);
+        setDataToDisplay(chunkData[0]);
     }, [data]);
 
     const [paginationArray, setPaginationArray] = useState(getPageArrayInitialState(chunkData));
@@ -31,7 +31,7 @@ const DataTable = ({ data, onFilterBySearch, Table, userRole }) => {
 
     const changePageHandler = index => {
         setCurrentPageIndex(index);
-        setBillsToDisplay(chunkData[index - 1]);
+        setDataToDisplay(chunkData[index - 1]);
     };
 
     const backToFirstSetButtonsHandler = () => {
@@ -39,7 +39,7 @@ const DataTable = ({ data, onFilterBySearch, Table, userRole }) => {
 
         setCurrentPageIndex(1);
         setPaginationSetIndex(1);
-        setBillsToDisplay(chunkData[0]);
+        setDataToDisplay(chunkData[0]);
     };
 
     const nextSetButtonsHandler = () => {
@@ -59,7 +59,7 @@ const DataTable = ({ data, onFilterBySearch, Table, userRole }) => {
 
         setPaginationArray(mappedPaginationArr);
         setCurrentPageIndex(paginationSetIndex * 5 + 1);
-        setBillsToDisplay(chunkData[paginationSetIndex * 5]);
+        setDataToDisplay(chunkData[paginationSetIndex * 5]);
         setPaginationSetIndex(prevState => prevState + 1);
     };
 
@@ -78,23 +78,23 @@ const DataTable = ({ data, onFilterBySearch, Table, userRole }) => {
     // const searchChangeHandler = e => {
     //     const inputValue = e.target.value.trim().toLowerCase();
     //     const filteredData = onFilterBySearch(chunkData[currentPageIndex - 1], inputValue);
-    //     setBillsToDisplay(filteredData);
+    //     setDataToDisplay(filteredData);
     // };
 
-    let dataToShow;
-    if (billsToDisplay?.length > 0) {
-        dataToShow = (
+    let contentToShow;
+    if (dataToDisplay?.length > 0) {
+        contentToShow = (
             <>
-                <Table dataToDisplay={billsToDisplay} userRole={userRole} />
+                <Table dataToDisplay={dataToDisplay} userRole={userRole} />
                 <div className="pagination">
-                    {billsToDisplay?.length > 0 && (
+                    {dataToDisplay?.length > 0 && (
                         <>
                             {paginationSetIndex > 1 && (
                                 <button onClick={backToFirstSetButtonsHandler}>
                                     <HiOutlineChevronDoubleLeft />
                                 </button>
                             )}
-                            {paginationButtons}
+                            {paginationButtons.length >= 1 && paginationButtons}
                             {showNextButton && (
                                 <button onClick={nextSetButtonsHandler}>
                                     <HiOutlineChevronRight />
@@ -106,7 +106,7 @@ const DataTable = ({ data, onFilterBySearch, Table, userRole }) => {
             </>
         );
     } else {
-        dataToShow = <div className="no-result-heading">No records.</div>;
+        contentToShow = <div className="no-result-heading">No records.</div>;
     }
 
     return (
@@ -123,7 +123,7 @@ const DataTable = ({ data, onFilterBySearch, Table, userRole }) => {
                         </div>
                     </div> */}
             </div>
-            {dataToShow}
+            {contentToShow}
         </article>
     );
 };
