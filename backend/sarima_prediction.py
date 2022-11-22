@@ -1,7 +1,8 @@
 import pandas as pd
 import numpy as np
 import statsmodels.api as sm
-from pylab import rcParams
+
+# from pylab import rcParams
 import itertools
 
 # import tensorflow as tf
@@ -54,11 +55,11 @@ def predict_rate():
     val_df = (val_df - train_mean) / train_std
     test_df = (test_df - train_mean) / train_std
 
-    def analyze_time_series(time_series_df):
-        rcParams["figure.figsize"] = 18, 8
-        decomposition = sm.tsa.seasonal_decompose(time_series_df, model="additive")
+    # def analyze_time_series(time_series_df):
+    #     rcParams["figure.figsize"] = 18, 8
+    #     decomposition = sm.tsa.seasonal_decompose(time_series_df, model="additive")
 
-    analyze_time_series(new_df)
+    # analyze_time_series(new_df)
 
     # Time Series Analysis
     p = d = q = range(0, 2)
