@@ -12,11 +12,13 @@ import { TbTarget } from "react-icons/tb";
 import { useAuthContext } from "../../context/AuthContext";
 
 import "./Account.styles.scss";
+import { useRef } from "react";
 
 const Account = () => {
     const { user } = useAuthContext();
 
-    const [showError, setShowError] = useState(false);
+    const [inputError, setInputError] = useState("");
+    const billRef = useRef();
 
     const [accuracy, setAccuracy] = useState(0);
     const { email, name, photoURL, role, metadata } = user || {};
@@ -50,46 +52,48 @@ const Account = () => {
             : 0;
 
     const billChangeHandler = e => {
-        if (!forecastedBill) {
-            setShowError(true);
+        const inputBill = +e.target.value;
+
+        if (!forecastedBill || inputBill < 0) {
+            setInputError("Please input a valid value.");
             return;
         }
 
-        setShowError(false);
+        setInputError("");
 
-        const officialBill = +e.target.value;
         // var regex = /[0-9]|\./;
-        // if (!regex.test(officialBill)) return;
+        // if (!regex.test(inputBill)) return;
 
-        const errorRate = (Math.abs(officialBill - forecastedBill) / forecastedBill) * 100;
+        const errorRate = (Math.abs(inputBill - forecastedBill) / forecastedBill) * 100;
         const accuracy = (100 - errorRate).toFixed(2);
         setAccuracy(accuracy);
     };
 
-    const billOnBlurHandler = e => {
-        if (e.target.value.trim() === "") {
+    const enterBillHandler = e => {
+        const inputBill = +billRef.current?.value;
+
+        if (!inputBill || inputBill < 0) {
+            setInputError("Please input a valid value.");
             return;
         }
 
         if (!forecastedBill) {
-            setShowError(true);
+            setInputError("Please forecast a bill first using the calculator.");
             return;
         }
 
-        setShowError(false);
-        const officialBill = +e.target.value;
+        setInputError("");
 
-        const errorRate = (Math.abs(officialBill - forecastedBill) / forecastedBill) * 100;
+        const errorRate = (Math.abs(inputBill - forecastedBill) / forecastedBill) * 100;
         const accuracy = (100 - errorRate).toFixed(2);
         const newUserRecord = {
             ...currentRecord,
             accuracy: +accuracy,
             forecasted: forecastedBill,
-            actual: officialBill,
+            actual: inputBill,
             status: "good",
         };
 
-        // ! better way to update state but we need that updateUserRecords
         setRecords(prevState => {
             const existingRecordIndex = prevState.findIndex(
                 record =>
@@ -151,33 +155,24 @@ const Account = () => {
                     <div className="prediction">
                         <div className="group">
                             <div className="control">
-                                <div className="control">
-                                    <div className="control__icon">
-                                        <RiLightbulbFlashFill />
-                                    </div>
-                                    <div className="control__texts">
-                                        <p className="label">Your Bill Last Month</p>
-                                        <div className="value">
-                                            ₱ {lastMonthBill.toLocaleString()}
-                                        </div>
-                                    </div>
+                                <div className="control__icon">
+                                    <RiLightbulbFlashFill />
+                                </div>
+                                <div className="control__texts">
+                                    <p className="label">Your Bill Last Month</p>
+                                    <div className="value">₱ {lastMonthBill.toLocaleString()}</div>
                                 </div>
                             </div>
 
                             <div className="control">
-                                <div className="control">
-                                    <div className="control__icon">
-                                        <FaChartLine />
-                                    </div>
-                                    <div className="control__texts">
-                                        <p className="label">
-                                            Forecasted bill this month{" "}
-                                            <strong>({currentMonth})</strong>
-                                        </p>
-                                        <div className="value">
-                                            ₱ {forecastedBill.toLocaleString()}
-                                        </div>
-                                    </div>
+                                <div className="control__icon">
+                                    <FaChartLine />
+                                </div>
+                                <div className="control__texts">
+                                    <p className="label">
+                                        Forecasted bill this month <strong>({currentMonth})</strong>
+                                    </p>
+                                    <div className="value">₱ {forecastedBill.toLocaleString()}</div>
                                 </div>
                             </div>
                         </div>
@@ -190,25 +185,35 @@ const Account = () => {
                                     <GiMoneyStack />
                                 </div>
                                 <div className="control__texts">
-                                    <label className="label" htmlFor="bill">
-                                        Your bill this month <strong>({currentMonth})</strong>
-                                    </label>
-                                    <input
-                                        onChange={billChangeHandler}
-                                        onBlur={billOnBlurHandler}
-                                        type="number"
-                                        name="bill"
-                                        id="bill"
-                                    />
-                                    {showError && (
-                                        <div className="error">
-                                            Forecast a bill first using the{" "}
-                                            <em>
-                                                <strong>calculator</strong>
-                                            </em>{" "}
-                                            app .
-                                        </div>
-                                    )}
+                                    <div>
+                                        <label className="label" htmlFor="bill">
+                                            Your bill this month <strong>({currentMonth})</strong>
+                                        </label>
+                                        <input
+                                            onChange={billChangeHandler}
+                                            ref={billRef}
+                                            type="number"
+                                            name="bill"
+                                            id="bill"
+                                        />
+                                        {inputError && (
+                                            <div className="error">
+                                                {inputError}
+                                                {/* Forecast a bill first using the{" "}
+                                                <em>
+                                                    <strong>calculator</strong>
+                                                </em>{" "}
+                                                app . */}
+                                            </div>
+                                        )}
+                                    </div>
+
+                                    <button
+                                        className="btn btn__primary enter-btn"
+                                        onClick={enterBillHandler}
+                                    >
+                                        Enter
+                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -216,14 +221,12 @@ const Account = () => {
                         {/* <button className="btn secondary">Compare</button> */}
 
                         <div className="control">
-                            <div className="control">
-                                <div className="control__icon">
-                                    <TbTarget />
-                                </div>
-                                <div className="control__texts">
-                                    <p className="label">Prediction Accuracy</p>
-                                    <div className="value">{accuracy}%</div>
-                                </div>
+                            <div className="control__icon">
+                                <TbTarget />
+                            </div>
+                            <div className="control__texts">
+                                <p className="label">Prediction Accuracy</p>
+                                <div className="value">{accuracy}%</div>
                             </div>
                         </div>
                     </div>
