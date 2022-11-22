@@ -54,6 +54,7 @@
 
     .group {
         display: flex;
+        align-items: flex-start;
         gap: 3rem;
     }
 
@@ -65,12 +66,13 @@
         display: flex;
         align-items: center;
         gap: 1.25rem;
-        margin: 1rem 0;
+        margin: 2rem 0;
         min-width: 50%;
 
         &__icon {
+            align-self: flex-start;
             align-items: center;
-            background: $base-color;
+            background-image: linear-gradient(to left, $base-color-light, $base-color);
             border-radius: 50%;
             display: flex;
             font-size: 1.15rem;
@@ -102,8 +104,9 @@
             align-items: flex-start;
             gap: 1rem;
 
-            .btn {
-                font-size: 0.9rem;
+            .enter-btn {
+                margin-top: 1rem;
+                font-size: 0.95rem;
             }
 
             .input-bill {
