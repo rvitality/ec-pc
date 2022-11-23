@@ -2,10 +2,9 @@
 .landing {
     align-items: center;
     display: flex;
-    height: 100vh;
+    height: 80vh;
     overflow: hidden;
     position: relative;
-    padding-top: 4rem;
 
     &__texts {
         width: 50%;
@@ -91,7 +90,7 @@
 
             img {
                 border-radius: 50%;
-                height: 6rm;
+                height: 6rem;
                 width: 6rem;
                 filter: drop-shadow(0px 5px 5px black);
             }
