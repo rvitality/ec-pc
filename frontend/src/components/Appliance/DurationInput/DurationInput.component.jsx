@@ -12,7 +12,7 @@ const DurationInput = ({ num, onChangeInputHander }) => {
             durationRef.current.value = 24;
         }
 
-        if (inputValue < 1) {
+        if (inputValue < 0.1) {
             inputValue = 1;
             durationRef.current.value = 1;
         }
@@ -28,7 +28,7 @@ const DurationInput = ({ num, onChangeInputHander }) => {
             <input
                 type="number"
                 id={`duration_${num + 1}`}
-                min={1}
+                min={0.1}
                 max={24}
                 defaultValue={1}
                 ref={durationRef}
