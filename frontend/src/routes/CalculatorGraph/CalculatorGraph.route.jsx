@@ -32,9 +32,7 @@ const CalculatorGraph = () => {
             setIsLoading(true);
             setError("");
             try {
-                const response = await fetch(
-                    "https://ec-pc-flaskapi.onrender.com/api/get_sarima_rate"
-                );
+                const response = await fetch("/api/get_sarima_rate");
                 if (!response.ok) return "Failed to get sarima rate!";
                 const data = await response.json();
                 console.log(data);

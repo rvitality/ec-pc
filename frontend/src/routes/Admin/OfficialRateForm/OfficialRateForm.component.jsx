@@ -22,13 +22,12 @@ const OfficialRateForm = () => {
             setLoading(true);
             setError("");
             try {
-                const response = await fetch(
-                    "https://ec-pc-flaskapi.onrender.com/api/get_last_rate_data"
-                );
+                const response = await fetch("/api/get_last_rate_data");
+                console.log(response);
                 if (!response.ok) return "Failed to fetch last rate data.";
                 const data = await response.json();
+                console.log(data);
                 const { last_rate_data } = data;
-                console.log(last_rate_data);
                 setCurrentOfficialRate(last_rate_data);
             } catch (err) {
                 console.log(err.message);
@@ -62,19 +61,16 @@ const OfficialRateForm = () => {
                 setLoading(true);
                 setError("");
 
-                const response = await fetch(
-                    "https://ec-pc-flaskapi.onrender.com/api/add_official_rate",
-                    {
-                        headers: {
-                            "Content-Type": "application/json",
-                        },
-                        method: "POST",
-                        body: JSON.stringify({
-                            date: dateToday,
-                            rate: rateInput,
-                        }),
-                    }
-                );
+                const response = await fetch("api/add_official_rate", {
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    method: "POST",
+                    body: JSON.stringify({
+                        date: dateToday,
+                        rate: rateInput,
+                    }),
+                });
 
                 if (!response.ok) throw Error("Something went wrong");
 
