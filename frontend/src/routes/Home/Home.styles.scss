@@ -2,13 +2,10 @@
 .landing {
     align-items: center;
     display: flex;
-    // height: 100vh;
-    // margin-top: -15vh;
-    // padding-top: 6rem;
-    max-height: 100vh;
+    height: 100vh;
     overflow: hidden;
     position: relative;
-    padding-top: 1rem;
+    padding-top: 4rem;
 
     &__texts {
         width: 50%;

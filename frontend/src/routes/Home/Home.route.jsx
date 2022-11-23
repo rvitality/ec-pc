@@ -32,8 +32,7 @@ const Home = () => {
             </section>
             <section id="about" className="about section-px section-py">
                 <div className="heading">
-                    <h2 className="heading-tertiary">About</h2>
-                    <div className="heading-secondary">What is the application?</div>
+                    <div className="heading-secondary">About</div>
                     <div className="section-paragraph">
                         This is an application developed by student researchers to predict a{" "}
                         <strong>household's electric bill for the month</strong>. However, this
