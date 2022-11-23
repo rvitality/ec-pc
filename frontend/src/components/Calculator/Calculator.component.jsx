@@ -2,12 +2,12 @@ import React, { useState, useReducer, useEffect } from "react";
 
 import Appliance from "../Appliance/Appliance.component";
 
+import { FaInfoCircle } from "react-icons/fa";
 import { IoMdAdd } from "react-icons/io";
-import { useApplianceContext } from "../../context/ApplianceContext";
-
-import { getAppliancesAndDocuments, updateUserRecords } from "../../utils/firebase.utils";
 
 import { useAuthContext } from "../../context/AuthContext";
+import { useApplianceContext } from "../../context/ApplianceContext";
+import { getAppliancesAndDocuments, updateUserRecords } from "../../utils/firebase.utils";
 
 import "./Calculator.styles.scss";
 
@@ -188,6 +188,16 @@ const Calculator = () => {
 
     return (
         <aside className="calcu">
+            <div className="hours-info">
+                <div className="info">
+                    <div className="info__tooltip">
+                        Your hours input will greatly affect the predicted bill output so we
+                        encourage to do it with certainty.
+                    </div>
+                    <FaInfoCircle className="info__icon" />
+                </div>
+            </div>
+
             <h1 className="heading-secondary">Calculator</h1>
 
             <form onSubmit={submitDataHandler}>
@@ -212,6 +222,16 @@ const Calculator = () => {
                 </button>
 
                 <div className="manual-input-container">
+                    <div className="manual-info">
+                        <div className="info">
+                            <div className="info__tooltip">
+                                If you know your appliance's specific wattage, we encourage you to
+                                put it manually for more accurate prediction.
+                            </div>
+                            <FaInfoCircle className="info__icon" />
+                        </div>
+                    </div>
+
                     <h3>Manual Input:</h3>
                     <p className="note">
                         Add a <b>new</b> appliance if it's not included with the provided ones.

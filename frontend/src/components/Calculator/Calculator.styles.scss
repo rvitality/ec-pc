@@ -1,9 +1,59 @@
 @import "../../styles/variables.scss";
 
 .calcu {
+    position: relative;
     background-image: linear-gradient(to bottom, $base-color, #b4afe0);
     padding: 2.5rem;
     border-radius: 2rem;
+
+    .hours-info {
+        position: absolute;
+        top: 3%;
+        right: 4%;
+    }
+
+    .manual-info {
+        position: absolute;
+        top: 12%;
+        right: 3%;
+    }
+
+    .info {
+        position: relative;
+
+        &__tooltip {
+            width: 15rem;
+            background-color: black;
+            color: #fff;
+            border-radius: 6px;
+            padding: 0.5rem;
+            position: absolute;
+            z-index: 1;
+            left: 120%;
+            top: -3%;
+            font-size: 0.8rem;
+            font-weight: lighter;
+            transition: all 0.25s ease-in-out;
+            opacity: 0;
+        }
+
+        &:hover {
+            .info__tooltip {
+                opacity: 1;
+            }
+        }
+
+        &__icon {
+            color: #fff;
+            font-size: 1.5rem;
+            transition: all 0.15s ease-in-out;
+
+            &:hover {
+                transform: scale(1.05);
+                filter: brightness(1.1);
+            }
+        }
+    }
 
     h1 {
         font-size: 2.5rem;
@@ -16,9 +66,11 @@
     }
 
     .manual-input-container {
+        position: relative;
         border-top: 2px solid #222;
         padding-top: 1rem;
         margin-top: 2rem;
+
         h3 {
             color: #000;
             text-transform: uppercase;
