@@ -1,6 +1,8 @@
 import React from "react";
 
 import jyumulImgSrc from "../../assets/images/jyumul.jpg";
+import csorianoImgSrc from "../../assets/images/csoriano.png";
+import dvelascoImgSrc from "../../assets/images/dvelasco.png";
 
 import heroImgSrc from "../../assets/illustrations/hero.png";
 
@@ -56,7 +58,7 @@ const Home = () => {
 
                     <div className="people__item">
                         <div>
-                            <img src="https://picsum.photos/200" alt="Carlos Gabriel U. Soriano" />
+                            <img src={csorianoImgSrc} alt="Carlos Gabriel U. Soriano" />
                         </div>
                         <h3 className="people__name">Carlos Gabriel U. Soriano</h3>
                     </div>
@@ -64,7 +66,7 @@ const Home = () => {
                     <div className="people__item">
                         <div>
                             <img
-                                src="https://picsum.photos/200"
+                                src={dvelascoImgSrc}
                                 alt="Danielle G. Velasco
 "
                             />
