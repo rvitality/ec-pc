@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, Outlet } from "react-router-dom";
 
 import { signInWithGooglePopup, signOutUser } from "../../utils/firebase.utils";
@@ -12,6 +12,16 @@ const Header = () => {
     const { isAuthenticated, user, login, logout } = useAuthContext();
 
     const [error, setError] = useState("");
+
+    const [offset, setOffset] = useState(0);
+
+    useEffect(() => {
+        const onScroll = () => setOffset(window.pageYOffset);
+        // clean up code
+        window.removeEventListener("scroll", onScroll);
+        window.addEventListener("scroll", onScroll, { passive: true });
+        return () => window.removeEventListener("scroll", onScroll);
+    }, []);
 
     const loginHandler = async () => {
         try {
@@ -30,7 +40,7 @@ const Header = () => {
 
     return (
         <>
-            <header>
+            <header className={`${offset >= 100 ? "add-shadow" : ""}`}>
                 <div className="left">
                     <Link to="/" className="logo">
                         <img src={logoSrc} alt="Logo" />
