@@ -1,0 +1,39 @@
+.tooltip {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    &__icon {
+        font-size: 1.5rem;
+        transition: all 0.15s ease-in-out;
+
+        &:hover {
+            transform: scale(1.05);
+            filter: brightness(1.1);
+        }
+    }
+
+    &__message {
+        pointer-events: none;
+        width: 15rem;
+        background-color: black;
+        color: #fff;
+        border-radius: 6px;
+        padding: 0.5rem;
+        position: absolute;
+        z-index: 1;
+        left: 120%;
+        top: -3%;
+        font-size: 0.8rem;
+        font-weight: lighter;
+        transition: all 0.25s ease-in-out;
+        opacity: 0;
+    }
+
+    &:hover {
+        .tooltip__message {
+            opacity: 1;
+        }
+    }
+}
