@@ -240,8 +240,8 @@ const Calculator = () => {
 
                 <div className="calcu__bottom">
                     <p className="formula">
-                        Estimated kWH of an appliance (((wattage * (hours * 30 days) * quantity) /
-                        1000) * SARIMA_RATE)
+                        Estimated kWH of an appliance ((wattage * (hours * 30 days)) / 1000) *
+                        SARIMA_RATE
                     </p>
 
                     <div className="submit-btn-container">
