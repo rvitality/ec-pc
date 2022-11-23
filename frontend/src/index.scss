@@ -20,6 +20,11 @@ html {
 
     font-size: 100%;
 
+    @include respond(big-desktop) {
+        // width > 1800?
+        font-size: 120%;
+    }
+
     @include respond(tab-land) {
         // width < 1200?
         font-size: 75%;
