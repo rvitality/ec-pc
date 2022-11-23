@@ -28,9 +28,10 @@ const DurationInput = ({ num, onChangeInputHander }) => {
             <input
                 type="number"
                 id={`duration_${num + 1}`}
-                min={0.1}
-                max={24}
-                defaultValue={1}
+                step="any"
+                min="0.1"
+                max="24"
+                defaultValue="1"
                 ref={durationRef}
                 onBlur={inputBlurHandler}
                 required
