@@ -2,14 +2,16 @@ import React, { useEffect } from "react";
 
 import { useApplianceContext } from "../../context/ApplianceContext";
 
+import Spinner from "../../ui/Spinner/Spinner.ui";
 import Calculator from "../../components/Calculator/Calculator.component";
 import Modal from "../../components/Modal/Modal.component";
 import Graph from "../../components/Graph/Graph.component";
 
-import "./CalculatorGraph.styles.scss";
 import { useAuthContext } from "../../context/AuthContext";
 import { useState } from "react";
-import Spinner from "../../ui/Spinner/Spinner.ui";
+
+import "./CalculatorGraph.styles.scss";
+import ConversionTool from "./ConversionTool/ConversionTool.component";
 
 const CalculatorGraph = () => {
     const { user } = useAuthContext();
@@ -68,6 +70,8 @@ const CalculatorGraph = () => {
 
                 <div className="right-side">
                     <Graph />
+
+                    <ConversionTool />
 
                     <div className="current-data">
                         <div className="control">

@@ -1,0 +1,45 @@
+.conversion {
+    padding: 1.25rem 0;
+    border-top: 1px solid #777;
+    border-bottom: 1px solid #777;
+
+    &__heading {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+
+        .title {
+            font-size: 1.25rem;
+            font-weight: 500;
+        }
+    }
+
+    &__tool {
+        margin-top: 1rem;
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+
+        .box {
+            display: flex;
+            align-items: center;
+            padding: 0.7rem 1rem;
+            background: rgba(0, 0, 0, 0.1);
+            label {
+                text-transform: uppercase;
+                font-weight: 300;
+                font-size: 1.1rem;
+                margin-right: 1rem;
+            }
+
+            input {
+                padding: 0.25rem 0.5rem;
+                font-size: 1.15rem;
+            }
+        }
+
+        .arrow {
+            font-size: 2rem;
+        }
+    }
+}

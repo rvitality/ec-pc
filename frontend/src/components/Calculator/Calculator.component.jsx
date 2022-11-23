@@ -1,8 +1,8 @@
 import React, { useState, useReducer, useEffect } from "react";
 
+import Tooltip from "../Tooltip/Tooltip.component";
 import Appliance from "../Appliance/Appliance.component";
 
-import { FaInfoCircle } from "react-icons/fa";
 import { IoMdAdd } from "react-icons/io";
 
 import { useAuthContext } from "../../context/AuthContext";
@@ -189,13 +189,10 @@ const Calculator = () => {
     return (
         <aside className="calcu">
             <div className="hours-info">
-                <div className="info">
-                    <div className="info__tooltip">
-                        Your hours input will greatly affect the predicted bill output so we
-                        encourage to do it with certainty.
-                    </div>
-                    <FaInfoCircle className="info__icon" />
-                </div>
+                <Tooltip
+                    message="Your hours input will greatly affect the predicted bill output so we
+                        encourage to do it with certainty."
+                />
             </div>
 
             <h1 className="heading-secondary">Calculator</h1>
@@ -223,13 +220,10 @@ const Calculator = () => {
 
                 <div className="manual-input-container">
                     <div className="manual-info">
-                        <div className="info">
-                            <div className="info__tooltip">
-                                If you know your appliance's specific wattage, we encourage you to
-                                put it manually for more accurate prediction.
-                            </div>
-                            <FaInfoCircle className="info__icon" />
-                        </div>
+                        <Tooltip
+                            message="If you know your appliance's specific wattage, we encourage you to
+                    put it manually for more accurate prediction."
+                        />
                     </div>
 
                     <h3>Manual Input:</h3>
