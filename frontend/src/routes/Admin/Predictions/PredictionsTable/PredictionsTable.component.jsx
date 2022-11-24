@@ -19,7 +19,8 @@ const PredictionsTable = ({ dataToDisplay }) => {
             <tbody>
                 {dataToDisplay.map((user, index) => {
                     const { id, name, email, records, role, photoURL } = user;
-                    const { month, year, actual, forecasted, accuracy, status } = records[0] || {};
+                    const { month, year, actual, forecasted, accuracy, status } =
+                        records.length > 0 ? records[records.length - 1] : {};
 
                     return (
                         <tr key={id}>
