@@ -10,6 +10,21 @@ import {
 
 import { createContext, useContext, useState } from "react";
 
+const monthNames = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+];
+
 const initialState = {
     isAuthenticated: false,
     user: { email: "", password: "", role: "" },
@@ -65,46 +80,94 @@ export const AuthContextProvider = props => {
                 // get user data from firestore db
                 // getUserData(user.uid).then(res => setUser(prevState => ({ ...prevState, ...res })));
 
-                const dateObj = new Date();
-                const currentMonth = dateObj.toLocaleDateString("en-US", { month: "long" });
-                // const currentMonth = "December";
-                const currentYear = dateObj.getFullYear();
+                const getLastRateData = async () => {
+                    const response = await fetch("/api/get_last_rate_data");
+                    if (!response.ok) return "Failed to fetch last rate data.";
+                    const data = await response.json();
+                    console.log(response);
+                    console.log(data);
+                    const { last_rate_data } = data;
 
-                getUserData(user.uid).then(res => {
-                    const { records } = res;
+                    await getUserData(user.uid).then(res => {
+                        const { records } = res;
 
-                    const addNewDefaultRecord = () => {
-                        const defaultRecordElement = {
-                            id: uuidv4(),
-                            accuracy: 0,
-                            actual: 0,
-                            forecasted: 0,
-                            month: currentMonth,
-                            year: currentYear,
-                            status: "good",
+                        const addNewDefaultRecord = (month, year) => {
+                            const defaultRecordElement = {
+                                id: uuidv4(),
+                                accuracy: 0,
+                                actual: 0,
+                                forecasted: 0,
+                                month,
+                                year,
+                                status: "good",
+                            };
+
+                            const newRecords = [...records, defaultRecordElement];
+                            updateUserRecords({ id: user.uid, ...res, records: newRecords });
+                            setUser(prevState => ({
+                                ...prevState,
+                                ...res,
+                                records: newRecords,
+                            }));
                         };
 
-                        const newRecords = [...records, defaultRecordElement];
-                        updateUserRecords({ id: user.uid, ...res, records: newRecords });
-                        setUser(prevState => ({ ...prevState, ...res, records: newRecords }));
-                    };
+                        const dateObj = new Date();
+                        const currentMonth = dateObj
+                            .toLocaleDateString("en-US", {
+                                month: "long",
+                            })
+                            .toLowerCase();
+                        // const currentMonth = "December";
+                        const currentYear = dateObj.getFullYear();
 
-                    if (records?.length > 0) {
-                        const lastRecordElement = records[records.length - 1];
+                        if (records?.length > 0) {
+                            console.log(last_rate_data);
+                            const splitLastRate = last_rate_data[0]?.split("/");
+                            const lastRateMonth = monthNames[+splitLastRate[1] - 1].toLowerCase();
+                            // const lastRateMonth = "December";
+                            const lastRateYear = +splitLastRate[0];
 
-                        // check if this month's data already exists, else create the basic values like month and year so that `Calculator` & `Account` will fetch the records
-                        if (
-                            lastRecordElement.month.toLowerCase() === currentMonth.toLowerCase() &&
-                            +lastRecordElement.year === currentYear
-                        ) {
-                            setUser(prevState => ({ ...prevState, ...res }));
+                            const lastRecordElement = records[records.length - 1];
+
+                            // check if this month's data already exists, else create the basic values like month and year so that `Calculator` & `Account` will fetch the records
+                            let nextMonthIndex = +splitLastRate[1];
+                            let nextYr = lastRateYear;
+                            // check if it exceeds december, 11 means december because it starts at 0 (January)
+                            if (nextMonthIndex > 11) {
+                                nextMonthIndex = 0;
+                                nextYr += 1;
+                            }
+
+                            // console.log(lastRecordElement.month.toLowerCase(), lastRateMonth);
+                            // console.log(+lastRecordElement.year, lastRateYear);
+
+                            const nextMonth = monthNames[nextMonthIndex].toLowerCase();
+
+                            if (
+                                nextMonth === lastRecordElement.month.toLowerCase() &&
+                                nextYr === +lastRecordElement.year
+                            ) {
+                                console.log(1);
+                                setUser(prevState => {
+                                    return { ...prevState, ...res };
+                                });
+                            } else if (
+                                lastRecordElement.month.toLowerCase() === lastRateMonth &&
+                                +lastRecordElement.year === lastRateYear
+                            ) {
+                                console.log(2);
+                                addNewDefaultRecord(nextMonth, nextYr);
+                            } else {
+                                console.log(3);
+                                addNewDefaultRecord(currentMonth, currentYear);
+                            }
                         } else {
-                            addNewDefaultRecord();
+                            addNewDefaultRecord(currentMonth, currentYear);
                         }
-                    } else {
-                        addNewDefaultRecord();
-                    }
-                });
+                    });
+                };
+
+                getLastRateData();
             }
         });
 
