@@ -9,6 +9,7 @@ import {
 } from "../utils/firebase.utils";
 
 import { createContext, useContext, useState } from "react";
+import { calculateAccuracy } from "../helpers/calculateAccuracy.helper";
 
 const monthNames = [
     "January",
@@ -68,7 +69,17 @@ export const AuthContextProvider = props => {
 
     const setUserRecords = records => {
         if (!records) return;
-        updateUserRecords({ ...user, records });
+        const lastUserRecord = user.records[user.records.length - 1];
+
+        const { forecasted, actual } = lastUserRecord;
+
+        const accuracy = calculateAccuracy(forecasted, actual);
+
+        const newRecords = [...records];
+        newRecords[newRecords.length - 1] = { ...lastUserRecord, accuracy };
+
+        setUser(prevState => ({ ...prevState, records: newRecords }));
+        updateUserRecords({ ...user, records: newRecords });
     };
 
     useEffect(() => {
@@ -119,7 +130,6 @@ export const AuthContextProvider = props => {
                         const currentYear = dateObj.getFullYear();
 
                         if (records?.length > 0) {
-                            console.log(last_rate_data);
                             const splitLastRate = last_rate_data[0]?.split("/");
                             const lastRateMonth = monthNames[+splitLastRate[1] - 1].toLowerCase();
                             // const lastRateMonth = "December";
@@ -138,16 +148,9 @@ export const AuthContextProvider = props => {
                                 nextYr += 1;
                             }
 
-                            // console.log(lastRecordElement.month.toLowerCase(), lastRateMonth);
-                            // console.log(+lastRecordElement.year, lastRateYear);
-
                             const nextMonth = monthNames[nextMonthIndex].toLowerCase();
 
-                            console.log(nextMonth, lastRecordMonth);
-                            console.log(nextYr, lastRecordYear);
-
                             if (nextMonth === lastRecordMonth && nextYr === lastRecordYear) {
-                                console.log(1);
                                 setUser(prevState => {
                                     return { ...prevState, ...res };
                                 });
@@ -155,10 +158,8 @@ export const AuthContextProvider = props => {
                                 lastRecordMonth === lastRateMonth &&
                                 lastRecordYear === lastRateYear
                             ) {
-                                console.log(2);
                                 addNewDefaultRecord(nextMonth, nextYr);
                             } else {
-                                console.log(3);
                                 addNewDefaultRecord(currentMonth, currentYear);
                             }
                         } else {
