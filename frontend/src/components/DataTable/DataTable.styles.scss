@@ -95,6 +95,7 @@
         }
 
         tr {
+            text-transform: capitalize;
             grid-template-columns: repeat(6, 1fr);
             border-radius: 1rem;
             margin-top: 1rem;
