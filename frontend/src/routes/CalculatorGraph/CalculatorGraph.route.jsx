@@ -31,8 +31,8 @@ const CalculatorGraph = () => {
 
     const [accuracy, setAccuracy] = useState(lastCalcAccuracy);
     if (actual && !forecasted) {
-        errorRate = (Math.abs(actual - forecasted) / forecasted) * 100;
-        setAccuracy((100 - errorRate).toFixed(2));
+        errorRate = (Math.abs(forecasted - actual) / forecasted) * 100;
+        setAccuracy(100 - errorRate).toFixed(2);
     }
 
     // ! fetch sarima rate
