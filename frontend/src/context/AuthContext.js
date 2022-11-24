@@ -84,8 +84,6 @@ export const AuthContextProvider = props => {
                     const response = await fetch("/api/get_last_rate_data");
                     if (!response.ok) return "Failed to fetch last rate data.";
                     const data = await response.json();
-                    console.log(response);
-                    console.log(data);
                     const { last_rate_data } = data;
 
                     await getUserData(user.uid).then(res => {
@@ -128,6 +126,8 @@ export const AuthContextProvider = props => {
                             const lastRateYear = +splitLastRate[0];
 
                             const lastRecordElement = records[records.length - 1];
+                            const lastRecordMonth = lastRecordElement?.month.toLowerCase();
+                            const lastRecordYear = +lastRecordElement?.year;
 
                             // check if this month's data already exists, else create the basic values like month and year so that `Calculator` & `Account` will fetch the records
                             let nextMonthIndex = +splitLastRate[1];
@@ -143,17 +143,17 @@ export const AuthContextProvider = props => {
 
                             const nextMonth = monthNames[nextMonthIndex].toLowerCase();
 
-                            if (
-                                nextMonth === lastRecordElement.month.toLowerCase() &&
-                                nextYr === +lastRecordElement.year
-                            ) {
+                            console.log(nextMonth, lastRecordMonth);
+                            console.log(nextYr, lastRecordYear);
+
+                            if (nextMonth === lastRecordMonth && nextYr === lastRecordYear) {
                                 console.log(1);
                                 setUser(prevState => {
                                     return { ...prevState, ...res };
                                 });
                             } else if (
-                                lastRecordElement.month.toLowerCase() === lastRateMonth &&
-                                +lastRecordElement.year === lastRateYear
+                                lastRecordMonth === lastRateMonth &&
+                                lastRecordYear === lastRateYear
                             ) {
                                 console.log(2);
                                 addNewDefaultRecord(nextMonth, nextYr);
