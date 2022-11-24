@@ -13,34 +13,18 @@ import { GiMoneyStack } from "react-icons/gi";
 import { TbTarget } from "react-icons/tb";
 
 import { useAuthContext } from "../../context/AuthContext";
-import useFetchLastRate from "../../hooks/useFetchLastRate";
 
 import "./Account.styles.scss";
-
-const monthNames = [
-    "January",
-    "February",
-    "March",
-    "April",
-    "May",
-    "June",
-    "July",
-    "August",
-    "September",
-    "October",
-    "November",
-    "December",
-];
+import { calculateAccuracy } from "../../helpers/calculateAccuracy.helper";
 
 const Account = () => {
     const { user, setUserRecords } = useAuthContext();
-    const receivedLastRate = useFetchLastRate();
 
     const [inputError, setInputError] = useState("");
     const billRef = useRef();
 
-    const [accuracy, setAccuracy] = useState(0);
     const { email, name, photoURL, role, metadata } = user || {};
+
     const accountCreationTime = metadata?.createdAt ? new Date(+metadata.createdAt) : "";
 
     const options = {
@@ -56,7 +40,8 @@ const Account = () => {
     // const currentYear = dateObj.getFullYear();
 
     const lastUserRecord = user.records ? user.records[user.records.length - 1] : [];
-    const { month } = lastUserRecord;
+    const { month, actual, accuracy: latestAccuracy } = lastUserRecord;
+
     const [currentRecord, setCurrentRecord] = useState(lastUserRecord);
 
     const forecastedBill = lastUserRecord?.forecasted || 0;
@@ -67,6 +52,8 @@ const Account = () => {
         user?.records && user?.records.length >= 2
             ? user.records[user.records.length - 2].actual
             : 0;
+
+    const [accuracy, setAccuracy] = useState(latestAccuracy || 0);
 
     const billChangeHandler = e => {
         const inputBill = +e.target.value;
@@ -86,8 +73,9 @@ const Account = () => {
         // var regex = /[0-9]|\./;
         // if (!regex.test(inputBill)) return;
 
-        const errorRate = (Math.abs(forecastedBill - inputBill) / forecastedBill) * 100;
-        const accuracy = (100 - errorRate).toFixed(2);
+        // const errorRate = (Math.abs(forecastedBill - inputBill) / forecastedBill) * 100;
+        // const accuracy = (100 - errorRate).toFixed(2);
+        const accuracy = calculateAccuracy(forecastedBill, inputBill);
         setAccuracy(accuracy);
     };
 
@@ -218,6 +206,7 @@ const Account = () => {
                                             type="number"
                                             name="bill"
                                             id="bill"
+                                            defaultValue={actual}
                                         />
                                         {inputError && (
                                             <div className="error">
@@ -235,7 +224,7 @@ const Account = () => {
                                         className="btn btn__primary enter-btn"
                                         onClick={enterBillHandler}
                                     >
-                                        Enter
+                                        {actual ? "Update" : "Enter"}
                                     </button>
                                 </div>
                             </div>
