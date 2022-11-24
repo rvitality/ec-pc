@@ -71,6 +71,11 @@ const Account = () => {
     const billChangeHandler = e => {
         const inputBill = +e.target.value;
 
+        if (!forecastedBill) {
+            setInputError("Please forecast a bill first using the calculator.");
+            return;
+        }
+
         if (!forecastedBill || inputBill < 0) {
             setInputError("Please input a valid value.");
             return;
@@ -81,7 +86,7 @@ const Account = () => {
         // var regex = /[0-9]|\./;
         // if (!regex.test(inputBill)) return;
 
-        const errorRate = (Math.abs(inputBill - forecastedBill) / forecastedBill) * 100;
+        const errorRate = (Math.abs(forecastedBill - inputBill) / forecastedBill) * 100;
         const accuracy = (100 - errorRate).toFixed(2);
         setAccuracy(accuracy);
     };
