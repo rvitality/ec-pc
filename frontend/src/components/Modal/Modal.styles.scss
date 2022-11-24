@@ -51,7 +51,7 @@
         font-size: 1.5rem;
     }
 
-    .forecasted-bill {
+    .upper {
         display: flex;
         text-align: center;
         justify-content: center;
@@ -76,16 +76,23 @@
         }
     }
 
-    .breakdown {
-        height: 100%;
-        overflow-y: auto;
-        padding-right: 2rem;
+    .mid {
+        height: 60%;
+        display: flex;
+        gap: 2rem;
 
         .heading {
             border-bottom: 1px solid #ccc;
             margin-bottom: 1rem;
             padding-bottom: 0.5rem;
         }
+    }
+
+    .breakdown {
+        width: 100%;
+        overflow-y: auto;
+        padding-right: 2rem;
+        overflow-x: hidden;
 
         /* width */
         &::-webkit-scrollbar {
@@ -147,6 +154,43 @@
             font-weight: bold;
             font-size: 1.25rem;
             margin-left: 0.5rem;
+        }
+    }
+
+    .tips {
+        font-weight: 300;
+        font-size: 0.8rem;
+        line-height: 1.5;
+        padding-right: 0.5rem;
+        width: 30%;
+        overflow-x: hidden;
+        overflow-y: auto;
+
+        .heading {
+            margin-bottom: 1.5rem;
+        }
+
+        &__content {
+        }
+
+        /* width */
+        &::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        /* Track */
+        &::-webkit-scrollbar-track {
+            background: #999;
+        }
+
+        /* Handle */
+        &::-webkit-scrollbar-thumb {
+            background: #333;
+        }
+
+        /* Handle on hover */
+        &::-webkit-scrollbar-thumb:hover {
+            background: #111;
         }
     }
 

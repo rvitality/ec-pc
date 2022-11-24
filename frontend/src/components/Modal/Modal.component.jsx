@@ -15,11 +15,11 @@ const ModalContent = props => {
 
     return (
         <div className="modal">
-            <div className="forecasted-bill">
+            <div className="upper">
                 <div>
                     <div className="heading">Forecasted electric bill: </div>
                     {forecastedBill > 0 && (
-                        <p className="forecasted-bill__value">
+                        <p className="upper__value">
                             ₱ {forecastedBill.toLocaleString("en", { minimumFractionDigits: 2 })}
                         </p>
                     )}
@@ -45,54 +45,68 @@ const ModalContent = props => {
                 </div>
             </div>
 
-            <div className="breakdown">
-                <div className="heading">Appliances </div>
-                <ul className="lvl1">
-                    {appliances.map(item => {
-                        const {
-                            applianceID,
-                            applianceName,
-                            wattage,
-                            quantity,
-                            duration,
-                            applianceBill,
-                            inputDurations,
-                        } = item;
+            <div className="mid">
+                <div className="breakdown">
+                    <div className="heading">Appliances </div>
+                    <ul className="lvl1">
+                        {appliances.map(item => {
+                            const {
+                                applianceID,
+                                applianceName,
+                                wattage,
+                                quantity,
+                                duration,
+                                applianceBill,
+                                inputDurations,
+                            } = item;
 
-                        return (
-                            <li key={applianceID}>
-                                <p className="appliance-name">
-                                    <span>{applianceName}:</span>
-                                </p>
-                                <div className="info">
-                                    <ul className="lvl2">
-                                        <li>
-                                            Wattage: <span className="value">{wattage}</span>
-                                        </li>
-                                        <li>
-                                            Quantity: <span className="value">{quantity}</span>
-                                        </li>
-                                        <li>
-                                            Duration(hr):{" "}
-                                            <span className="value">
-                                                {inputDurations.join(", ")}
+                            return (
+                                <li key={applianceID}>
+                                    <p className="appliance-name">
+                                        <span>{applianceName}:</span>
+                                    </p>
+                                    <div className="info">
+                                        <ul className="lvl2">
+                                            <li>
+                                                Wattage: <span className="value">{wattage}</span>
+                                            </li>
+                                            <li>
+                                                Quantity: <span className="value">{quantity}</span>
+                                            </li>
+                                            <li>
+                                                Duration(hr):{" "}
+                                                <span className="value">
+                                                    {inputDurations.join(", ")}
+                                                </span>
+                                            </li>
+                                        </ul>
+                                        <div>
+                                            Total:{" "}
+                                            <span className="total">
+                                                ₱{" "}
+                                                {applianceBill?.toLocaleString("en", {
+                                                    minimumFractionDigits: 2,
+                                                })}
                                             </span>
-                                        </li>
-                                    </ul>
-                                    <div>
-                                        Total:{" "}
-                                        <span className="total">
-                                            ₱{" "}
-                                            {applianceBill?.toLocaleString("en", {
-                                                minimumFractionDigits: 2,
-                                            })}
-                                        </span>
+                                        </div>
                                     </div>
-                                </div>
-                            </li>
-                        );
-                    })}
-                </ul>
+                                </li>
+                            );
+                        })}
+                    </ul>
+                </div>
+
+                <div className="tips">
+                    <div className="heading">Tips</div>
+                    <p className="tips__content">
+                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Ullam, cupiditate
+                        quisquam. Dicta laboriosam ipsam asperiores repellat voluptatibus dolore
+                        doloribus fuga assumenda, sequi non laborum repudiandae dolorum inventore?
+                        Commodi nobis perspiciatis, unde non, ipsa ullam quisquam quasi consectetur
+                        corporis quidem sequi magnam qui expedita totam. Non amet sapiente corporis
+                        molestias. Reprehenderit.
+                    </p>
+                </div>
             </div>
 
             <div className="actions">
