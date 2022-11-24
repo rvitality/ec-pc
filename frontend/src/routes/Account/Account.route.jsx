@@ -1,4 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
+
+import { v4 as uuidv4 } from "uuid";
+
 import { updateUserRecords } from "../../utils/firebase.utils";
 
 import DataTable from "../../components/DataTable/DataTable.component";
@@ -10,12 +13,28 @@ import { GiMoneyStack } from "react-icons/gi";
 import { TbTarget } from "react-icons/tb";
 
 import { useAuthContext } from "../../context/AuthContext";
+import useFetchLastRate from "../../hooks/useFetchLastRate";
 
 import "./Account.styles.scss";
-import { useRef } from "react";
+
+const monthNames = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+];
 
 const Account = () => {
-    const { user } = useAuthContext();
+    const { user, setUserRecords } = useAuthContext();
+    const receivedLastRate = useFetchLastRate();
 
     const [inputError, setInputError] = useState("");
     const billRef = useRef();
@@ -31,21 +50,19 @@ const Account = () => {
         year: "numeric",
     };
 
-    const dateObj = new Date();
-    const currentMonth = dateObj.toLocaleDateString("en-US", { month: "long" });
+    // const dateObj = new Date();
+    // const currentMonth = dateObj.toLocaleDateString("en-US", { month: "long" });
     // const currentMonth = "December";
+    // const currentYear = dateObj.getFullYear();
 
-    const currentYear = dateObj.getFullYear();
     const lastUserRecord = user.records ? user.records[user.records.length - 1] : [];
+    const { month } = lastUserRecord;
     const [currentRecord, setCurrentRecord] = useState(lastUserRecord);
 
     const forecastedBill = lastUserRecord?.forecasted || 0;
 
-    // const [forecastedBill, setForecastedBill] = useState(lastUserRecord?.forecasted);
-
     const [records, setRecords] = useState(user.records || []);
 
-    // const [lastMonthBill, setLastMonthBill] = useState(0);
     const lastMonthBill =
         user?.records && user?.records.length >= 2
             ? user.records[user.records.length - 2].actual
@@ -159,7 +176,9 @@ const Account = () => {
                                     <RiLightbulbFlashFill />
                                 </div>
                                 <div className="control__texts">
-                                    <p className="label">Your Bill Last Month</p>
+                                    <p className="label">
+                                        Your <strong>Actual</strong> Bill Last Month
+                                    </p>
                                     <div className="value">₱ {lastMonthBill.toLocaleString()}</div>
                                 </div>
                             </div>
@@ -170,7 +189,8 @@ const Account = () => {
                                 </div>
                                 <div className="control__texts">
                                     <p className="label">
-                                        Forecasted bill this month <strong>({currentMonth})</strong>
+                                        <strong>Forecasted</strong> bill this month{" "}
+                                        <strong>({month})</strong>
                                     </p>
                                     <div className="value">₱ {forecastedBill.toLocaleString()}</div>
                                 </div>
@@ -187,7 +207,7 @@ const Account = () => {
                                 <div className="control__texts">
                                     <div>
                                         <label className="label" htmlFor="bill">
-                                            Your bill this month <strong>({currentMonth})</strong>
+                                            Your bill for <strong>{month}</strong>
                                         </label>
                                         <input
                                             onChange={billChangeHandler}
