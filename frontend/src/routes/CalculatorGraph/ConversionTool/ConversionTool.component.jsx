@@ -26,7 +26,6 @@ const ConversionTool = () => {
         }
 
         const computedHours = (inputValue / 60).toFixed(2);
-        console.log(computedHours);
 
         setHours(computedHours);
     };

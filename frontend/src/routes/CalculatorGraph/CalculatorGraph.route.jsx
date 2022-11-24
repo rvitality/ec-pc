@@ -1,17 +1,18 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 
 import { useApplianceContext } from "../../context/ApplianceContext";
+
+import { useAuthContext } from "../../context/AuthContext";
+
+import { calculateAccuracy } from "../../helpers/calculateAccuracy.helper";
 
 import Spinner from "../../ui/Spinner/Spinner.ui";
 import Calculator from "../../components/Calculator/Calculator.component";
 import Modal from "../../components/Modal/Modal.component";
 import Graph from "../../components/Graph/Graph.component";
-
-import { useAuthContext } from "../../context/AuthContext";
-import { useState } from "react";
+import ConversionTool from "./ConversionTool/ConversionTool.component";
 
 import "./CalculatorGraph.styles.scss";
-import ConversionTool from "./ConversionTool/ConversionTool.component";
 
 const CalculatorGraph = () => {
     const { user } = useAuthContext();
@@ -27,12 +28,11 @@ const CalculatorGraph = () => {
     const [error, setError] = useState();
     const { setSarimaRate, sarimaRate } = useApplianceContext();
 
-    let errorRate = 0;
+    // const [accuracy, setAccuracy] = useState(lastCalcAccuracy);
 
-    const [accuracy, setAccuracy] = useState(lastCalcAccuracy);
-    if (actual && !forecasted) {
-        errorRate = (Math.abs(forecasted - actual) / forecasted) * 100;
-        setAccuracy(100 - errorRate).toFixed(2);
+    let accuracy = lastCalcAccuracy;
+    if (actual && forecasted) {
+        accuracy = calculateAccuracy(forecasted, actual);
     }
 
     // ! fetch sarima rate
