@@ -15,20 +15,24 @@ import ConversionTool from "./ConversionTool/ConversionTool.component";
 
 const CalculatorGraph = () => {
     const { user } = useAuthContext();
-    const { forecasted, actual, month, year } =
-        user.records?.length > 0 ? user.records[user.records?.length - 1] : {};
+    const {
+        forecasted,
+        actual,
+        month,
+        year,
+        accuracy: lastCalcAccuracy,
+    } = user.records?.length > 0 ? user.records[user.records?.length - 1] : {};
 
     const [loading, setIsLoading] = useState(false);
     const [error, setError] = useState();
     const { setSarimaRate, sarimaRate } = useApplianceContext();
 
     let errorRate = 0;
-    let accuracy = 0;
 
+    const [accuracy, setAccuracy] = useState(lastCalcAccuracy);
     if (actual && !forecasted) {
         errorRate = (Math.abs(actual - forecasted) / forecasted) * 100;
-        console.log(actual, forecasted);
-        accuracy = (100 - errorRate).toFixed(2);
+        setAccuracy((100 - errorRate).toFixed(2));
     }
 
     // ! fetch sarima rate
