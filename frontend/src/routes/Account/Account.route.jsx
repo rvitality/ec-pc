@@ -106,8 +106,6 @@ const Account = () => {
 
         setInputError("");
 
-        const errorRate = (Math.abs(inputBill - forecastedBill) / forecastedBill) * 100;
-        const accuracy = (100 - errorRate).toFixed(2);
         const newUserRecord = {
             ...currentRecord,
             accuracy: +accuracy,
