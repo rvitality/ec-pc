@@ -10,12 +10,13 @@ import "./OfficialRateForm.styles.scss";
 
 const OfficialRateForm = () => {
     const receivedLastRate = useFetchLastRate();
-    const { date, value } = receivedLastRate || {};
+    const { value } = receivedLastRate || {};
 
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
 
     const [currentOfficialRate, setCurrentOfficialRate] = useState(value);
+    const date = (currentOfficialRate && currentOfficialRate[0]) || 0;
     const rate = (currentOfficialRate && +currentOfficialRate[1]) || 0;
 
     const { setSarimaRate } = useApplianceContext();
@@ -85,12 +86,12 @@ const OfficialRateForm = () => {
             <div className="official-rate-form__control rate">
                 <div>
                     <label>
-                        Current Rate <small>({date}): </small>
+                        Latest Official Rate <small>({date}): </small>
                     </label>
                     <div className="sarima-rate">₱ {rate.toFixed(2)}</div>
                 </div>
                 <div className="loading">
-                    {receivedLastRate.loading && (
+                    {(loading || receivedLastRate.loading) && (
                         <>
                             <p>Loading ...</p>
                             <Spinner />
