@@ -129,8 +129,6 @@ const Appliance = ({
         wattageValue = wattage,
         inputDurations = [1],
     }) => {
-        console.log(inputDurations);
-
         const applianceBill = ((wattageValue * (duration * 30)) / 1000) * sarimaRate;
         return {
             ...appliance,
@@ -253,8 +251,6 @@ const Appliance = ({
         });
 
         prevSelectedAppliance.current = currentAppliance;
-
-        console.log(currentAppliance);
 
         onAddAppliance(previousAppliance, currentAppliance);
     };
