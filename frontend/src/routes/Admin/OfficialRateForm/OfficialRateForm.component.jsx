@@ -1,48 +1,34 @@
-import React, { useRef, useEffect, useState } from "react";
+import React, { useRef, useState } from "react";
+import { useEffect } from "react";
+
 import { useApplianceContext } from "../../../context/ApplianceContext";
+import useFetchLastRate from "../../../hooks/useFetchLastRate";
 
 import Spinner from "../../../ui/Spinner/Spinner.ui";
 
 import "./OfficialRateForm.styles.scss";
 
 const OfficialRateForm = () => {
+    const receivedLastRate = useFetchLastRate();
+    const { date, value } = receivedLastRate || {};
+
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
 
-    const { setSarimaRate } = useApplianceContext();
-    const rateInputRef = useRef();
-
-    const [currentOfficialRate, setCurrentOfficialRate] = useState([]);
-    const date = (currentOfficialRate && currentOfficialRate[0]) || 0;
+    const [currentOfficialRate, setCurrentOfficialRate] = useState(value);
     const rate = (currentOfficialRate && +currentOfficialRate[1]) || 0;
 
-    // ! fetch last rate from csv file official rates
-    useEffect(() => {
-        const sendRequest = async () => {
-            setLoading(true);
-            setError("");
-            try {
-                const response = await fetch("/api/get_last_rate_data");
-                console.log(response);
-                if (!response.ok) return "Failed to fetch last rate data.";
-                const data = await response.json();
-                console.log(data);
-                const { last_rate_data } = data;
-                setCurrentOfficialRate(last_rate_data);
-            } catch (err) {
-                console.log(err.message);
-                setError(err.message);
-            }
-
-            setLoading(false);
-        };
-        sendRequest();
-    }, []);
+    const { setSarimaRate } = useApplianceContext();
+    const rateInputRef = useRef();
 
     const currentDate = new Date();
     const monthLong = currentDate.toLocaleDateString("en-US", { month: "long" });
     const day = currentDate.getDate();
     const yr = currentDate.getFullYear();
+
+    useEffect(() => {
+        setCurrentOfficialRate(receivedLastRate.value);
+    }, [receivedLastRate.rate]);
 
     const submitHanlder = e => {
         e.preventDefault();
@@ -56,7 +42,7 @@ const OfficialRateForm = () => {
         const month = currentDate.getMonth() + 1;
         const dateToday = `${yr}/${month}/1`;
 
-        const sendRequest = async () => {
+        const sendRequestOfficialRate = async () => {
             try {
                 setLoading(true);
                 setError("");
@@ -88,7 +74,7 @@ const OfficialRateForm = () => {
             setLoading(false);
         };
 
-        sendRequest();
+        sendRequestOfficialRate();
     };
 
     return (
@@ -104,7 +90,7 @@ const OfficialRateForm = () => {
                     <div className="sarima-rate">₱ {rate.toFixed(2)}</div>
                 </div>
                 <div className="loading">
-                    {loading && (
+                    {receivedLastRate.loading && (
                         <>
                             <p>Loading ...</p>
                             <Spinner />
