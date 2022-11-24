@@ -22,7 +22,7 @@ const UsersTable = ({ dataToDisplay }) => {
                             <td className="photo">
                                 <img src={photoURL} alt={name} referrerPolicy="no-referrer" />
                             </td>
-                            <td>
+                            <td className="capitalize">
                                 <strong>{name}</strong>{" "}
                             </td>
                             <td>{email}</td>

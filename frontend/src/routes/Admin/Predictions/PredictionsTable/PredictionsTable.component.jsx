@@ -27,10 +27,10 @@ const PredictionsTable = ({ dataToDisplay }) => {
                             <td className="photo">
                                 <img src={photoURL} alt={name} referrerPolicy="no-referrer" />
                             </td>
-                            <td>
+                            <td className="capitalize">
                                 <strong>{name}</strong>{" "}
                             </td>
-                            <td>{month}</td>
+                            <td className="capitalize">{month}</td>
                             <td>{year}</td>
                             <td>₱ {forecasted?.toLocaleString()}</td>
                             <td>₱ {actual?.toLocaleString()}</td>
