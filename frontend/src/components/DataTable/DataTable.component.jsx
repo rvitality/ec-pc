@@ -94,7 +94,7 @@ const DataTable = ({ data, onFilterBySearch, Table, userRole }) => {
                                     <HiOutlineChevronDoubleLeft />
                                 </button>
                             )}
-                            {paginationButtons.length >= 1 && paginationButtons}
+                            {paginationButtons.length > 1 && paginationButtons}
                             {showNextButton && (
                                 <button onClick={nextSetButtonsHandler}>
                                     <HiOutlineChevronRight />
