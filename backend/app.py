@@ -18,14 +18,25 @@ def get_sarima_rate():
 
 @app.get("/api/get_last_rate_data")
 def get_last_rate_data():
+
     lastRowData = {}
     with open("official_rates.csv") as f:
         mycsv = csv.reader(f)
         mycsv = list(mycsv)
         lastRowData = mycsv[-1]
-        print(lastRowData)
 
-    return {"last_rate_data": lastRowData}
+    return {
+        "last_rate_data": lastRowData,
+    }
+
+
+@app.get("/api/get_rates")
+def get_rates():
+    with open("official_rates.csv") as f:
+        mycsv = csv.reader(f)
+        rates = list(mycsv)
+
+    return {"rates": rates}
 
 
 @app.post("/api/add_official_rate")
