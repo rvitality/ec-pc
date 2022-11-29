@@ -40,6 +40,17 @@ header {
             a {
                 font-weight: 600;
                 text-transform: capitalize;
+                padding-bottom: 1rem;
+                transition: all 0.2s ease-in-out;
+                border-bottom: 2px solid transparent;
+
+                &.active {
+                    border-color: rgb(31, 87, 183);
+                }
+
+                &:hover {
+                    border-color: rgb(41, 105, 215);
+                }
             }
         }
     }
