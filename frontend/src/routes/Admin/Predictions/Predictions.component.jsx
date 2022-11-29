@@ -1,5 +1,5 @@
 import React from "react";
-import useFetchUsers from "../../../hooks/useFetchUsers";
+import useFetchCollections from "../../../hooks/useFetchCollections";
 
 import Spinner from "../../../ui/Spinner/Spinner.ui";
 import DataTable from "../../../components/DataTable/DataTable.component";
@@ -295,7 +295,8 @@ const DUMMY_USERS = [
 ];
 
 const Predictions = () => {
-    const { error, isLoading, data: users } = useFetchUsers();
+    const reqCollectionsResponse = useFetchCollections("users");
+    const { error, isLoading, collections: users } = reqCollectionsResponse;
 
     return (
         <div className="predictions-container">
@@ -305,7 +306,7 @@ const Predictions = () => {
                     <Spinner />
                 </div>
             ) : (
-                <DataTable data={users} Table={PredictionsTable} />
+                <DataTable data={users || []} Table={PredictionsTable} />
             )}
         </div>
     );
