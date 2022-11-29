@@ -162,10 +162,10 @@ const Calculator = () => {
     const submitDataHandler = e => {
         e.preventDefault();
 
-        if (sarimaRate === 1 || !sarimaRate) {
-            setError("Please wait for the Predicted Rate (SARIMA).");
-            return;
-        }
+        // if (sarimaRate === 1 || !sarimaRate) {
+        //     setError("Please wait for the Predicted Rate (SARIMA).");
+        //     return;
+        // }
 
         setAppliances(state.selectedAppliances);
 
@@ -184,6 +184,8 @@ const Calculator = () => {
             lastRecord.forecasted = forecastedBill;
             setUserRecords(newRecords);
         }
+
+        console.log(state.selectedAppliances);
     };
 
     return (
@@ -197,7 +199,7 @@ const Calculator = () => {
 
             <h1 className="heading-secondary">Calculator</h1>
 
-            <form onSubmit={submitDataHandler}>
+            <form onSubmit={submitDataHandler} className="calcu__form">
                 {applianceHolders?.map((_, index) => (
                     <Appliance
                         key={index}
