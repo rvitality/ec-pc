@@ -1,7 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
 
-import { v4 as uuidv4 } from "uuid";
-
 import { updateUserRecords } from "../../utils/firebase.utils";
 
 import DataTable from "../../components/DataTable/DataTable.component";
@@ -46,7 +44,11 @@ const Account = () => {
 
     const forecastedBill = lastUserRecord?.forecasted || 0;
 
-    const [records, setRecords] = useState(user.records || []);
+    const [records, setRecords] = useState(user?.records || []);
+
+    useEffect(() => {
+        setRecords(user.records);
+    }, [user.records]);
 
     const lastMonthBill =
         user?.records && user?.records.length >= 2
@@ -63,7 +65,7 @@ const Account = () => {
             return;
         }
 
-        if (!forecastedBill || inputBill < 0) {
+        if (!forecastedBill || inputBill < 0 || inputBill > 200_000) {
             setInputError("Please input a valid value.");
             return;
         }
@@ -82,7 +84,7 @@ const Account = () => {
     const enterBillHandler = e => {
         const inputBill = +billRef.current?.value;
 
-        if (!inputBill || inputBill < 0) {
+        if (!inputBill || inputBill < 0 || inputBill > 200_000) {
             setInputError("Please input a valid value.");
             return;
         }
@@ -180,8 +182,8 @@ const Account = () => {
                                 </div>
                                 <div className="control__texts">
                                     <p className="label">
-                                        <strong>Forecasted</strong> bill this month{" "}
-                                        <strong>({month})</strong>
+                                        <strong>Forecasted</strong> bill for{" "}
+                                        <strong>{month}</strong>
                                     </p>
                                     <div className="value">₱ {forecastedBill.toLocaleString()}</div>
                                 </div>
@@ -248,7 +250,7 @@ const Account = () => {
                     <h2>Loading...</h2>
                 ) : (
                     <DataTable
-                        data={records}
+                        data={records || []}
                         Table={BillsTable}
                         // onFilterBySearch={filterBySearchHandler}
                     />
