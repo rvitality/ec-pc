@@ -40,21 +40,32 @@
         display: flex;
         gap: 2rem;
 
-        .graph-container {
-            width: 55%;
+        .form {
+            width: 50%;
+            .loading-container {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                gap: 2rem;
+                justify-content: center;
+                margin-top: 2rem;
+
+                &__text {
+                    font-size: 1.5rem;
+                }
+            }
         }
-    }
 
-    .loading-container {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 2rem;
-        justify-content: center;
-        margin-top: 2rem;
+        .rates {
+            width: 50%;
 
-        &__text {
-            font-size: 1.5rem;
+            .loading {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                flex-direction: column;
+                gap: 0.5rem;
+            }
         }
     }
 }
