@@ -1,14 +1,15 @@
-import React, { useRef, useState } from "react";
-import { useEffect } from "react";
+import React, { useRef, useState, useEffect } from "react";
 
 import { useApplianceContext } from "../../../context/ApplianceContext";
-import useFetchLastRate from "../../../hooks/useFetchLastRate";
+import { updatePredictedRates } from "../../../utils/firebase.utils";
 
 import Spinner from "../../../ui/Spinner/Spinner.ui";
 
+import useFetchLastRate from "../../../hooks/useFetchLastRate";
+
 import "./OfficialRateForm.styles.scss";
 
-const OfficialRateForm = () => {
+const OfficialRateForm = ({ predictedRates, onChangeLatestOfficialRate }) => {
     const receivedLastRate = useFetchLastRate();
     const { value } = receivedLastRate || {};
 
@@ -29,7 +30,7 @@ const OfficialRateForm = () => {
 
     useEffect(() => {
         setCurrentOfficialRate(receivedLastRate.value);
-    }, [receivedLastRate.rate]);
+    }, [receivedLastRate.value]);
 
     const submitHanlder = e => {
         e.preventDefault();
@@ -48,25 +49,92 @@ const OfficialRateForm = () => {
                 setLoading(true);
                 setError("");
 
-                const response = await fetch("api/add_official_rate", {
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                    method: "POST",
-                    body: JSON.stringify({
-                        date: dateToday,
-                        rate: rateInput,
-                    }),
-                });
+                const response = await fetch(
+                    "https://ec-pc-flaskapi.onrender.com/api/add_official_rate",
+                    {
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                        method: "POST",
+                        body: JSON.stringify({
+                            date: dateToday,
+                            rate: rateInput,
+                        }),
+                    }
+                );
 
                 if (!response.ok) throw Error("Something went wrong");
 
                 const data = await response.json();
-                console.log(data);
                 const { last_rate_data, sarima_rate } = data;
 
                 setSarimaRate(sarima_rate);
                 setCurrentOfficialRate(last_rate_data);
+
+                // update firestore db
+                // ! -------------------------------------
+                if (!last_rate_data) return;
+                const [date, rate] = last_rate_data;
+
+                // ex. 2022/11/1
+                const dateSplit = date?.split("/");
+
+                let newMonth = +dateSplit[1];
+                let newYr = +dateSplit[0];
+
+                // + 1 because 11 is december and 0 is january
+                if (newMonth + 1 > 12) {
+                    newMonth = 1;
+                    newYr += 1;
+                } else {
+                    newMonth += 1;
+                }
+
+                const lastOfficialRateDate = `${newYr}/${newMonth}/1`;
+                let predictedRatesCopy = [...predictedRates];
+
+                const existingPredictedRateIndex = predictedRatesCopy.findIndex(
+                    rate => rate.date === lastOfficialRateDate
+                );
+
+                // ! UPDATE -------
+                if (existingPredictedRateIndex >= 0) {
+                    predictedRatesCopy[existingPredictedRateIndex].value = sarima_rate;
+                    await updatePredictedRates({
+                        id: "pHyzqSueZeBWo2iA5IGg",
+                        predictedRates: predictedRatesCopy,
+                    });
+
+                    onChangeLatestOfficialRate({
+                        predictedRates: predictedRatesCopy,
+                        last_rate_data,
+                    });
+                } else {
+                    // ! ADD NEW -------
+                    const newPredictedRate = { date: lastOfficialRateDate, value: sarima_rate };
+
+                    await updatePredictedRates({
+                        id: "pHyzqSueZeBWo2iA5IGg",
+                        predictedRates: [...predictedRates, newPredictedRate],
+                    });
+                }
+
+                // if (newPredictedRates.length > 1) {
+                //     newPredictedRates[newPredictedRates.length - 1].value = sarima_rate;
+                //     await updatePredictedRates({
+                //         id: "pHyzqSueZeBWo2iA5IGg",
+                //         predictedRates: newPredictedRates,
+                //     });
+                // } else {
+                //     // add new predicted rate
+
+                //     const newPredictedRates = { date: lastOfficialRateDate, value: rate };
+
+                //     await updatePredictedRates({
+                //         id: "pHyzqSueZeBWo2iA5IGg",
+                //         predictedRates: [newPredictedRates],
+                //     });
+                // }
             } catch (err) {
                 console.log(err);
                 setError(err.message);
@@ -76,6 +144,12 @@ const OfficialRateForm = () => {
         };
 
         sendRequestOfficialRate();
+
+        // const sendRequestUpdatePredictedRates = async () => {
+        //     // const reponse = await updatePredictedRates({ id: "pHyzqSueZeBWo2iA5IGg" });
+        // };
+
+        // sendRequestUpdatePredictedRates();
     };
 
     return (
@@ -93,7 +167,7 @@ const OfficialRateForm = () => {
                 <div className="loading">
                     {(loading || receivedLastRate.loading) && (
                         <>
-                            <p>Loading ...</p>
+                            <p>Updating ...</p>
                             <Spinner />
                         </>
                     )}
