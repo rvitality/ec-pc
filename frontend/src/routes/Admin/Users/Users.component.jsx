@@ -1,6 +1,6 @@
 import React from "react";
 
-import useFetchUsers from "../../../hooks/useFetchUsers";
+import useFetchCollections from "../../../hooks/useFetchCollections";
 
 import Spinner from "../../../ui/Spinner/Spinner.ui";
 import DataTable from "../../../components/DataTable/DataTable.component";
@@ -8,7 +8,8 @@ import UsersTable from "./UsersTable/UsersTable.component";
 import "./Users.styles.scss";
 
 const Users = () => {
-    const { error, isLoading, data: users } = useFetchUsers();
+    const reqCollectionsResponse = useFetchCollections("users");
+    const { error, isLoading, collections: users } = reqCollectionsResponse;
 
     return (
         <div className="users-container">
@@ -18,7 +19,7 @@ const Users = () => {
                     <Spinner />
                 </div>
             ) : (
-                <DataTable data={users} Table={UsersTable} />
+                <DataTable data={users || []} Table={UsersTable} />
             )}
         </div>
     );
