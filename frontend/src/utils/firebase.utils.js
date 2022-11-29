@@ -66,13 +66,8 @@ export const createUserDocumentFromAuth = async (userAuth, additionalInfo) => {
             email,
             photoURL,
             records: [],
+            appliances: [],
         };
-
-        if (uid === "KgGL9ntc4IRouwtjBSGfusfd28r1") {
-            userData["role"] = "admin";
-        } else {
-            userData["role"] = "user";
-        }
 
         try {
             await setDoc(userDocRef, {
@@ -102,8 +97,8 @@ export const getAppliancesAndDocuments = async () => {
     }));
 };
 
-export const getUsers = async () => {
-    const collectionRef = collection(db, "users");
+export const getCollections = async (collectionName = "") => {
+    const collectionRef = collection(db, collectionName);
     const q = query(collectionRef);
 
     const querySnapshot = await getDocs(q);
@@ -124,18 +119,29 @@ export const getUserData = async userID => {
         return docSnap.data();
     } else {
         // doc.data() will be undefined in this case
-        console.log("No such document!");
+        console.log("User doesn't exist.");
         return {};
     }
 };
 
-// ! UPDATE USER DATA, ADD NEW ELECTRIC BILL
+// ! UPDATE USER DATA, ADD/UPDATE NEW ELECTRIC BILL
 export const updateUserRecords = async userData => {
-    // console.log(userData);
     try {
         const { id, records } = userData;
         const documentRef = doc(db, "users", id);
         await updateDoc(documentRef, { records });
+    } catch (err) {
+        console.log(err);
+    }
+};
+
+// ! ADD/UPDATE PREDICTED RATE
+export const updatePredictedRates = async ratesData => {
+    console.log(ratesData);
+    try {
+        const { id, predictedRates } = ratesData;
+        const documentRef = doc(db, "predictedRates", id);
+        return await updateDoc(documentRef, { predictedRates });
     } catch (err) {
         console.log(err);
     }
