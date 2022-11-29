@@ -184,16 +184,21 @@ const Appliance = ({
     };
 
     const wattageOnBlurHandler = wattageValue => {
-        const previousAppliance = prevSelectedAppliance.current;
-        const currentAppliance = { ...selectedAppliance, wattage: wattageValue };
-
         setWattage(wattageValue);
+
+        const previousAppliance = prevSelectedAppliance.current;
+        // const currentAppliance = { ...selectedAppliance, wattage: wattageValue };
+
+        const currentAppliance = getCurrentAppliance({
+            wattageValue: wattageValue,
+        });
+
         prevSelectedAppliance.current = currentAppliance;
         onAddAppliance(previousAppliance, currentAppliance);
     };
 
     const quantityInputChangeHandler = e => {
-        let inputValue = +e.target.value;
+        let inputValue = Math.floor(+e.target.value);
         setQuantity(inputValue);
 
         if (inputValue > 20) {
@@ -373,7 +378,7 @@ const Appliance = ({
         <>
             <button
                 type="button"
-                className="calcu__btn appliance__btn"
+                className="calcu__btn appliance__btn option"
                 onClick={setAppliancesOptionHandler}
             >
                 {selectedApplianceExists
