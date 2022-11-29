@@ -5,45 +5,88 @@ import { Chart } from "chart.js/auto";
 
 import "./Graph.styles.scss";
 
-// const months = [
-//     "January",
-//     "February",
-//     "March",
-//     "April",
-//     "May",
-//     "June",
-//     "July",
-//     "August",
-//     "September",
-//     "October",
-//     "November",
-//     "December",
-// ];
-const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+const MONTH_NAMES = [
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec",
+];
 
-const rates = [
+const RATES = [
     9.3373, 9.309411, 9.1076, 9.5415, 10.6559, 10.830914, 11.487409, 10.7406, 10.689505, 10.65632,
     10.8854, 11.878485, 13.626412, 13.936211, 12.895415, 12.886791, 12.900309, 13.185409, 15.049805,
     15.137605, 15.012016, 16.515005, 14.123213,
 ];
 
-const Graph = () => {
+const Graph = ({ rates = [], predictedRates = [] }) => {
+    // console.log(rates);
+
+    // ! THERE WILL ALWAYS BE AT LEAST 24 RATES BECAUSE PYTHON (SARIMA) REQUIRES IT TO PREDICT A VALUE
+    const yrs = rates ? [...new Set(rates.map(rate => rate.yr))] : [];
+    const lastTwoYrs = yrs.length >= 2 ? yrs.slice(-2) : [];
+
+    const [firstYr, secondYr] = lastTwoYrs;
+
+    const firstYearData = rates
+        .map(rate => (rate.yr === firstYr ? { x: rate.x - 1, y: rate.y, yr: rate.yr } : null))
+        .filter(Boolean);
+    const secondYearData = rates
+        .map(rate => (rate.yr === secondYr ? { x: rate.x - 1, y: rate.y, yr: rate.yr } : null))
+        .filter(Boolean);
+
+    // predictedRates = [
+    //     { x: "Nov", y: 17.2113213, yr: 2021 },
+    //     { x: "Nov", y: 17.2113213, yr: 2021 },
+    //     { x: "Nov", y: 17.2113213, yr: 2021 },
+    //     { x: "Dec", y: 19.2113213, yr: 2022 },
+    //     { x: "Jan", y: 22.2113213, yr: 2023 },
+    //     { x: "Jan", y: 22.2113213, yr: 2024 },
+    // ];
+
+    const formattedPredictedRates = predictedRates?.map(rate => {
+        const { date, value } = rate;
+        const dateSplit = date.split("/");
+
+        const yr = +dateSplit[0];
+        const monthIndex = dateSplit[1] - 1;
+        const monthName = MONTH_NAMES[monthIndex];
+
+        return { yr, x: monthName, y: value };
+    });
+
+    const predictedRatesYrs = formattedPredictedRates
+        ? [...new Set(formattedPredictedRates.map(rate => rate.yr))]
+        : [];
+
+    const lastPredictedYr = predictedRatesYrs?.slice(-1)[0];
+    const lastPredictedYearData = formattedPredictedRates.filter(rate =>
+        rate.yr === lastPredictedYr ? { x: rate.x, y: rate.y } : null
+    );
+
     const data = {
-        labels: months,
+        labels: MONTH_NAMES,
         datasets: [
             {
-                label: "2021",
-                data: rates.slice(0, 12),
+                label: firstYr,
+                data: firstYearData,
                 borderColor: "purple",
             },
             {
-                label: "2022",
-                data: rates.slice(13),
+                label: secondYr,
+                data: secondYearData,
                 borderColor: "#00B526",
             },
             {
                 label: "Predicted",
-                data: [...rates.slice(13), 17.2323],
+                data: lastPredictedYearData,
                 borderColor: "red",
             },
         ],
