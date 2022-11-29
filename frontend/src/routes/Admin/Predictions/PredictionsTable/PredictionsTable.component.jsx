@@ -11,7 +11,7 @@ const PredictionsTable = ({ dataToDisplay }) => {
                     <th>Name</th>
                     <th>Month</th>
                     <th>Year</th>
-                    <th>Forecasted Bill</th>
+                    <th>Predicted Bill</th>
                     <th>Actual Bill</th>
                     <th>Accuracy</th>
                 </tr>
