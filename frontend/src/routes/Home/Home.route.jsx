@@ -20,8 +20,8 @@ const Home = () => {
                         </h1>
                         <p className="section-paragraph">
                             EC-PC or <strong>"Electric Consumption - Price Calculator"</strong> is
-                            an application that predicts a household's electric bill for the current
-                            month using the previous bills using SARIMA.
+                            an application that predicts a household's electric bill for a specific
+                            month using the previous rates.
                         </p>
                         <a href="#about" className="btn btn__primary">
                             Learn more
@@ -41,8 +41,8 @@ const Home = () => {
                         application is only limited to the households within{" "}
                         <strong>Angeles City, Pampanga, Philippines</strong>. If you are from
                         another city, place, or country, then the accuracy of this application may
-                        differentiate as the rate used to create this calculator is based on the
-                        public information posted by <strong>Angeles Electric Corporation</strong>.
+                        differ as the rate used to create this calculator is based on the public
+                        information posted by <strong>Angeles Electric Corporation</strong>.
                     </div>
                 </div>
 
