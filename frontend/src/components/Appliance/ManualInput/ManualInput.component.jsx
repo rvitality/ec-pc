@@ -27,6 +27,7 @@ const ManualInput = ({ onBlurApplianceNameHandler, onBlurWattageHandler, applian
 
     const wattageOnBlurHandler = e => {
         const wattageValue = +e.target.value;
+        if (wattageValue > 5000 || wattageValue < 1) return;
 
         // const newAppliance = {
         //     ...appliance,
@@ -55,9 +56,10 @@ const ManualInput = ({ onBlurApplianceNameHandler, onBlurWattageHandler, applian
                         id="wattage"
                         ref={wattageRef}
                         defaultValue={1}
+                        step="any"
                         type="number"
                         min={1}
-                        max={1000}
+                        max={5000}
                         onBlur={wattageOnBlurHandler}
                         required
                     />
