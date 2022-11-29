@@ -2,6 +2,10 @@
     position: relative;
     margin: 2rem 0;
 
+    .show {
+        display: block !important;
+    }
+
     &__selection {
         font-family: inherit;
         position: relative;
@@ -11,9 +15,9 @@
             background: #a39ed0;
         }
 
-        &:hover .appliance__options {
-            display: block;
-        }
+        // &:hover .appliance__options {
+        //     display: block;
+        // }
     }
 
     &__delete-btn {
@@ -60,6 +64,11 @@
                 align-items: center;
                 justify-content: space-between;
                 text-align: left;
+                pointer-events: none;
+            }
+
+            svg {
+                pointer-events: none;
             }
 
             &:hover {
@@ -70,9 +79,9 @@
         li > ul {
             display: none;
         }
-        li:hover > ul {
-            display: block;
-        }
+        // li:hover > ul {
+        //     display: block;
+        // }
 
         .lvl1,
         .lvl2,
@@ -121,27 +130,12 @@
             }
         }
 
-        // button[type="submit"] {
-        //     border: none;
-        //     border: 10px solid !important;
-        //     border-radius: 0.5rem;
-        //     color: #fff;
-        //     width: fit-content;
-        //     text-transform: uppercase;
-        //     font-size: 1.25rem;
-        //     padding: 0.7rem 1.5rem;
-
-        //     &:hover {
-        //         background: #494377;
-        //     }
-        // }
-
         .durations-container {
             display: flex;
             flex-wrap: wrap;
             justify-content: flex-end;
             gap: 0.5rem;
-            width: 60%;
+            width: 55%;
 
             .apply-to-all {
                 display: flex;
@@ -195,6 +189,7 @@
         &__form-control-container {
             display: flex;
             gap: 3rem;
+            margin-top: 1rem;
         }
 
         .wattage {
