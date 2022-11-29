@@ -22,7 +22,7 @@ const BillsTable = ({ dataToDisplay }) => {
                     return (
                         <tr key={id}>
                             <td>{index + 1}</td>
-                            <td>{month}</td>
+                            <td className="capitalize">{month}</td>
                             <td>{year}</td>
                             <td>₱ {forecasted.toLocaleString()}</td>
                             <td>₱ {actual.toLocaleString()}</td>
