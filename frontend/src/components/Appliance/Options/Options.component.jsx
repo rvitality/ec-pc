@@ -126,7 +126,7 @@ const Options = ({ onSelectAppliance, choices }) => {
         <ul className="lvl1">
             {choices.map(({ id, category, data }) => {
                 return (
-                    <li key={id}>
+                    <li key={id} className="first-category option">
                         <h3>
                             {category}
                             <BsChevronRight />
@@ -145,7 +145,7 @@ const Options = ({ onSelectAppliance, choices }) => {
 
                                 if (subData) {
                                     return (
-                                        <li key={id}>
+                                        <li key={id} className="sub-category option">
                                             <h3>
                                                 {subCategory}
                                                 <BsChevronRight />
@@ -157,6 +157,7 @@ const Options = ({ onSelectAppliance, choices }) => {
                                                         return (
                                                             <li
                                                                 key={applianceID}
+                                                                className="option edge"
                                                                 onClick={() =>
                                                                     onSelectAppliance({
                                                                         applianceID,
@@ -178,6 +179,7 @@ const Options = ({ onSelectAppliance, choices }) => {
                                 return (
                                     <li
                                         key={applianceID}
+                                        className="option edge"
                                         onClick={() =>
                                             onSelectAppliance({
                                                 applianceID,
