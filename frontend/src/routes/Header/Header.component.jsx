@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Link, Outlet } from "react-router-dom";
+import { Link, NavLink, Outlet } from "react-router-dom";
 
 import { signInWithGooglePopup, signOutUser } from "../../utils/firebase.utils";
 import { useAuthContext } from "../../context/AuthContext";
@@ -52,14 +52,29 @@ const Header = () => {
                         <nav>
                             <ul>
                                 <li>
-                                    <Link to="/calculator">Calculator</Link>
+                                    <NavLink
+                                        className={({ isActive }) => (isActive ? "active" : "")}
+                                        to="/calculator"
+                                    >
+                                        Calculator
+                                    </NavLink>
                                 </li>
                                 <li>
-                                    <Link to="/account">Account</Link>
+                                    <NavLink
+                                        className={({ isActive }) => (isActive ? "active" : "")}
+                                        to="/account"
+                                    >
+                                        Account
+                                    </NavLink>
                                 </li>
                                 {user.role === "admin" && (
                                     <li>
-                                        <Link to="/admin">Admin</Link>
+                                        <NavLink
+                                            className={({ isActive }) => (isActive ? "active" : "")}
+                                            to="/admin"
+                                        >
+                                            Admin
+                                        </NavLink>
                                     </li>
                                 )}
                             </ul>
