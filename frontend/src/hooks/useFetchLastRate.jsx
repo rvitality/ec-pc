@@ -14,7 +14,9 @@ const useFetchLastRate = () => {
             setLoading(true);
             setError("");
             try {
-                const response = await fetch("/api/get_last_rate_data");
+                const response = await fetch(
+                    "https://ec-pc-flaskapi.onrender.com/api/get_last_rate_data"
+                );
                 if (!response.ok) return "Failed to fetch last rate data.";
                 const data = await response.json();
                 // console.log(data);
