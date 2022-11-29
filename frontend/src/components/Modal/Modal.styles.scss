@@ -170,7 +170,24 @@
             margin-bottom: 1.5rem;
         }
 
-        &__content {
+        .appliance-name {
+            text-transform: capitalize;
+            font-weight: bold;
+        }
+
+        .list-links {
+            margin-top: 1rem;
+            border-top: 1px solid #ccc;
+            padding-top: 0.5rem;
+
+            li {
+                margin-left: 1rem;
+                list-style-type: disc !important;
+            }
+
+            li a {
+                color: skyblue;
+            }
         }
 
         /* width */
