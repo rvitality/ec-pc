@@ -1,4 +1,5 @@
 import React from "react";
+import { useEffect } from "react";
 import { createPortal } from "react-dom";
 
 import { useApplianceContext } from "../../context/ApplianceContext";
@@ -12,6 +13,15 @@ const Backdrop = ({ onCloseModal }) => {
 
 const ModalContent = props => {
     const { forecastedBill, sarimaRate, appliances, onCloseModal } = props;
+
+    let highestBillAppliance = appliances[0];
+    if (appliances.length > 1) {
+        appliances.forEach(appliance => {
+            if (appliance.applianceBill > highestBillAppliance.applianceBill) {
+                highestBillAppliance = appliance;
+            }
+        });
+    }
 
     return (
         <div className="modal">
@@ -30,7 +40,7 @@ const ModalContent = props => {
                     <div>
                         {sarimaRate !== 1 ? (
                             <>
-                                <div className="forecasted-bill__value">
+                                <div className="upper__value">
                                     ₱{" "}
                                     {sarimaRate.toLocaleString("en", { minimumFractionDigits: 2 })}
                                 </div>
@@ -76,7 +86,11 @@ const ModalContent = props => {
                                             <li>
                                                 Duration(hr):{" "}
                                                 <span className="value">
-                                                    {inputDurations.join(", ")}
+                                                    {inputDurations.length > 5
+                                                        ? `${inputDurations
+                                                              .slice(0, 5)
+                                                              .join(", ")} ...`
+                                                        : inputDurations.join(", ")}
                                                 </span>
                                             </li>
                                         </ul>
@@ -96,17 +110,48 @@ const ModalContent = props => {
                     </ul>
                 </div>
 
-                <div className="tips">
-                    <div className="heading">Tips</div>
-                    <p className="tips__content">
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Ullam, cupiditate
-                        quisquam. Dicta laboriosam ipsam asperiores repellat voluptatibus dolore
-                        doloribus fuga assumenda, sequi non laborum repudiandae dolorum inventore?
-                        Commodi nobis perspiciatis, unde non, ipsa ullam quisquam quasi consectetur
-                        corporis quidem sequi magnam qui expedita totam. Non amet sapiente corporis
-                        molestias. Reprehenderit.
-                    </p>
-                </div>
+                {highestBillAppliance && (
+                    <div className="tips">
+                        <div className="heading">Tips</div>
+                        <p className="tips__content">
+                            <span className="appliance-name">
+                                {highestBillAppliance.applianceName}
+                            </span>{" "}
+                            is the highest contributor on your bill. Try to monitor your usage of it
+                            and check these websites to know how to save electricity.
+                        </p>
+
+                        <ul className="list-links">
+                            <li>
+                                <a
+                                    target="_blank"
+                                    rel="noreferrer"
+                                    href="https://www.energy.gov/energysaver/energy-saver-guide-tips-saving-money-and-energy-home"
+                                >
+                                    energy.gov
+                                </a>
+                            </li>
+                            <li>
+                                <a
+                                    target="_blank"
+                                    rel="noreferrer"
+                                    href="https://energysavingtrust.org.uk/hub/quick-tips-to-save-energy/"
+                                >
+                                    energysavingtrust.org
+                                </a>
+                            </li>
+                            <li>
+                                <a
+                                    target="_blank"
+                                    rel="noreferrer"
+                                    href="https://www.directenergy.com/learning-center/25-energy-efficiency-tips"
+                                >
+                                    directenergy.com
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                )}
             </div>
 
             <div className="actions">
