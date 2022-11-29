@@ -92,52 +92,49 @@ export const AuthContextProvider = props => {
                 // getUserData(user.uid).then(res => setUser(prevState => ({ ...prevState, ...res })));
 
                 const getLastRateData = async () => {
-                    const response = await fetch("/api/get_last_rate_data");
-                    if (!response.ok) return "Failed to fetch last rate data.";
-                    const data = await response.json();
-                    const { last_rate_data } = data;
+                    try {
+                        const response = await fetch(
+                            "https://ec-pc-flaskapi.onrender.com/api/get_last_rate_data"
+                        );
+                        if (!response.ok) throw new Error("Failed to fetch last rate data.");
+                        const data = await response.json();
+                        const { last_rate_data } = data;
 
-                    await getUserData(user.uid).then(res => {
-                        const { records } = res;
+                        await getUserData(user.uid).then(res => {
+                            const records = res?.records || [];
 
-                        const addNewDefaultRecord = (month, year) => {
-                            const defaultRecordElement = {
-                                id: uuidv4(),
-                                accuracy: 0,
-                                actual: 0,
-                                forecasted: 0,
-                                month,
-                                year,
-                                status: "good",
+                            const addNewDefaultRecord = (month, year) => {
+                                const defaultRecordElement = {
+                                    id: uuidv4(),
+                                    accuracy: 0,
+                                    actual: 0,
+                                    forecasted: 0,
+                                    month,
+                                    year,
+                                    status: "good",
+                                };
+
+                                const newRecords = [...records, defaultRecordElement];
+                                updateUserRecords({ id: user.uid, ...res, records: newRecords });
+                                setUser(prevState => ({
+                                    ...prevState,
+                                    ...res,
+                                    records: newRecords,
+                                }));
                             };
 
-                            const newRecords = [...records, defaultRecordElement];
-                            updateUserRecords({ id: user.uid, ...res, records: newRecords });
-                            setUser(prevState => ({
-                                ...prevState,
-                                ...res,
-                                records: newRecords,
-                            }));
-                        };
+                            const dateObj = new Date();
+                            const currentMonth = dateObj
+                                .toLocaleDateString("en-US", {
+                                    month: "long",
+                                })
+                                .toLowerCase();
+                            // const currentMonth = "December";
+                            const currentYear = +dateObj.getFullYear();
 
-                        const dateObj = new Date();
-                        const currentMonth = dateObj
-                            .toLocaleDateString("en-US", {
-                                month: "long",
-                            })
-                            .toLowerCase();
-                        // const currentMonth = "December";
-                        const currentYear = dateObj.getFullYear();
-
-                        if (records?.length > 0) {
                             const splitLastRate = last_rate_data[0]?.split("/");
                             const lastRateMonth = monthNames[+splitLastRate[1] - 1].toLowerCase();
-                            // const lastRateMonth = "December";
                             const lastRateYear = +splitLastRate[0];
-
-                            const lastRecordElement = records[records.length - 1];
-                            const lastRecordMonth = lastRecordElement?.month.toLowerCase();
-                            const lastRecordYear = +lastRecordElement?.year;
 
                             // check if this month's data already exists, else create the basic values like month and year so that `Calculator` & `Account` will fetch the records
                             let nextMonthIndex = +splitLastRate[1];
@@ -150,22 +147,63 @@ export const AuthContextProvider = props => {
 
                             const nextMonth = monthNames[nextMonthIndex].toLowerCase();
 
-                            if (nextMonth === lastRecordMonth && nextYr === lastRecordYear) {
-                                setUser(prevState => {
-                                    return { ...prevState, ...res };
-                                });
-                            } else if (
-                                lastRecordMonth === lastRateMonth &&
-                                lastRecordYear === lastRateYear
-                            ) {
-                                addNewDefaultRecord(nextMonth, nextYr);
-                            } else {
-                                addNewDefaultRecord(currentMonth, currentYear);
+                            // !! THIS BLOCK IS FOR THE USER SIGNS IN FOR THE FIRST TIME, USER DOESN'T HAVE ANY DATA IN THE FIRESTOREDB
+                            if (!res || !Object.keys(res).length) {
+                                // ! ADD THE NEW RECORD
+
+                                if (
+                                    currentMonth === lastRateMonth &&
+                                    currentYear === lastRateYear
+                                ) {
+                                    console.log(2);
+                                    addNewDefaultRecord(nextMonth, nextYr);
+                                } else {
+                                    console.log(3);
+                                    addNewDefaultRecord(currentMonth, currentYear);
+                                }
+
+                                // ! WE'LL `RETURN` HERE BECAUSE IT WILL CAUSE AN ERROR BELOW AS THE `RECORDS` DOESN'T EXIST
+                                return;
                             }
-                        } else {
-                            addNewDefaultRecord(currentMonth, currentYear);
-                        }
-                    });
+
+                            // ! ====================================
+
+                            // ! THESE DATA WILL COME FROM THE USERS' FIRESTOREDB RECORDS
+                            const lastRecordElement = records[records.length - 1];
+                            const lastRecordMonth = lastRecordElement?.month.toLowerCase();
+                            const lastRecordYear = +lastRecordElement?.year;
+
+                            if (records?.length > 0) {
+                                if (nextMonth === lastRecordMonth && nextYr === lastRecordYear) {
+                                    setUser(prevState => {
+                                        return { ...prevState, ...res };
+                                    });
+                                } else if (
+                                    lastRecordMonth === lastRateMonth &&
+                                    lastRecordYear === lastRateYear
+                                ) {
+                                    addNewDefaultRecord(nextMonth, nextYr);
+                                } else {
+                                    addNewDefaultRecord(currentMonth, currentYear);
+                                }
+                            } else {
+                                // add next month because we're predicting the next month instead of the current month
+                                // this month's official rate already exists in the backend
+                                if (
+                                    currentMonth === lastRateMonth &&
+                                    currentYear === lastRateYear
+                                ) {
+                                    console.log(2);
+                                    addNewDefaultRecord(nextMonth, nextYr);
+                                } else {
+                                    console.log(3);
+                                    addNewDefaultRecord(currentMonth, currentYear);
+                                }
+                            }
+                        });
+                    } catch (err) {
+                        console.log(err.message);
+                    }
                 };
 
                 getLastRateData();
