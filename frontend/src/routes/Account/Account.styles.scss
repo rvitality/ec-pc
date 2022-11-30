@@ -110,6 +110,12 @@
         border-top: 1px solid #aaa;
         padding-top: 0.5rem;
 
+        .status {
+            padding: 0.35rem 0.85rem;
+            margin-top: 0.3rem;
+            width: fit-content;
+        }
+
         .input-bill-container {
             min-width: 50%;
             display: flex;
