@@ -19,7 +19,6 @@ const useFetchLastRate = () => {
                 );
                 if (!response.ok) return "Failed to fetch last rate data.";
                 const data = await response.json();
-                // console.log(data);
                 const { last_rate_data } = data;
                 setCurrentOfficialRate(last_rate_data);
             } catch (err) {
