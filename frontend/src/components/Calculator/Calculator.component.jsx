@@ -7,7 +7,11 @@ import { IoMdAdd } from "react-icons/io";
 
 import { useAuthContext } from "../../context/AuthContext";
 import { useApplianceContext } from "../../context/ApplianceContext";
-import { getAppliancesAndDocuments, updateUserRecords } from "../../utils/firebase.utils";
+import {
+    getAppliancesAndDocuments,
+    updateUserAppliances,
+    updateUserRecords,
+} from "../../utils/firebase.utils";
 
 import "./Calculator.styles.scss";
 
@@ -98,7 +102,7 @@ const Calculator = () => {
 
     const [state, dispatch] = useReducer(reducer, initialState);
 
-    const { user, setUserRecords } = useAuthContext();
+    const { user, setUserRecords, setUserAppliances } = useAuthContext();
 
     const [applianceOptions, setApplianceOptions] = useState([]);
 
@@ -185,7 +189,9 @@ const Calculator = () => {
             setUserRecords(newRecords);
         }
 
-        console.log(state.selectedAppliances);
+        updateUserAppliances({ id: user.id, selectedAppliances: state.selectedAppliances });
+
+        setUserAppliances(state.selectedAppliances);
     };
 
     return (
