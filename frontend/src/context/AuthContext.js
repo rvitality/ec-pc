@@ -115,7 +115,7 @@ export const AuthContextProvider = props => {
                                     forecasted: 0,
                                     month,
                                     year,
-                                    status: "good",
+                                    status: "neutral",
                                 };
 
                                 const newRecords = [...records, defaultRecordElement];
