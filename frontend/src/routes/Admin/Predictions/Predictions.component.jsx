@@ -295,6 +295,24 @@ const DUMMY_USERS = [
 ];
 
 const Predictions = () => {
+    const filterBySearchHandler = (data, inputValue) => {
+        if (!data) return;
+
+        return data.filter(user => {
+            const { name, role, records } = user;
+
+            const { actual, forecasted, accuracy } = records.slice(-1)[0];
+
+            return (
+                name.toLowerCase().includes(inputValue) ||
+                role.toLowerCase().includes(inputValue) ||
+                `${actual}`.toLowerCase().includes(inputValue) ||
+                `${forecasted}`.toLowerCase().includes(inputValue) ||
+                `${accuracy}`.toLowerCase().includes(inputValue)
+            );
+        });
+    };
+
     const reqCollectionsResponse = useFetchCollections("users");
     const { error, isLoading, collections: users } = reqCollectionsResponse;
 
@@ -306,7 +324,11 @@ const Predictions = () => {
                     <Spinner />
                 </div>
             ) : (
-                <DataTable data={users || []} Table={PredictionsTable} />
+                <DataTable
+                    data={users || []}
+                    Table={PredictionsTable}
+                    onFilterBySearch={filterBySearchHandler}
+                />
             )}
         </div>
     );
