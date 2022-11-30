@@ -67,6 +67,10 @@ export const AuthContextProvider = props => {
         setUser({});
     };
 
+    const setUserAppliances = appliances => {
+        setUser(prevState => ({ ...prevState, selectedAppliances: appliances }));
+    };
+
     const setUserRecords = records => {
         if (!records) return;
         const lastUserRecord = user.records[user.records.length - 1];
@@ -155,10 +159,8 @@ export const AuthContextProvider = props => {
                                     currentMonth === lastRateMonth &&
                                     currentYear === lastRateYear
                                 ) {
-                                    console.log(2);
                                     addNewDefaultRecord(nextMonth, nextYr);
                                 } else {
-                                    console.log(3);
                                     addNewDefaultRecord(currentMonth, currentYear);
                                 }
 
@@ -193,10 +195,8 @@ export const AuthContextProvider = props => {
                                     currentMonth === lastRateMonth &&
                                     currentYear === lastRateYear
                                 ) {
-                                    console.log(2);
                                     addNewDefaultRecord(nextMonth, nextYr);
                                 } else {
-                                    console.log(3);
                                     addNewDefaultRecord(currentMonth, currentYear);
                                 }
                             }
@@ -221,6 +221,7 @@ export const AuthContextProvider = props => {
         login: loginHandler,
         logout: logoutHandler,
         setUserRecords,
+        setUserAppliances,
     };
 
     return <AuthContext.Provider value={contextValue}>{props.children}</AuthContext.Provider>;
