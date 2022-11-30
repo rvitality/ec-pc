@@ -18,10 +18,9 @@ import SelectedAppliancesTable from "./SelectedAppliancesTable/SelectedAppliance
 
 const Account = () => {
     const { user } = useAuthContext();
-    console.log(user);
 
-    const [inputError, setInputError] = useState("");
     const billRef = useRef();
+    const [inputError, setInputError] = useState("");
 
     const { email, name, photoURL, role, metadata } = user || {};
 
@@ -33,11 +32,6 @@ const Account = () => {
         month: "short", //to display the full name of the month
         year: "numeric",
     };
-
-    // const dateObj = new Date();
-    // const currentMonth = dateObj.toLocaleDateString("en-US", { month: "long" });
-    // const currentMonth = "December";
-    // const currentYear = dateObj.getFullYear();
 
     const lastUserRecord = user.records ? user.records[user.records.length - 1] : [];
     const { month, actual, accuracy: latestAccuracy } = lastUserRecord;
@@ -105,7 +99,7 @@ const Account = () => {
             accuracy: +accuracy,
             forecasted: forecastedBill,
             actual: inputBill,
-            status: "good",
+            status: "neutral",
         };
 
         setRecords(prevState => {
@@ -131,6 +125,36 @@ const Account = () => {
             }
         });
     };
+
+    const billsFilterBySearchHandler = (data, inputValue) => {
+        if (!data) return;
+
+        return data.filter(bill => {
+            const { month, year, accuracy, actual, forecasted } = bill;
+            return (
+                month.toLowerCase().includes(inputValue) ||
+                `${year}`.toLowerCase().includes(inputValue) ||
+                `${accuracy}`.toLowerCase().includes(inputValue) ||
+                `${actual}`.toLowerCase().includes(inputValue) ||
+                `${forecasted}`.toLowerCase().includes(inputValue)
+            );
+        });
+    };
+
+    const appliancesFilterBySearchHandler = (data, inputValue) => {
+        if (!data) return;
+
+        return data.filter(appliance => {
+            const { applianceName, wattage, quantity } = appliance;
+            return (
+                applianceName.toLowerCase().includes(inputValue) ||
+                `${wattage}`.toLowerCase().includes(inputValue) ||
+                `${quantity}`.toLowerCase().includes(inputValue)
+            );
+        });
+    };
+
+    const status = !accuracy ? "neutral" : accuracy >= 75 ? "good" : accuracy > 50 ? "bad" : "fail";
 
     return (
         <section id="account" className="account">
@@ -244,7 +268,7 @@ const Account = () => {
                             </div>
                             <div className="control__texts">
                                 <p className="label">Prediction Accuracy</p>
-                                <div className="value">{accuracy}%</div>
+                                <div className={`value status ${status}`}>{accuracy}%</div>
                             </div>
                         </div>
                     </div>
@@ -259,7 +283,7 @@ const Account = () => {
                         <DataTable
                             data={records || []}
                             Table={BillsTable}
-                            // onFilterBySearch={filterBySearchHandler}
+                            onFilterBySearch={billsFilterBySearchHandler}
                         />
                     )}
 
@@ -271,7 +295,7 @@ const Account = () => {
                         <DataTable
                             data={selectedAppliances || []}
                             Table={SelectedAppliancesTable}
-                            // onFilterBySearch={filterBySearchHandler}
+                            onFilterBySearch={appliancesFilterBySearchHandler}
                         />
                     )}
                 </div>
