@@ -17,7 +17,15 @@ const BillsTable = ({ dataToDisplay }) => {
             </thead>
             <tbody>
                 {dataToDisplay.map((log, index) => {
-                    const { id, month, year, forecasted, actual, accuracy, status } = log;
+                    const { id, month, year, forecasted, actual, accuracy } = log;
+
+                    const status = !accuracy
+                        ? "neutral"
+                        : accuracy >= 75
+                        ? "good"
+                        : accuracy > 50
+                        ? "bad"
+                        : "fail";
 
                     return (
                         <tr key={id}>
