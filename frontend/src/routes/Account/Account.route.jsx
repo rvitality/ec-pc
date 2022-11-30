@@ -251,18 +251,6 @@ const Account = () => {
                 </div>
 
                 <div className="tables">
-                    <h2 className="tables__label heading-tertiary">Selected Appliances</h2>
-                    {/* ------------- DATA TABLE  for SELECTED APPLIANCES --------------- */}
-                    {Object.keys(user).length < 0 ? (
-                        <h2>Loading...</h2>
-                    ) : (
-                        <DataTable
-                            data={selectedAppliances || []}
-                            Table={SelectedAppliancesTable}
-                            // onFilterBySearch={filterBySearchHandler}
-                        />
-                    )}
-
                     <h2 className="tables__label heading-tertiary">Bill Records</h2>
                     {/* ------------- DATA TABLE for BILLS--------------- */}
                     {Object.keys(user).length < 0 ? (
@@ -271,6 +259,18 @@ const Account = () => {
                         <DataTable
                             data={records || []}
                             Table={BillsTable}
+                            // onFilterBySearch={filterBySearchHandler}
+                        />
+                    )}
+
+                    <h2 className="tables__label heading-tertiary">Selected Appliances</h2>
+                    {/* ------------- DATA TABLE  for SELECTED APPLIANCES --------------- */}
+                    {Object.keys(user).length < 0 ? (
+                        <h2>Loading...</h2>
+                    ) : (
+                        <DataTable
+                            data={selectedAppliances || []}
+                            Table={SelectedAppliancesTable}
                             // onFilterBySearch={filterBySearchHandler}
                         />
                     )}
