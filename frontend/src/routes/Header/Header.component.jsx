@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { Link, NavLink, Outlet } from "react-router-dom";
 
+import { BsCalculator } from "react-icons/bs";
+import { FaUserShield, FaUserAlt } from "react-icons/fa";
+
 import { signInWithGooglePopup, signOutUser } from "../../utils/firebase.utils";
 import { useAuthContext } from "../../context/AuthContext";
 
@@ -56,7 +59,8 @@ const Header = () => {
                                         className={({ isActive }) => (isActive ? "active" : "")}
                                         to="/calculator"
                                     >
-                                        Calculator
+                                        <BsCalculator />
+                                        <span>Calculator</span>
                                     </NavLink>
                                 </li>
                                 <li>
@@ -64,7 +68,8 @@ const Header = () => {
                                         className={({ isActive }) => (isActive ? "active" : "")}
                                         to="/account"
                                     >
-                                        Account
+                                        <FaUserAlt />
+                                        <span>Account</span>
                                     </NavLink>
                                 </li>
                                 {user.role === "admin" && (
@@ -73,7 +78,8 @@ const Header = () => {
                                             className={({ isActive }) => (isActive ? "active" : "")}
                                             to="/admin"
                                         >
-                                            Admin
+                                            <FaUserShield />
+                                            <span>Admin</span>
                                         </NavLink>
                                     </li>
                                 )}
