@@ -100,12 +100,12 @@ const CalculatorGraph = () => {
 
                 // run python predict rate if sarimaRate hasn't been changed in the admin route and it doesnt exist in the firestoredb
                 // 1 being the default value
-                if (sarimaRate === 1 && !currentPredictedRate && !reqAllRatesResponse.loading) {
+                if (sarimaRate === 1 && !currentPredictedRate && !reqAllRatesResponse) {
                     getSarimaRate();
                 }
             }
         }
-    }, [predictedRates]);
+    }, [predictedRates, reqAllRatesResponse, sarimaRate, setSarimaRate]);
 
     useEffect(() => {
         const handleClickOutside = e => {
@@ -202,7 +202,7 @@ const CalculatorGraph = () => {
                         <div className="control">
                             <div className="control__label">
                                 Forecasted Rate{" "}
-                                <div className="date">
+                                <div className="date small">
                                     ({month}, {year})
                                 </div>
                             </div>
@@ -219,7 +219,10 @@ const CalculatorGraph = () => {
                         </div>
 
                         <div className="control">
-                            <div className="control__label">Current Predicted Bill</div>
+                            <div className="control__label">
+                                Current Predicted Bill{" "}
+                                <div className="small">(with your previous appliances)</div>
+                            </div>
                             <div className="control__value">₱ {forecasted?.toLocaleString()}</div>
                         </div>
 
