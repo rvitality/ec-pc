@@ -33,7 +33,6 @@ const Admin = () => {
     let contentToShow;
 
     const changeLatestOfficialRateHandler = data => {
-        console.log(data);
         if (!data) return;
         const { predictedRates, last_rate_data } = data;
 
@@ -52,7 +51,6 @@ const Admin = () => {
 
     useEffect(() => {
         const receivedRates = reqCollectionsResponse?.collections;
-        console.log(receivedRates);
         setPredictedRates(receivedRates);
     }, [reqCollectionsResponse.collections]);
 
