@@ -67,10 +67,8 @@ const CalculatorGraph = () => {
             );
 
             if (currentPredictedRate) {
-                console.log("get from firestore");
                 setSarimaRate(currentPredictedRate.value);
             } else {
-                console.log("python get sarima");
                 // if it doesnt exist in the firestoredb yet
 
                 const getSarimaRate = async () => {
