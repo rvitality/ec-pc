@@ -67,6 +67,7 @@ export const createUserDocumentFromAuth = async (userAuth, additionalInfo) => {
             photoURL,
             records: [],
             selectedAppliances: [],
+            role: "user",
         };
 
         try {
@@ -148,7 +149,6 @@ export const updateUserAppliances = async userData => {
 
 // ! ADD/UPDATE PREDICTED RATE
 export const updatePredictedRates = async ratesData => {
-    console.log(ratesData);
     try {
         const { id, predictedRates } = ratesData;
         const documentRef = doc(db, "predictedRates", id);
@@ -157,13 +157,3 @@ export const updatePredictedRates = async ratesData => {
         console.log(err);
     }
 };
-
-// export const updateUserForecastedBill = async userData => {
-//     try {
-//         const { id, forecastedBill } = userData;
-//         const documentRef = doc(db, "users", id);
-//         await updateDoc(documentRef, { forecastedBill });
-//     } catch (err) {
-//         console.log(err);
-//     }
-// };
