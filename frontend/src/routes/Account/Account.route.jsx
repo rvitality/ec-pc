@@ -14,9 +14,11 @@ import { useAuthContext } from "../../context/AuthContext";
 
 import "./Account.styles.scss";
 import { calculateAccuracy } from "../../helpers/calculateAccuracy.helper";
+import SelectedAppliancesTable from "./SelectedAppliancesTable/SelectedAppliancesTable.component";
 
 const Account = () => {
-    const { user, setUserRecords } = useAuthContext();
+    const { user } = useAuthContext();
+    console.log(user);
 
     const [inputError, setInputError] = useState("");
     const billRef = useRef();
@@ -45,10 +47,12 @@ const Account = () => {
     const forecastedBill = lastUserRecord?.forecasted || 0;
 
     const [records, setRecords] = useState(user?.records || []);
+    const [selectedAppliances, setSelectedAppliances] = useState(user?.selectedAppliances || []);
 
     useEffect(() => {
         setRecords(user.records);
-    }, [user.records]);
+        setSelectedAppliances(user.selectedAppliances);
+    }, [user.records, user.selectedAppliances]);
 
     const lastMonthBill =
         user?.records && user?.records.length >= 2
@@ -245,16 +249,32 @@ const Account = () => {
                         </div>
                     </div>
                 </div>
-                {/* ------------- DATA TABLE --------------- */}
-                {Object.keys(user).length < 0 ? (
-                    <h2>Loading...</h2>
-                ) : (
-                    <DataTable
-                        data={records || []}
-                        Table={BillsTable}
-                        // onFilterBySearch={filterBySearchHandler}
-                    />
-                )}
+
+                <div className="tables">
+                    <h2 className="tables__label heading-tertiary">Selected Appliances</h2>
+                    {/* ------------- DATA TABLE  for SELECTED APPLIANCES --------------- */}
+                    {Object.keys(user).length < 0 ? (
+                        <h2>Loading...</h2>
+                    ) : (
+                        <DataTable
+                            data={selectedAppliances || []}
+                            Table={SelectedAppliancesTable}
+                            // onFilterBySearch={filterBySearchHandler}
+                        />
+                    )}
+
+                    <h2 className="tables__label heading-tertiary">Bill Records</h2>
+                    {/* ------------- DATA TABLE for BILLS--------------- */}
+                    {Object.keys(user).length < 0 ? (
+                        <h2>Loading...</h2>
+                    ) : (
+                        <DataTable
+                            data={records || []}
+                            Table={BillsTable}
+                            // onFilterBySearch={filterBySearchHandler}
+                        />
+                    )}
+                </div>
             </div>
         </section>
     );

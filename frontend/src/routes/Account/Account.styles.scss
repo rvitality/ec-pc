@@ -93,6 +93,19 @@
         }
     }
 
+    .tables {
+        margin-top: 5rem;
+
+        &__label {
+            text-align: center;
+            font-weight: bold;
+
+            &:last-of-type {
+                margin-top: 4rem;
+            }
+        }
+    }
+
     .comparison {
         border-top: 1px solid #aaa;
         padding-top: 0.5rem;
