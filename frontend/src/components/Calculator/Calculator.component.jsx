@@ -3,15 +3,12 @@ import React, { useState, useReducer, useEffect } from "react";
 import Tooltip from "../Tooltip/Tooltip.component";
 import Appliance from "../Appliance/Appliance.component";
 
-import { IoMdAdd } from "react-icons/io";
-
 import { useAuthContext } from "../../context/AuthContext";
 import { useApplianceContext } from "../../context/ApplianceContext";
-import {
-    getAppliancesAndDocuments,
-    updateUserAppliances,
-    updateUserRecords,
-} from "../../utils/firebase.utils";
+
+import { getAppliancesAndDocuments, updateUserAppliances } from "../../utils/firebase.utils";
+
+import { IoMdAdd } from "react-icons/io";
 
 import "./Calculator.styles.scss";
 
@@ -96,16 +93,13 @@ const reducer = (state, action) => {
 };
 
 const Calculator = () => {
-    const { setAppliances, sarimaRate, setModalIsOpen } = useApplianceContext();
-
-    const [error, setError] = useState("");
-
     const [state, dispatch] = useReducer(reducer, initialState);
 
+    const { setAppliances, sarimaRate, setModalIsOpen } = useApplianceContext();
     const { user, setUserRecords, setUserAppliances } = useAuthContext();
 
+    const [error, setError] = useState("");
     const [applianceOptions, setApplianceOptions] = useState([]);
-
     const [applianceHolders, setApplianceHolder] = useState(Array(3).fill(0));
     const [manualApplianceHolders, setManualApplianceHolders] = useState([]);
 
@@ -166,21 +160,47 @@ const Calculator = () => {
     const submitDataHandler = e => {
         e.preventDefault();
 
+        setModalIsOpen(true);
+
+        setAppliances(state.selectedAppliances);
+
         // if (sarimaRate === 1 || !sarimaRate) {
         //     setError("Please wait for the Predicted Rate (SARIMA).");
         //     return;
         // }
 
-        setAppliances(state.selectedAppliances);
+        // ! =======================================
 
-        const forecastedBill = state.selectedAppliances.reduce(
+        const { id, selectedAppliances } = user;
+
+        const currentSelectedAppliances = selectedAppliances || [];
+
+        const newSelectedAppliances = [...currentSelectedAppliances, ...state.selectedAppliances];
+
+        const filteredAppliances = newSelectedAppliances.filter((appliance, currentIndex, self) => {
+            const applianceIndex = self.findLastIndex(
+                el => el.applianceID === appliance.applianceID
+            );
+
+            if (currentIndex === applianceIndex) {
+                return appliance;
+            }
+            return null;
+        });
+
+        updateUserAppliances({
+            id,
+            selectedAppliances: filteredAppliances,
+        });
+        setUserAppliances(filteredAppliances);
+
+        // ! ================================
+        const forecastedBill = filteredAppliances.reduce(
             (sum, item) => sum + item.applianceBill,
             0
         );
 
-        setModalIsOpen(true);
-
-        if (!user.records || state.selectedAppliances.length === 0) return;
+        if (!user.records || !filteredAppliances.length) return;
 
         if (user.records.length > 0) {
             const newRecords = [...user.records];
@@ -188,10 +208,6 @@ const Calculator = () => {
             lastRecord.forecasted = forecastedBill;
             setUserRecords(newRecords);
         }
-
-        updateUserAppliances({ id: user.id, selectedAppliances: state.selectedAppliances });
-
-        setUserAppliances(state.selectedAppliances);
     };
 
     return (
