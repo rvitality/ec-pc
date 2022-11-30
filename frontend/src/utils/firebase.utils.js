@@ -66,7 +66,7 @@ export const createUserDocumentFromAuth = async (userAuth, additionalInfo) => {
             email,
             photoURL,
             records: [],
-            appliances: [],
+            selectedAppliances: [],
         };
 
         try {
@@ -130,6 +130,17 @@ export const updateUserRecords = async userData => {
         const { id, records } = userData;
         const documentRef = doc(db, "users", id);
         await updateDoc(documentRef, { records });
+    } catch (err) {
+        console.log(err);
+    }
+};
+
+// ! UPDATE USER SELECTED APPLIANCES, ADD/UPDATE NEW ELECTRIC BILL
+export const updateUserAppliances = async userData => {
+    try {
+        const { id, selectedAppliances } = userData;
+        const documentRef = doc(db, "users", id);
+        await updateDoc(documentRef, { selectedAppliances });
     } catch (err) {
         console.log(err);
     }
