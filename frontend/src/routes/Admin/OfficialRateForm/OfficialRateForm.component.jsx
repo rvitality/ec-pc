@@ -1,7 +1,8 @@
 import React, { useRef, useState, useEffect } from "react";
 
+import { useAuthContext } from "../../../context/AuthContext";
 import { useApplianceContext } from "../../../context/ApplianceContext";
-import { updatePredictedRates } from "../../../utils/firebase.utils";
+import { updatePredictedRates, updateUserAppliances } from "../../../utils/firebase.utils";
 
 import Spinner from "../../../ui/Spinner/Spinner.ui";
 
@@ -10,6 +11,7 @@ import useFetchLastRate from "../../../hooks/useFetchLastRate";
 import "./OfficialRateForm.styles.scss";
 
 const OfficialRateForm = ({ predictedRates, onChangeLatestOfficialRate }) => {
+    const { user, setUserAppliances } = useAuthContext();
     const receivedLastRate = useFetchLastRate();
     const { value } = receivedLastRate || {};
 
@@ -97,6 +99,8 @@ const OfficialRateForm = ({ predictedRates, onChangeLatestOfficialRate }) => {
                     rate => rate.date === lastOfficialRateDate
                 );
 
+                console.log(existingPredictedRateIndex);
+
                 // ! UPDATE -------
                 if (existingPredictedRateIndex >= 0) {
                     predictedRatesCopy[existingPredictedRateIndex].value = sarima_rate;
@@ -111,12 +115,20 @@ const OfficialRateForm = ({ predictedRates, onChangeLatestOfficialRate }) => {
                     });
                 } else {
                     // ! ADD NEW -------
+                    console.log("add new");
                     const newPredictedRate = { date: lastOfficialRateDate, value: sarima_rate };
 
                     await updatePredictedRates({
                         id: "pHyzqSueZeBWo2iA5IGg",
                         predictedRates: [...predictedRates, newPredictedRate],
                     });
+
+                    updateUserAppliances({
+                        id: user.id,
+                        selectedAppliances: [],
+                    });
+
+                    setUserAppliances([]);
                 }
 
                 // if (newPredictedRates.length > 1) {
