@@ -210,8 +210,7 @@ const Account = () => {
                                 </div>
                                 <div className="control__texts">
                                     <p className="label">
-                                        <strong>Forecasted</strong> bill for{" "}
-                                        <strong>{month}</strong>
+                                        <strong>Predicted</strong> bill for <strong>{month}</strong>
                                     </p>
                                     <div className="value">₱ {forecastedBill.toLocaleString()}</div>
                                 </div>
