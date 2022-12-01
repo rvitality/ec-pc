@@ -53,7 +53,7 @@
 
             svg {
                 font-weight: bold;
-                font-size: 1.6rem;
+                font-size: 1.05rem;
             }
 
             &.active {
@@ -63,6 +63,7 @@
             }
 
             &:hover {
+                color: #fff;
                 background-color: $base-color-light;
             }
         }
