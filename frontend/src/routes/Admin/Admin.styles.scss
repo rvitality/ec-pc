@@ -1,3 +1,5 @@
+@import "../../styles/mixins.scss";
+
 .admin-dashboard {
     h1 {
         padding-bottom: 1rem;
@@ -40,6 +42,10 @@
         display: flex;
         gap: 2rem;
 
+        @include respond(phone) {
+            flex-direction: column;
+        }
+
         .form {
             width: 50%;
             .loading-container {
@@ -54,6 +60,10 @@
                     font-size: 1.5rem;
                 }
             }
+
+            @include respond(phone) {
+                width: 100%;
+            }
         }
 
         .rates {
@@ -65,6 +75,10 @@
                 justify-content: center;
                 flex-direction: column;
                 gap: 0.5rem;
+            }
+
+            @include respond(phone) {
+                width: 100%;
             }
         }
     }
