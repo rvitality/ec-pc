@@ -1,10 +1,18 @@
 @import "../../styles/variables.scss";
+@import "../../styles/mixins.scss";
+
 .landing {
     align-items: center;
     display: flex;
     height: 80vh;
     overflow: hidden;
     position: relative;
+
+    @include respond(phone) {
+        height: 100vh;
+        flex-direction: column-reverse;
+        margin-top: -5rem;
+    }
 
     &__texts {
         width: 50%;
@@ -14,6 +22,16 @@
         .section-paragraph {
             max-width: 75%;
             margin-bottom: 2rem;
+        }
+
+        @include respond(phone) {
+            width: 100%;
+            text-align: center;
+            flex-direction: column;
+
+            .section-paragraph {
+                max-width: 100%;
+            }
         }
     }
     &__img-container {
@@ -27,6 +45,14 @@
             max-width: 75rem;
             position: relative;
             z-index: 1;
+        }
+
+        @include respond(phone) {
+            width: 100%;
+
+            .section-paragraph {
+                max-width: 100%;
+            }
         }
     }
 }
@@ -53,6 +79,12 @@
             text-align: center;
             margin: 0 auto;
         }
+
+        @include respond(phone) {
+            .section-paragraph {
+                max-width: 100%;
+            }
+        }
     }
 
     .our-team-heading {
@@ -60,6 +92,11 @@
         margin-bottom: 5rem;
         font-weight: bold;
         text-align: center;
+
+        @include respond(phone) {
+            margin-top: 3rem;
+            margin-bottom: 4rem;
+        }
     }
 
     .people {
