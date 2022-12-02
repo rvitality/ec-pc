@@ -35,7 +35,7 @@ header {
         gap: 3rem;
 
         // sign in/out btn
-        .btn {
+        .sign-out {
             @include respond(phone) {
                 display: none;
             }
@@ -88,41 +88,5 @@ header {
                 background-color: rgb(41, 105, 215);
             }
         }
-    }
-
-    form {
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-
-        .groups {
-            position: relative;
-
-            .control {
-                display: flex;
-                gap: 1rem;
-            }
-
-            .error {
-                position: absolute;
-                bottom: -1.25rem;
-                color: red;
-                margin-top: 0.5rem;
-                font-size: 0.8rem;
-                text-transform: capitalize;
-            }
-        }
-
-        input {
-            font-family: inherit;
-            font-size: 1rem;
-            padding: 0.25rem;
-        }
-    }
-
-    .profile {
-        display: flex;
-        gap: 2rem;
-        align-items: center;
     }
 }
