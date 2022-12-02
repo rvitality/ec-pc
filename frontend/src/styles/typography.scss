@@ -1,6 +1,10 @@
 .heading-primary {
     font-size: 3.8rem;
     line-height: 1.1;
+
+    @include respond(phone) {
+        font-size: 3.25rem;
+    }
 }
 
 .highlight {
@@ -8,7 +12,7 @@
 }
 
 .heading-secondary {
-    font-size: 2.25rem;
+    font-size: 2.35rem;
     font-weight: 500;
     line-height: 1.2;
     margin: 0 auto;
@@ -17,7 +21,7 @@
     font-weight: 500;
     letter-spacing: 0.25rem;
     color: $base-color;
-    font-size: 1.3rem;
+    font-size: 1.4rem;
     text-transform: uppercase;
 }
 
@@ -25,6 +29,10 @@
     margin: 1rem 0;
     font-size: 1.1rem;
     color: $gray-light;
+
+    .section-paragraph {
+        max-width: 100%;
+    }
 }
 
 .btn {
