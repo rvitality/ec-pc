@@ -1,11 +1,20 @@
+@import "mixins.scss";
+
 .section-px {
     padding-left: 5rem;
     padding-right: 5rem;
+
+    @include respond(phone) {
+        padding-left: 2rem;
+        padding-right: 2rem;
+    }
 }
 
 .section-py {
-    padding-top: 2rem;
-    padding-bottom: 2rem;
+    @include respond(phone) {
+        padding-top: 2rem;
+        padding-bottom: 2rem;
+    }
 }
 
 .neutral {
