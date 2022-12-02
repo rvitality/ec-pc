@@ -1,11 +1,15 @@
 @import "../../styles/variables.scss";
+@import "../../styles/mixins.scss";
 
 .main-content {
     display: flex;
-    // flex-direction: column;
     gap: 5rem;
     padding: 1.5rem 3rem;
     align-items: flex-start;
+
+    @include respond(phone) {
+        flex-direction: column;
+    }
 
     .loading {
         p {
@@ -28,6 +32,10 @@
         .loading {
             height: 50vh;
         }
+
+        @include respond(phone) {
+            width: 100%;
+        }
     }
 
     .right-side {
@@ -35,6 +43,11 @@
         display: flex;
         flex-direction: column;
         gap: 3rem;
+
+        @include respond(phone) {
+            width: 100%;
+            padding-bottom: 2.25rem;
+        }
     }
 
     .current-data {
