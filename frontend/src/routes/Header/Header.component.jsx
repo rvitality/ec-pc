@@ -10,6 +10,7 @@ import { useAuthContext } from "../../context/AuthContext";
 import logoSrc from "../../assets/images/logo.png";
 
 import "./Header.styles.scss";
+import MobileNav from "../../components/MobileNav/MobileNav.component";
 
 const Header = () => {
     const { isAuthenticated, user, login, logout } = useAuthContext();
@@ -51,12 +52,15 @@ const Header = () => {
                 </div>
 
                 <div className="right">
+                    {isAuthenticated && <MobileNav />}
+
                     {isAuthenticated && (
-                        <nav>
+                        <nav className="nav">
                             <ul>
                                 <li>
                                     <NavLink
-                                        className={({ isActive }) => (isActive ? "active" : "")}
+                                        className={`nav__link ${({ isActive }) =>
+                                            isActive ? "active" : ""}`}
                                         to="/calculator"
                                     >
                                         <BsCalculator />
@@ -65,7 +69,8 @@ const Header = () => {
                                 </li>
                                 <li>
                                     <NavLink
-                                        className={({ isActive }) => (isActive ? "active" : "")}
+                                        className={`nav__link ${({ isActive }) =>
+                                            isActive ? "active" : ""}`}
                                         to="/account"
                                     >
                                         <FaUserAlt />
@@ -75,7 +80,8 @@ const Header = () => {
                                 {user.role === "admin" && (
                                     <li>
                                         <NavLink
-                                            className={({ isActive }) => (isActive ? "active" : "")}
+                                            className={`nav__link ${({ isActive }) =>
+                                                isActive ? "active" : ""}`}
                                             to="/admin"
                                         >
                                             <FaUserShield />
