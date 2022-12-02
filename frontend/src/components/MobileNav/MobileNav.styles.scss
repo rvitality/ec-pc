@@ -1,0 +1,119 @@
+@import "../../styles/mixins.scss";
+
+.user-container {
+    display: none;
+    align-items: center;
+    gap: 2rem;
+    .greeting {
+        position: relative;
+
+        &__name {
+            font-weight: bold;
+            color: #287cc0;
+        }
+    }
+    //
+    @include respond(phone) {
+        display: flex;
+    }
+
+    .nav__link {
+        font-size: 1.15rem;
+    }
+
+    .user {
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 9;
+
+        &__name {
+            font-weight: bold;
+            font-size: 1.15rem;
+        }
+
+        &__photo img {
+            margin-right: 1rem;
+            width: 2.65rem;
+            height: 2.65rem;
+            color: #287cc0;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        &__drowndown-btn {
+            cursor: pointer;
+            background: none;
+            outline: none;
+            border: none;
+        }
+
+        &__dropdown-icon {
+            pointer-events: none;
+            color: #555;
+            width: 2rem;
+            height: 2rem;
+            cursor: pointer;
+            margin-left: 0.25rem;
+        }
+    }
+
+    .logout-btn {
+        cursor: pointer;
+        background: none;
+        outline: none;
+        color: #fff;
+        border: none;
+        font-weight: bold;
+        font-family: inherit;
+    }
+
+    .dropdown {
+        position: absolute;
+        top: 130%;
+        right: 2px;
+        background-color: #161b22;
+        color: #c9d1d9;
+        display: flex;
+        flex-direction: column;
+        width: 10rem;
+        box-shadow: 0 5px 10px rgba($color: #010409, $alpha: 0.5);
+        transition: all 0.2s ease-in-out;
+        pointer-events: none;
+        opacity: 0;
+
+        &.show {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        a {
+            font-size: 1.05rem;
+            padding: 1rem 2rem;
+            width: 100%;
+            transition: all 0.15s ease-in-out;
+
+            &:hover {
+                color: #287cc0;
+                background-color: #e6f4ff;
+            }
+
+            &.logout {
+                border-top: 1px solid #333;
+            }
+        }
+
+        &::before {
+            color: #000;
+            position: absolute;
+            display: inline-block;
+            content: "";
+            top: -16px;
+            right: 0;
+            left: auto;
+            border: 8px solid transparent;
+            border-bottom-color: var(--color-border-default);
+        }
+    }
+}
