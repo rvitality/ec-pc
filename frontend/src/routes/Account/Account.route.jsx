@@ -160,7 +160,7 @@ const Account = () => {
         <section id="account" className="account">
             <div className="cover"></div>
             <div className="section-py section-px">
-                <div className="section-px section-py">
+                <div className="info-container">
                     <div className="photo-container">
                         <div className="left">
                             <img
