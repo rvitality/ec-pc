@@ -41,17 +41,17 @@ def get_rates():
 
 @app.post("/api/add_official_rate")
 def add_official_rate():
-    jsonData = request.get_json()
-    entered_data = list(jsonData.values())
-    receivedMonth = entered_data[0]
+    json_data = request.get_json()
+    entered_data = list(json_data.values())
+    received_month = entered_data[0]
 
     with open("official_rates.csv") as f:
         mycsv = csv.reader(f)
         mycsv = list(mycsv)
-        lastRowData = mycsv[-1]
-        lastRowMonth = lastRowData[0]
+        last_row_data = mycsv[-1]
+        last_row_month = last_row_data[0]
 
-        if receivedMonth == lastRowMonth:
+        if received_month == last_row_month:
             lines = mycsv[:-1]
 
             with open("official_rates.csv", "w", newline="") as f:
