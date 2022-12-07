@@ -26,7 +26,14 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        z-index: 9;
+
+        &__info {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9;
+        }
 
         &__name {
             font-weight: bold;
