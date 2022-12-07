@@ -213,7 +213,7 @@ const CalculatorGraph = () => {
                                         <Spinner />
                                     </div>
                                 ) : (
-                                    `₱ ${sarimaRate?.toLocaleString()}`
+                                    `₱ ${sarimaRate?.toLocaleString()} kWh`
                                 )}
                             </div>
                         </div>
