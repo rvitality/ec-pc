@@ -25,7 +25,7 @@
         gap: 10rem;
         position: relative;
         z-index: 3;
-        margin-top: -3rem;
+        margin-top: -2rem;
 
         @include respond(phone) {
             gap: 5rem;
@@ -80,7 +80,7 @@
         align-items: center;
         gap: 1.25rem;
         margin: 2rem 0;
-        width: 50%;
+        min-width: 50%;
 
         @include respond(phone) {
             width: fit-content;
