@@ -174,7 +174,7 @@ const OfficialRateForm = ({ predictedRates, onChangeLatestOfficialRate }) => {
                     <label>
                         Latest Official Rate <small>({date}): </small>
                     </label>
-                    <div className="sarima-rate">₱ {rate.toFixed(2)}</div>
+                    <div className="sarima-rate">₱ {rate.toFixed(2)} kWh</div>
                 </div>
                 <div className="loading">
                     {(loading || receivedLastRate.loading) && (
