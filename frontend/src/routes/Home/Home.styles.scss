@@ -8,8 +8,11 @@
     overflow: hidden;
     position: relative;
 
+    @include respond(tab-port) {
+        height: auto;
+    }
+
     @include respond(phone) {
-        height: 100vh;
         flex-direction: column-reverse;
         margin-top: -5rem;
     }
