@@ -13,7 +13,8 @@ import "./MobileNav.styles.scss";
 
 const MobileNav = () => {
     const dropdownRef = useRef(null);
-    const buttonRef = useRef(null);
+    const buttonRef1 = useRef(null);
+    const buttonRef2 = useRef(null);
 
     const [showDropdown, setShowDropdown] = useState(false);
 
@@ -28,14 +29,19 @@ const MobileNav = () => {
     const logoutHandler = () => {
         signOutUser();
         logout();
-        Navigate("/boys-art-paint-center-delivery/auth");
+        Navigate("/");
     };
 
     useEffect(() => {
         const checkIfClickedOutside = e => {
             // If the menu is open and the clicked target is not within the menu, then close the menu
-
-            if (showDropdown && dropdownRef.current && e.target !== buttonRef.current) {
+            console.log(1);
+            if (
+                showDropdown &&
+                dropdownRef.current &&
+                e.target !== buttonRef1.current &&
+                e.target !== buttonRef2.current
+            ) {
                 setShowDropdown(false);
             }
         };
@@ -62,14 +68,19 @@ const MobileNav = () => {
                 <div className="user__photo">
                     <img src={photoURL} alt={name} />
                 </div>
-                <div className="user__name">{name}</div>
-                <button
-                    className="user__drowndown-btn"
-                    ref={buttonRef}
-                    onClick={toggleDropdownHandler}
-                >
-                    <BiChevronDown className="user__dropdown-icon" />
-                </button>
+
+                <div className="user__info">
+                    <div ref={buttonRef1} onClick={toggleDropdownHandler} className="user__name">
+                        {name}
+                    </div>
+                    <button
+                        ref={buttonRef2}
+                        onClick={toggleDropdownHandler}
+                        className="user__drowndown-btn"
+                    >
+                        <BiChevronDown className="user__dropdown-icon" />
+                    </button>
+                </div>
 
                 <div ref={dropdownRef} className={`dropdown ${showDropdown ? "show" : ""}`}>
                     <Link to="/account">Account</Link>
