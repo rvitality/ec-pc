@@ -31,12 +31,11 @@ html {
 
     @include respond(tab-port) {
         // width < 900?
-        font-size: 60%;
+        font-size: 65%;
     }
 
     // width < 600?
     @include respond(phone) {
-        font-size: 55%;
     }
 }
 
