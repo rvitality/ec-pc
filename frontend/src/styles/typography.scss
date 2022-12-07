@@ -60,4 +60,8 @@
             filter: brightness(1.25);
         }
     }
+
+    @include respond(phone) {
+        font-size: 1.25rem;
+    }
 }
