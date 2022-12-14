@@ -35,7 +35,6 @@ const MobileNav = () => {
     useEffect(() => {
         const checkIfClickedOutside = e => {
             // If the menu is open and the clicked target is not within the menu, then close the menu
-            console.log(1);
             if (
                 showDropdown &&
                 dropdownRef.current &&
