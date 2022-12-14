@@ -19,6 +19,7 @@ import useFetchCollections from "../../hooks/useFetchCollections";
 import { MdFlip } from "react-icons/md";
 
 import "./CalculatorGraph.styles.scss";
+import BillsCalcuInputs from "../../components/BillsCalcuInputs/BillsCalcuInputs.component";
 
 const CalculatorGraph = () => {
     const reqAllRatesResponse = useFetchAllRates();
@@ -77,7 +78,9 @@ const CalculatorGraph = () => {
                     setIsLoading(true);
                     setError("");
                     try {
-                        const response = await fetch("/api/get_sarima_rate");
+                        const response = await fetch(
+                            "https://ec-pc-flaskapi.onrender.com/api/get_sarima_rate"
+                        );
                         if (!response.ok) return "Failed to get sarima rate!";
                         const data = await response.json();
                         const { sarima_rate } = data;
@@ -161,8 +164,18 @@ const CalculatorGraph = () => {
     }, []);
 
     const cardRef = useRef();
+    const [description, setDescription] = useState("Basic Calculator");
+    const [conversionToolIsVisible, setConversionToolIsVisible] = useState(false);
+
     const flipCardHandler = e => {
         cardRef.current?.classList.toggle("is-flipped");
+        setConversionToolIsVisible(currentState => !currentState);
+
+        if (cardRef.current?.classList.contains("is-flipped")) {
+            setDescription("Advanced Calculator");
+        } else {
+            setDescription("Basic Calculator");
+        }
     };
 
     return (
@@ -177,14 +190,11 @@ const CalculatorGraph = () => {
                         </div>
                     ) : (
                         <div className="scene">
-                            <div className="option">
-                                <p className="option__info">
-                                    Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                                    Accusamus provident facilis enim magni, quis natus.
-                                </p>
+                            <div className="calc-option">
+                                <p className="calc-option__info">{description}</p>
                                 <button
                                     onClick={flipCardHandler}
-                                    className="option__flip-btn btn btn__primary"
+                                    className="calc-option__flip-btn btn btn__primary"
                                 >
                                     <span>Flip</span>
                                     <MdFlip />
@@ -193,9 +203,14 @@ const CalculatorGraph = () => {
 
                             <div className="card" ref={cardRef}>
                                 <div className="card__face card__face--front">
+                                    <BillsCalcuInputs
+                                        sarimaRate={sarimaRate}
+                                        rates={reqAllRatesResponse.rates || []}
+                                    />
+                                </div>
+                                <div className="card__face card__face--back">
                                     <Calculator />
                                 </div>
-                                <div className="card__face card__face--back">back</div>
                             </div>
                         </div>
                     )}
@@ -222,7 +237,7 @@ const CalculatorGraph = () => {
                         />
                     )}
 
-                    <ConversionTool />
+                    {conversionToolIsVisible && <ConversionTool />}
 
                     <div className="current-data">
                         <div className="control">
@@ -239,22 +254,27 @@ const CalculatorGraph = () => {
                                         <Spinner />
                                     </div>
                                 ) : (
-                                    `₱ ${sarimaRate?.toLocaleString()} kWh`
+                                    `₱ ${sarimaRate?.toLocaleString("en", {
+                                        maximumFractionDigits: 2,
+                                    })} kWh`
                                 )}
                             </div>
                         </div>
 
                         <div className="control">
                             <div className="control__label">
-                                Current Predicted Bill{" "}
-                                <div className="small">(with your previous appliances)</div>
+                                Current Predicted Bill <div className="small"></div>
                             </div>
-                            <div className="control__value">₱ {forecasted?.toLocaleString()}</div>
+                            <div className="control__value">
+                                ₱ {forecasted?.toLocaleString("en", { maximumFractionDigits: 2 })}
+                            </div>
                         </div>
 
                         <div className="control">
                             <div className="control__label">Current Actual Bill</div>
-                            <div className="control__value">₱ {actual?.toLocaleString()}</div>
+                            <div className="control__value">
+                                ₱ {actual?.toLocaleString("en", { maximumFractionDigits: 2 })}
+                            </div>
                         </div>
                         <div className="control">
                             <div className="control__label">Accuracy</div>
