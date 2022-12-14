@@ -25,11 +25,13 @@
         gap: 1rem;
     }
 
-    .option {
+    .calc-option {
         display: flex;
         align-items: flex-start;
         gap: 5rem;
         perspective: 600px;
+        justify-content: space-between;
+        margin-bottom: 1rem;
 
         &__info {
             margin-bottom: 2rem;
@@ -61,13 +63,9 @@
         width: 100%;
         height: 100%;
         transition: transform 1s;
+        // cursor: pointer;
         transform-style: preserve-3d;
-        cursor: pointer;
         position: relative;
-    }
-
-    .card.is-flipped {
-        transform: rotateY(180deg);
     }
 
     .card__face {
@@ -75,6 +73,7 @@
         width: 100%;
         -webkit-backface-visibility: hidden;
         backface-visibility: hidden;
+        z-index: 1;
     }
 
     .card__face--front {
@@ -82,9 +81,16 @@
     }
 
     .card__face--back {
-        height: 500px;
-        background: blue;
         transform: rotateY(180deg);
+    }
+
+    .card.is-flipped {
+        transform: rotateY(180deg);
+    }
+    .card.is-flipped {
+        .card__face--back {
+            z-index: 9;
+        }
     }
 
     .left-side {
