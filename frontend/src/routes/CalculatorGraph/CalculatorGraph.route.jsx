@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 
 import { useApplianceContext } from "../../context/ApplianceContext";
 
+import { updatePredictedRates } from "../../utils/firebase.utils";
 import { useAuthContext } from "../../context/AuthContext";
 
 import { calculateAccuracy } from "../../helpers/calculateAccuracy.helper";
@@ -15,8 +16,9 @@ import ConversionTool from "./ConversionTool/ConversionTool.component";
 import useFetchAllRates from "../../hooks/useFetchAllRates";
 import useFetchCollections from "../../hooks/useFetchCollections";
 
+import { MdFlip } from "react-icons/md";
+
 import "./CalculatorGraph.styles.scss";
-import { updatePredictedRates } from "../../utils/firebase.utils";
 
 const CalculatorGraph = () => {
     const reqAllRatesResponse = useFetchAllRates();
@@ -75,9 +77,7 @@ const CalculatorGraph = () => {
                     setIsLoading(true);
                     setError("");
                     try {
-                        const response = await fetch(
-                            "https://ec-pc-flaskapi.onrender.com/api/get_sarima_rate"
-                        );
+                        const response = await fetch("/api/get_sarima_rate");
                         if (!response.ok) return "Failed to get sarima rate!";
                         const data = await response.json();
                         const { sarima_rate } = data;
@@ -160,6 +160,11 @@ const CalculatorGraph = () => {
         };
     }, []);
 
+    const cardRef = useRef();
+    const flipCardHandler = e => {
+        cardRef.current?.classList.toggle("is-flipped");
+    };
+
     return (
         <>
             <section className="main-content">
@@ -171,7 +176,28 @@ const CalculatorGraph = () => {
                             <Spinner />
                         </div>
                     ) : (
-                        <Calculator />
+                        <div className="scene">
+                            <div className="option">
+                                <p className="option__info">
+                                    Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+                                    Accusamus provident facilis enim magni, quis natus.
+                                </p>
+                                <button
+                                    onClick={flipCardHandler}
+                                    className="option__flip-btn btn btn__primary"
+                                >
+                                    <span>Flip</span>
+                                    <MdFlip />
+                                </button>
+                            </div>
+
+                            <div className="card" ref={cardRef}>
+                                <div className="card__face card__face--front">
+                                    <Calculator />
+                                </div>
+                                <div className="card__face card__face--back">back</div>
+                            </div>
+                        </div>
                     )}
                 </div>
 
