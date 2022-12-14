@@ -219,7 +219,7 @@ const Calculator = () => {
                 />
             </div>
 
-            <h1 className="heading-secondary">Calculator</h1>
+            <h1 className="heading-secondary">Advanced Calculator</h1>
 
             <form onSubmit={submitDataHandler} className="calcu__form">
                 {applianceHolders?.map((_, index) => (
