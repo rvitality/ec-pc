@@ -30,7 +30,7 @@ const ModalContent = props => {
                     <div className="heading">Predicted electric bill: </div>
                     {forecastedBill > 0 && (
                         <p className="upper__value">
-                            ₱ {forecastedBill.toLocaleString("en", { minimumFractionDigits: 2 })}{" "}
+                            ₱ {forecastedBill.toLocaleString("en", { maximumFractionDigits: 2 })}{" "}
                         </p>
                     )}
                 </div>
@@ -42,7 +42,7 @@ const ModalContent = props => {
                             <>
                                 <div className="upper__value">
                                     ₱{" "}
-                                    {sarimaRate.toLocaleString("en", { minimumFractionDigits: 2 })}{" "}
+                                    {sarimaRate.toLocaleString("en", { maximumFractionDigits: 2 })}{" "}
                                     kWh
                                 </div>
                             </>
@@ -100,7 +100,7 @@ const ModalContent = props => {
                                             <span className="total">
                                                 ₱{" "}
                                                 {applianceBill?.toLocaleString("en", {
-                                                    minimumFractionDigits: 2,
+                                                    maximumFractionDigits: 2,
                                                 })}
                                             </span>
                                         </div>
