@@ -32,8 +32,10 @@ const BillsTable = ({ dataToDisplay }) => {
                             <td>{index + 1}</td>
                             <td className="capitalize">{month}</td>
                             <td>{year}</td>
-                            <td>₱ {forecasted.toLocaleString()}</td>
-                            <td>₱ {actual.toLocaleString()}</td>
+                            <td>
+                                ₱ {forecasted.toLocaleString("en", { maximumFractionDigits: 2 })}
+                            </td>
+                            <td>₱ {actual.toLocaleString("en", { maximumFractionDigits: 2 })}</td>
                             <td className={`status ${status}`}>{accuracy}%</td>
                         </tr>
                     );

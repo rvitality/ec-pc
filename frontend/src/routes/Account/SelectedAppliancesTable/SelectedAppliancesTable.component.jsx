@@ -67,14 +67,16 @@ const SelectedAppliancesTable = ({ dataToDisplay }) => {
                         <tr key={applianceID}>
                             <td>{index + 1}</td>
                             <td className="capitalize">{applianceName}</td>
-                            <td>{wattage.toLocaleString()}</td>
+                            <td>{wattage.toLocaleString("en", { maximumFractionDigits: 2 })}</td>
                             <td>{quantity}</td>
                             <td>
                                 {inputDurations.length > 7
                                     ? `${inputDurations.slice(0, 7).join(", ")} ...`
                                     : inputDurations.join(", ")}
                             </td>
-                            <td>₱ {applianceBill.toLocaleString()}</td>
+                            <td>
+                                ₱ {applianceBill.toLocaleString("en", { maximumFractionDigits: 2 })}
+                            </td>
                             <td>
                                 <div className="actions">
                                     {/* <a

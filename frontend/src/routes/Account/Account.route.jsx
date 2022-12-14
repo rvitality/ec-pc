@@ -200,7 +200,12 @@ const Account = () => {
                                     <p className="label">
                                         Your <strong>Actual</strong> Bill Last Month
                                     </p>
-                                    <div className="value">₱ {lastMonthBill.toLocaleString()}</div>
+                                    <div className="value">
+                                        ₱{" "}
+                                        {lastMonthBill.toLocaleString("en", {
+                                            maximumFractionDigits: 2,
+                                        })}
+                                    </div>
                                 </div>
                             </div>
 
@@ -212,7 +217,12 @@ const Account = () => {
                                     <p className="label">
                                         <strong>Predicted</strong> bill for <strong>{month}</strong>
                                     </p>
-                                    <div className="value">₱ {forecastedBill.toLocaleString()}</div>
+                                    <div className="value">
+                                        ₱{" "}
+                                        {forecastedBill.toLocaleString("en", {
+                                            maximumFractionDigits: 2,
+                                        })}
+                                    </div>
                                 </div>
                             </div>
                         </div>
