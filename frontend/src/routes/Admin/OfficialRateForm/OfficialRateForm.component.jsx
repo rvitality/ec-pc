@@ -99,8 +99,6 @@ const OfficialRateForm = ({ predictedRates, onChangeLatestOfficialRate }) => {
                     rate => rate.date === lastOfficialRateDate
                 );
 
-                console.log(existingPredictedRateIndex);
-
                 // ! UPDATE -------
                 if (existingPredictedRateIndex >= 0) {
                     predictedRatesCopy[existingPredictedRateIndex].value = sarima_rate;
@@ -115,7 +113,6 @@ const OfficialRateForm = ({ predictedRates, onChangeLatestOfficialRate }) => {
                     });
                 } else {
                     // ! ADD NEW -------
-                    console.log("add new");
                     const newPredictedRate = { date: lastOfficialRateDate, value: sarima_rate };
 
                     await updatePredictedRates({
