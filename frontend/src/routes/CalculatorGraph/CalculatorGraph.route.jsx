@@ -165,7 +165,7 @@ const CalculatorGraph = () => {
 
     const cardRef = useRef();
     const [description, setDescription] = useState(
-        "This calculator is able to predict an approximate/estimate of your upcoming bill by getting the last two recent months with official rates."
+        "This calculator is able to predict an approximate/estimate of your upcoming bill by getting your last two months electric bill."
     );
 
     const [isFlipped, setIsFlipped] = useState(false);
@@ -175,11 +175,11 @@ const CalculatorGraph = () => {
 
         if (cardRef.current?.classList.contains("is-flipped")) {
             setDescription(
-                "This calculator predicts an estimate of your bill according to the number of hours you use your appliance/s daily in a month."
+                "This calculator predicts an estimate of your bill according to your appliances input and hours of usage daily in a month."
             );
         } else {
             setDescription(
-                "This calculator is able to predict an approximate/estimate of your upcoming bill by getting the last two recent months with official rates."
+                "This calculator is able to predict an approximate/estimate of your upcoming bill by getting your last two months electric bill."
             );
         }
     };
