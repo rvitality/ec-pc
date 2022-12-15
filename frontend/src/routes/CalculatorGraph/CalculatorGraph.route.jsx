@@ -8,11 +8,11 @@ import { useAuthContext } from "../../context/AuthContext";
 import { calculateAccuracy } from "../../helpers/calculateAccuracy.helper";
 
 import Spinner from "../../ui/Spinner/Spinner.ui";
-import Calculator from "../../components/Calculator/Calculator.component";
 import Modal from "../../components/Modal/Modal.component";
 import Graph from "../../components/Graph/Graph.component";
 import ConversionTool from "./ConversionTool/ConversionTool.component";
 import BasicCalculator from "../../components/BasicCalculator/BasicCalculator.component";
+import AdvancedCalculator from "../../components/AdvancedCalculator/AdvancedCalculator.component";
 
 import useFetchAllRates from "../../hooks/useFetchAllRates";
 import useFetchCollections from "../../hooks/useFetchCollections";
@@ -216,7 +216,7 @@ const CalculatorGraph = () => {
                                     />
                                 </div>
                                 <div className="card__face card__face--back">
-                                    <Calculator />
+                                    <AdvancedCalculator />
                                 </div>
                             </div>
                         </div>
