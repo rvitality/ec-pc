@@ -34,6 +34,8 @@
             border-radius: 0.5rem;
             padding: 1rem 1.5rem;
             border: none;
+            margin: 0 auto;
+            display: block;
 
             &:hover {
                 background-color: $base-color;
@@ -77,11 +79,43 @@
         text-align: left;
         border-left: 5px solid #000;
         background: rgba(0, 0, 0, 0.25);
-        padding: 0.5rem 1rem;
+        padding: 0.7rem 1rem;
+        display: flex;
+        align-items: center;
+
+        &__label {
+            font-weight: lighter;
+        }
+
+        &__date {
+            text-transform: capitalize;
+        }
 
         &__value {
-            display: inline-block;
+            font-weight: 600;
             margin-left: 1rem;
+            font-size: 1.1rem;
+        }
+    }
+
+    .bills-diff-result {
+        margin: 2rem 0;
+        color: #fff;
+    }
+
+    .list-links {
+        margin-top: 1rem;
+        border-top: 1px solid #ccc;
+        padding-top: 0.5rem;
+
+        li {
+            margin-left: 1rem;
+            list-style-type: disc !important;
+        }
+
+        a {
+            color: $base-color;
+            text-decoration: underline;
         }
     }
 }
