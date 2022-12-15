@@ -1,5 +1,4 @@
-import React, { useRef } from "react";
-import { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { useAuthContext } from "../../context/AuthContext";
 import { updateUserAppliances } from "../../utils/firebase.utils";
 import Tooltip from "../Tooltip/Tooltip.component";
@@ -21,9 +20,13 @@ const MONTH_NAMES = [
     "December",
 ];
 
-const BillsCalcuInputs = ({ rates, sarimaRate }) => {
+const BillsCalcuInputs = ({ rates, sarimaRate, isFlipped }) => {
     const [predictedBill, setPredictedBill] = useState(null);
+    const [billsDiff, setBillsDiff] = useState();
+
     const { user, setUserRecords, setUserAppliances } = useAuthContext();
+
+    const { month, year } = user.records?.length > 0 ? user.records[user.records?.length - 1] : {};
 
     const lastTwoRates = rates.slice(-2);
 
@@ -32,6 +35,13 @@ const BillsCalcuInputs = ({ rates, sarimaRate }) => {
 
     const firstMonthRef = useRef();
     const secondMonthRef = useRef();
+
+    useEffect(() => {
+        if (isFlipped) {
+            setBillsDiff(null);
+            setPredictedBill(null);
+        }
+    }, [isFlipped]);
 
     const submitHandler = e => {
         e.preventDefault();
@@ -48,10 +58,6 @@ const BillsCalcuInputs = ({ rates, sarimaRate }) => {
         const secondKw = Math.round(secondMonthBill / secondOfficialRate?.y);
 
         const predictedBill = ((firstKw + secondKw) * +sarimaRate) / 2;
-        // console.log(
-        //     "predictedBill: ",
-        //     predictedBill.toLocaleString("en", { maximumFractionDigits: 2 })
-        // );
 
         setPredictedBill(predictedBill);
 
@@ -67,7 +73,12 @@ const BillsCalcuInputs = ({ rates, sarimaRate }) => {
             secondMonthRef.current.value = "";
         }
 
-        // ! =======================================
+        // most recent bill and predicted bill comparison
+        const difference = ((predictedBill - firstMonthBill) / firstMonthBill) * 100;
+
+        setBillsDiff(difference);
+
+        // ! STATE UPDATES =======================================
 
         const { id } = user;
 
@@ -119,8 +130,62 @@ const BillsCalcuInputs = ({ rates, sarimaRate }) => {
 
                 {predictedBill && (
                     <div className="predicted-bill">
-                        Predicted Bill: <span className="predicted-bill__value"></span>₱{" "}
-                        {predictedBill?.toLocaleString("en", { maximumFractionDigits: 2 })}
+                        <div className="predicted-bill__label">
+                            Predicted Bill{" "}
+                            <span className="predicted-bill__date">
+                                ({month}, {year}):
+                            </span>
+                        </div>
+                        <span className="predicted-bill__value">
+                            ₱ {predictedBill?.toLocaleString("en", { maximumFractionDigits: 2 })}
+                        </span>
+                    </div>
+                )}
+
+                {billsDiff && (
+                    <div className="bills-diff-result">
+                        {billsDiff > 0 ? (
+                            <div>
+                                <p>
+                                    Your predicted next bill is ${billsDiff.toFixed(2)}% higher than
+                                    your previous one. You might want to learn more about energy
+                                    consumption.
+                                </p>
+                                <ul className="list-links">
+                                    <li>
+                                        <a
+                                            target="_blank"
+                                            rel="noreferrer"
+                                            href="https://www.energy.gov/energysaver/energy-saver-guide-tips-saving-money-and-energy-home"
+                                        >
+                                            energy.gov
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a
+                                            target="_blank"
+                                            rel="noreferrer"
+                                            href="https://energysavingtrust.org.uk/hub/quick-tips-to-save-energy/"
+                                        >
+                                            energysavingtrust.org
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a
+                                            target="_blank"
+                                            rel="noreferrer"
+                                            href="https://www.directenergy.com/learning-center/25-energy-efficiency-tips"
+                                        >
+                                            directenergy.com
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        ) : (
+                            `Good job! Your predicted next bill is ${billsDiff.toFixed(
+                                2
+                            )}% lower than your previous one. Keep up the good work!`
+                        )}
                     </div>
                 )}
 
