@@ -23,9 +23,7 @@ import BillsCalcuInputs from "../../components/BillsCalcuInputs/BillsCalcuInputs
 
 const CalculatorGraph = () => {
     const reqAllRatesResponse = useFetchAllRates();
-
     const reqCollectionsResponse = useFetchCollections("predictedRates");
-    const predictedRates = reqCollectionsResponse?.collections;
 
     const { user } = useAuthContext();
     const {
@@ -50,7 +48,9 @@ const CalculatorGraph = () => {
         // get the last entered data on the offical_rates.csv
         const response = reqAllRatesResponse.rates ? reqAllRatesResponse.rates?.slice(-1)[0] : null;
 
-        if (response) {
+        const predictedRates = reqCollectionsResponse?.collections;
+
+        if (response && predictedRates.length > 0) {
             const { yr, x: month } = response;
             let newMonth = month;
             let newYr = yr;
@@ -103,12 +103,12 @@ const CalculatorGraph = () => {
 
                 // run python predict rate if sarimaRate hasn't been changed in the admin route and it doesnt exist in the firestoredb
                 // 1 being the default value
-                if (sarimaRate === 1 && !currentPredictedRate && !reqAllRatesResponse) {
+                if (sarimaRate === 1 && !currentPredictedRate) {
                     getSarimaRate();
                 }
             }
         }
-    }, [predictedRates, reqAllRatesResponse, sarimaRate, setSarimaRate]);
+    }, [reqCollectionsResponse.collections, reqAllRatesResponse.rates, sarimaRate, setSarimaRate]);
 
     useEffect(() => {
         const handleClickOutside = e => {
@@ -167,11 +167,11 @@ const CalculatorGraph = () => {
     const [description, setDescription] = useState(
         "This calculator is able to predict an approximate/estimate of your upcoming bill by getting the last two recent months with official rates."
     );
-    const [conversionToolIsVisible, setConversionToolIsVisible] = useState(false);
 
+    const [isFlipped, setIsFlipped] = useState(false);
     const flipCardHandler = e => {
         cardRef.current?.classList.toggle("is-flipped");
-        setConversionToolIsVisible(currentState => !currentState);
+        setIsFlipped(prevState => !prevState);
 
         if (cardRef.current?.classList.contains("is-flipped")) {
             setDescription(
@@ -212,6 +212,7 @@ const CalculatorGraph = () => {
                                     <BillsCalcuInputs
                                         sarimaRate={sarimaRate}
                                         rates={reqAllRatesResponse.rates || []}
+                                        isFlipped={isFlipped}
                                     />
                                 </div>
                                 <div className="card__face card__face--back">
@@ -239,18 +240,18 @@ const CalculatorGraph = () => {
                     {!reqAllRatesResponse.loading && !reqAllRatesResponse.error && (
                         <Graph
                             rates={reqAllRatesResponse.rates || []}
-                            predictedRates={predictedRates || []}
+                            predictedRates={reqCollectionsResponse.collections || []}
                         />
                     )}
 
-                    {conversionToolIsVisible && <ConversionTool />}
+                    {isFlipped && <ConversionTool />}
 
                     <div className="current-data">
                         <div className="control">
                             <div className="control__label">
                                 Forecasted Rate{" "}
                                 <div className="date small">
-                                    ({month}, {year})
+                                    ({month}, {year}):
                                 </div>
                             </div>
                             <div className="control__value">
