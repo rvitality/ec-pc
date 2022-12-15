@@ -40,6 +40,9 @@ const BasicCalculator = ({ rates, sarimaRate, isFlipped }) => {
         if (isFlipped) {
             setBillsDiff(null);
             setPredictedBill(null);
+
+            firstMonthRef.current.value = "";
+            secondMonthRef.current.value = "";
         }
     }, [isFlipped]);
 
