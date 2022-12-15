@@ -3,7 +3,7 @@ import { useAuthContext } from "../../context/AuthContext";
 import { updateUserAppliances } from "../../utils/firebase.utils";
 import Tooltip from "../Tooltip/Tooltip.component";
 
-import "./BillsCalcuInputs.styles.scss";
+import "./BasicCalculator.styles.scss";
 
 const MONTH_NAMES = [
     "January",
@@ -20,7 +20,7 @@ const MONTH_NAMES = [
     "December",
 ];
 
-const BillsCalcuInputs = ({ rates, sarimaRate, isFlipped }) => {
+const BasicCalculator = ({ rates, sarimaRate, isFlipped }) => {
     const [predictedBill, setPredictedBill] = useState(null);
     const [billsDiff, setBillsDiff] = useState();
 
@@ -213,4 +213,4 @@ const BillsCalcuInputs = ({ rates, sarimaRate, isFlipped }) => {
     );
 };
 
-export default BillsCalcuInputs;
+export default BasicCalculator;
