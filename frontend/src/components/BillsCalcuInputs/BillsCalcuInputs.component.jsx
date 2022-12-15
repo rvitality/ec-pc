@@ -2,6 +2,7 @@ import React, { useRef } from "react";
 import { useState } from "react";
 import { useAuthContext } from "../../context/AuthContext";
 import { updateUserAppliances } from "../../utils/firebase.utils";
+import Tooltip from "../Tooltip/Tooltip.component";
 
 import "./BillsCalcuInputs.styles.scss";
 
@@ -80,6 +81,10 @@ const BillsCalcuInputs = ({ rates, sarimaRate }) => {
     return (
         <aside className="bills-calcu-inputs">
             <h1>Basic Calculator</h1>
+
+            <div className="accuracy-info">
+                <Tooltip message="Lorem ipsum dolor sit amet consectetur adipisicing elit. Saepe, dolorum!" />
+            </div>
 
             <form onSubmit={submitHandler}>
                 <div className="input-group">
