@@ -1,0 +1,141 @@
+@import "../../styles/variables.scss";
+
+.calcu {
+    position: relative;
+    background-image: linear-gradient(to bottom, $base-color, #b4afe0);
+    padding: 2.5rem;
+    border-radius: 2rem;
+
+    .tooltip svg {
+        color: yellow;
+    }
+
+    .hours-info {
+        position: absolute;
+        top: 1.5rem;
+        right: 2.5rem;
+    }
+
+    .manual-info {
+        position: absolute;
+        top: 1rem;
+        right: 0;
+    }
+
+    h1 {
+        font-size: 2.25rem;
+        color: #fff;
+        font-weight: normal;
+    }
+
+    button {
+        transition: all 0.15s ease-in-out;
+    }
+
+    .manual-input-container {
+        position: relative;
+        border-top: 2px solid #222;
+        padding-top: 1rem;
+        margin-top: 2rem;
+
+        h3 {
+            color: #000;
+            text-transform: uppercase;
+            font-weight: 500;
+        }
+
+        .note {
+            margin-top: 0.6rem;
+            font-size: 1rem;
+            color: #000;
+            font-style: italic;
+        }
+
+        .appliance {
+            border-bottom: 1px solid #999;
+            padding-bottom: 1rem;
+        }
+
+        .new-btn {
+            transition: all 0.15s ease-in-out;
+            margin: 0 0 0 auto;
+            display: block;
+            margin-top: 1.5rem;
+            font-size: 1.1rem;
+            padding: 0.5rem 0.9rem;
+            font-weight: 500;
+            justify-self: flex-end;
+        }
+    }
+
+    &__btn {
+        border: 1px solid #ccc;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        font-size: 1.25rem;
+        width: 100%;
+        color: #000;
+        background: #fff;
+        padding: 1rem 1.45rem;
+        margin: 0.5rem 0;
+
+        &:hover {
+            background: #ccc;
+            color: #000;
+        }
+
+        &.add-btn {
+            font-weight: bold;
+            font-size: 1.5rem;
+            justify-content: center;
+        }
+    }
+
+    &__bottom {
+        margin-top: 5rem;
+        gap: 1rem;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        .formula {
+            color: #fff;
+            max-width: 60%;
+            text-align: center;
+            background: $base-color;
+            font-size: 1rem;
+            padding: 1rem;
+            border-radius: 1rem;
+            font-style: italic;
+        }
+
+        .submit-btn-container {
+            width: 40%;
+            display: flex;
+            align-items: center;
+            flex-direction: column;
+            justify-content: center;
+            text-align: center;
+
+            .error {
+                color: red;
+                font-size: 0.85rem;
+                font-weight: 300;
+            }
+
+            .submit-btn {
+                width: fit-content;
+                font-weight: 500;
+                text-transform: uppercase;
+                border-radius: 1rem;
+                padding: 1rem 1.5rem;
+
+                &:hover {
+                    background: #494377;
+                    color: #fff;
+                }
+            }
+        }
+    }
+}
