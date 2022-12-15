@@ -164,7 +164,9 @@ const CalculatorGraph = () => {
     }, []);
 
     const cardRef = useRef();
-    const [description, setDescription] = useState("Basic Calculator");
+    const [description, setDescription] = useState(
+        "This calculator is able to predict an approximate/estimate of your upcoming bill by getting the last two recent months with official rates."
+    );
     const [conversionToolIsVisible, setConversionToolIsVisible] = useState(false);
 
     const flipCardHandler = e => {
@@ -172,9 +174,13 @@ const CalculatorGraph = () => {
         setConversionToolIsVisible(currentState => !currentState);
 
         if (cardRef.current?.classList.contains("is-flipped")) {
-            setDescription("Advanced Calculator");
+            setDescription(
+                "This calculator predicts an estimate of your bill according to the number of hours you use your appliance/s daily in a month."
+            );
         } else {
-            setDescription("Basic Calculator");
+            setDescription(
+                "This calculator is able to predict an approximate/estimate of your upcoming bill by getting the last two recent months with official rates."
+            );
         }
     };
 
