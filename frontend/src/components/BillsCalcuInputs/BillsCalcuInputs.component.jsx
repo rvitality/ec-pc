@@ -68,9 +68,6 @@ const BillsCalcuInputs = ({ rates, sarimaRate, isFlipped }) => {
             const lastRecord = newRecords[newRecords.length - 1];
             lastRecord.forecasted = predictedBill;
             setUserRecords(newRecords);
-
-            firstMonthRef.current.value = "";
-            secondMonthRef.current.value = "";
         }
 
         // most recent bill and predicted bill comparison
@@ -94,7 +91,9 @@ const BillsCalcuInputs = ({ rates, sarimaRate, isFlipped }) => {
             <h1>Basic Calculator</h1>
 
             <div className="accuracy-info">
-                <Tooltip message="Lorem ipsum dolor sit amet consectetur adipisicing elit. Saepe, dolorum!" />
+                <Tooltip message="Indicating the exact amount from your 2 most recent electric bills will help to produce a much more accurate prediction of your next month's bill." />
+
+                {/* Indicating the exact amount from your two(2) most recent electric bills will increase the accuracy of prediction for the next month. */}
             </div>
 
             <form onSubmit={submitHandler}>
@@ -137,7 +136,11 @@ const BillsCalcuInputs = ({ rates, sarimaRate, isFlipped }) => {
                             </span>
                         </div>
                         <span className="predicted-bill__value">
-                            ₱ {predictedBill?.toLocaleString("en", { maximumFractionDigits: 2 })}
+                            ₱
+                            {predictedBill?.toLocaleString("en", {
+                                minimumFractionDigits: 2,
+                                maximumFractionDigits: 2,
+                            })}
                         </span>
                     </div>
                 )}
@@ -147,45 +150,58 @@ const BillsCalcuInputs = ({ rates, sarimaRate, isFlipped }) => {
                         {billsDiff > 0 ? (
                             <div>
                                 <p>
-                                    Your predicted next bill is ${billsDiff.toFixed(2)}% higher than
-                                    your previous one. You might want to learn more about energy
-                                    consumption.
+                                    Based on your inputs, your bill will increase{" "}
+                                    {Math.abs(billsDiff).toFixed(2)}% than the previous month.
+                                    <br />
+                                    <br />
+                                    <hr />
+                                    <br />
+                                    If you have trouble conserving for electricity, visit these site
+                                    to learn more.
                                 </p>
-                                <ul className="list-links">
-                                    <li>
-                                        <a
-                                            target="_blank"
-                                            rel="noreferrer"
-                                            href="https://www.energy.gov/energysaver/energy-saver-guide-tips-saving-money-and-energy-home"
-                                        >
-                                            energy.gov
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a
-                                            target="_blank"
-                                            rel="noreferrer"
-                                            href="https://energysavingtrust.org.uk/hub/quick-tips-to-save-energy/"
-                                        >
-                                            energysavingtrust.org
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a
-                                            target="_blank"
-                                            rel="noreferrer"
-                                            href="https://www.directenergy.com/learning-center/25-energy-efficiency-tips"
-                                        >
-                                            directenergy.com
-                                        </a>
-                                    </li>
-                                </ul>
                             </div>
                         ) : (
-                            `Good job! Your predicted next bill is ${billsDiff.toFixed(
-                                2
-                            )}% lower than your previous one. Keep up the good work!`
+                            <p>
+                                Based on your inputs, your predicted bill will be{" "}
+                                {Math.abs(billsDiff).toFixed(2)}% lower than the previous month.
+                                Keep up the good work!
+                                <br />
+                                <br />
+                                <hr />
+                                <br />
+                                If you need more tips on conserving electricity visit these sites.
+                            </p>
                         )}
+
+                        <ul className="list-links">
+                            <li>
+                                <a
+                                    target="_blank"
+                                    rel="noreferrer"
+                                    href="https://www.energy.gov/energysaver/energy-saver-guide-tips-saving-money-and-energy-home"
+                                >
+                                    energy.gov
+                                </a>
+                            </li>
+                            <li>
+                                <a
+                                    target="_blank"
+                                    rel="noreferrer"
+                                    href="https://energysavingtrust.org.uk/hub/quick-tips-to-save-energy/"
+                                >
+                                    energysavingtrust.org
+                                </a>
+                            </li>
+                            <li>
+                                <a
+                                    target="_blank"
+                                    rel="noreferrer"
+                                    href="https://www.directenergy.com/learning-center/25-energy-efficiency-tips"
+                                >
+                                    directenergy.com
+                                </a>
+                            </li>
+                        </ul>
                     </div>
                 )}
 
