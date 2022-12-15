@@ -6,6 +6,16 @@
     padding: 2.5rem;
     border-radius: 2rem;
 
+    .tooltip svg {
+        color: yellow;
+    }
+
+    .accuracy-info {
+        position: absolute;
+        top: 1.5rem;
+        right: 2.5rem;
+    }
+
     h1 {
         font-size: 2.25rem;
         color: #fff;
