@@ -12,6 +12,7 @@ import Calculator from "../../components/Calculator/Calculator.component";
 import Modal from "../../components/Modal/Modal.component";
 import Graph from "../../components/Graph/Graph.component";
 import ConversionTool from "./ConversionTool/ConversionTool.component";
+import BasicCalculator from "../../components/BasicCalculator/BasicCalculator.component";
 
 import useFetchAllRates from "../../hooks/useFetchAllRates";
 import useFetchCollections from "../../hooks/useFetchCollections";
@@ -19,7 +20,6 @@ import useFetchCollections from "../../hooks/useFetchCollections";
 import { MdFlip } from "react-icons/md";
 
 import "./CalculatorGraph.styles.scss";
-import BillsCalcuInputs from "../../components/BillsCalcuInputs/BillsCalcuInputs.component";
 
 const CalculatorGraph = () => {
     const reqAllRatesResponse = useFetchAllRates();
@@ -209,7 +209,7 @@ const CalculatorGraph = () => {
 
                             <div className="card" ref={cardRef}>
                                 <div className="card__face card__face--front">
-                                    <BillsCalcuInputs
+                                    <BasicCalculator
                                         sarimaRate={sarimaRate}
                                         rates={reqAllRatesResponse.rates || []}
                                         isFlipped={isFlipped}
