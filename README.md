@@ -2,7 +2,10 @@
 
 ## ⚙ About ⚙
 
-EC-PC or "Electric Consumption - Price Calculator" is an application that predicts a household's electric bill for a specific month using the previous rates.
+This includes two different calculators: basic and advanced.
+
+1. A calculator that is able to predict an approximate/estimate of your upcoming bill by getting the last two recent months with official rates.
+2. A calculator that predicts an estimate of your bill according to the number of hours you use your appliance/s daily in a month.
 
 ## Installation
 
