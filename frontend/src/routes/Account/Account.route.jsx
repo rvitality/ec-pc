@@ -15,6 +15,7 @@ import { useAuthContext } from "../../context/AuthContext";
 import "./Account.styles.scss";
 import { calculateAccuracy } from "../../helpers/calculateAccuracy.helper";
 import SelectedAppliancesTable from "./SelectedAppliancesTable/SelectedAppliancesTable.component";
+import BillsGraph from "../../components/BillsGraph/BillsGraph.component";
 
 const Account = () => {
     const { user } = useAuthContext();
@@ -294,6 +295,14 @@ const Account = () => {
                             Table={BillsTable}
                             onFilterBySearch={billsFilterBySearchHandler}
                         />
+                    )}
+
+                    {/* ------------- BILLS GRAPH ------------- */}
+
+                    {Object.keys(user).length < 0 ? (
+                        <h2>Loading...</h2>
+                    ) : (
+                        <BillsGraph bills={records || []} />
                     )}
 
                     <h2 className="tables__label heading-tertiary">Selected Appliances</h2>
