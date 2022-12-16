@@ -9,7 +9,7 @@ import { calculateAccuracy } from "../../helpers/calculateAccuracy.helper";
 
 import Spinner from "../../ui/Spinner/Spinner.ui";
 import Modal from "../../components/Modal/Modal.component";
-import Graph from "../../components/Graph/Graph.component";
+import RatesGraph from "../../components/RatesGraph/RatesGraph.component";
 import ConversionTool from "./ConversionTool/ConversionTool.component";
 import BasicCalculator from "../../components/BasicCalculator/BasicCalculator.component";
 import AdvancedCalculator from "../../components/AdvancedCalculator/AdvancedCalculator.component";
@@ -238,7 +238,7 @@ const CalculatorGraph = () => {
 
                     {/* ----------------- Graph ----------------- */}
                     {!reqAllRatesResponse.loading && !reqAllRatesResponse.error && (
-                        <Graph
+                        <RatesGraph
                             rates={reqAllRatesResponse.rates || []}
                             predictedRates={reqCollectionsResponse.collections || []}
                         />

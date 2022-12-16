@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 
 import Users from "./Users/Users.component";
-import Graph from "../../components/Graph/Graph.component";
+import RatesGraph from "../../components/RatesGraph/RatesGraph.component";
 import OfficialRateForm from "./OfficialRateForm/OfficialRateForm.component";
 import Predictions from "./Predictions/Predictions.component";
 import Spinner from "../../ui/Spinner/Spinner.ui";
@@ -80,7 +80,10 @@ const Admin = () => {
                         </div>
                     )}
                     {(!reqAllRatesResponse.loading || !reqCollectionsResponse.isLoading) && (
-                        <Graph rates={officialRates || []} predictedRates={predictedRates || []} />
+                        <RatesGraph
+                            rates={officialRates || []}
+                            predictedRates={predictedRates || []}
+                        />
                     )}
                 </div>
             </div>
