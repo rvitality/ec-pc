@@ -3,7 +3,7 @@ import { Line } from "react-chartjs-2";
 
 import { Chart } from "chart.js/auto";
 
-import "./Graph.styles.scss";
+import "./RatesGraph.styles.scss";
 
 const MONTH_NAMES = [
     "Jan",
@@ -26,7 +26,7 @@ const RATES = [
     15.137605, 15.012016, 16.515005, 14.123213,
 ];
 
-const Graph = ({ rates = [], predictedRates = [] }) => {
+const RatesGraph = ({ rates = [], predictedRates = [] }) => {
     // console.log(rates);
 
     // ! THERE WILL ALWAYS BE AT LEAST 24 RATES BECAUSE PYTHON (SARIMA) REQUIRES IT TO PREDICT A VALUE
@@ -148,4 +148,4 @@ const Graph = ({ rates = [], predictedRates = [] }) => {
     );
 };
 
-export default Graph;
+export default RatesGraph;
