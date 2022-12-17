@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef } from "react";
 
 import { useApplianceContext } from "../../context/ApplianceContext";
 
-import { updatePredictedRates } from "../../utils/firebase.utils";
+import { updatePredictedRates, updateUserAppliances } from "../../utils/firebase.utils";
 import { useAuthContext } from "../../context/AuthContext";
 
 import { calculateAccuracy } from "../../helpers/calculateAccuracy.helper";
@@ -25,7 +25,7 @@ const CalculatorGraph = () => {
     const reqAllRatesResponse = useFetchAllRates();
     const reqCollectionsResponse = useFetchCollections("predictedRates");
 
-    const { user } = useAuthContext();
+    const { user, setUserRecords, setUserAppliances } = useAuthContext();
     const {
         forecasted,
         actual,
@@ -184,6 +184,55 @@ const CalculatorGraph = () => {
         }
     };
 
+    const [calcuPredictedBills, setCalcuPredictedBills] = useState({
+        basicCalcuPredictedBill: 0,
+        advancedCalcuPredictedBill: 0,
+    });
+
+    const calcuPredictedBillsChangeHandler = data => {
+        if (user.records.length === 0) return;
+
+        setCalcuPredictedBills(prevState => ({ ...prevState, ...data }));
+        const bills = { ...calcuPredictedBills, ...data };
+
+        const { basicCalcuPredictedBill, advancedCalcuPredictedBill } = bills;
+
+        const newRecords = [...user.records]; // shallow copying, still mutates user.records because we need deep copy method
+        const lastRecord = newRecords[newRecords.length - 1];
+
+        if (basicCalcuPredictedBill && advancedCalcuPredictedBill) {
+            // console.log("both");
+
+            const basicKw = basicCalcuPredictedBill / sarimaRate;
+            const advancedKw = advancedCalcuPredictedBill / sarimaRate;
+
+            const resultPredictedBill = ((basicKw + advancedKw) / 2) * sarimaRate;
+
+            lastRecord.forecasted = resultPredictedBill;
+            setUserRecords(newRecords);
+        } else if (basicCalcuPredictedBill && !advancedCalcuPredictedBill) {
+            // console.log("basic");
+
+            lastRecord.forecasted = basicCalcuPredictedBill;
+            setUserRecords(newRecords);
+
+            // state updates reset --------------
+
+            const { id } = user;
+
+            updateUserAppliances({
+                id,
+                selectedAppliances: [],
+            });
+            setUserAppliances([]);
+        } else if (!basicCalcuPredictedBill && advancedCalcuPredictedBill) {
+            // console.log("advanced");
+
+            lastRecord.forecasted = advancedCalcuPredictedBill;
+            setUserRecords(newRecords);
+        }
+    };
+
     return (
         <>
             <section className="main-content">
@@ -213,10 +262,13 @@ const CalculatorGraph = () => {
                                         sarimaRate={sarimaRate}
                                         rates={reqAllRatesResponse.rates || []}
                                         isFlipped={isFlipped}
+                                        onPredictedBillChange={calcuPredictedBillsChangeHandler}
                                     />
                                 </div>
                                 <div className="card__face card__face--back">
-                                    <AdvancedCalculator />
+                                    <AdvancedCalculator
+                                        onPredictedBillChange={calcuPredictedBillsChangeHandler}
+                                    />
                                 </div>
                             </div>
                         </div>
