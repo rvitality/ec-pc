@@ -20,7 +20,7 @@ const MONTH_NAMES = [
     "December",
 ];
 
-const BasicCalculator = ({ rates, sarimaRate, isFlipped }) => {
+const BasicCalculator = ({ rates, sarimaRate, onPredictedBillChange }) => {
     const [predictedBill, setPredictedBill] = useState(null);
     const [billsDiff, setBillsDiff] = useState();
 
@@ -36,15 +36,15 @@ const BasicCalculator = ({ rates, sarimaRate, isFlipped }) => {
     const firstMonthRef = useRef();
     const secondMonthRef = useRef();
 
-    useEffect(() => {
-        if (isFlipped) {
-            setBillsDiff(null);
-            setPredictedBill(null);
+    // useEffect(() => {
+    //     if (isFlipped) {
+    //         setBillsDiff(null);
+    //         setPredictedBill(null);
 
-            firstMonthRef.current.value = "";
-            secondMonthRef.current.value = "";
-        }
-    }, [isFlipped]);
+    //         firstMonthRef.current.value = "";
+    //         secondMonthRef.current.value = "";
+    //     }
+    // }, [isFlipped]);
 
     const submitHandler = e => {
         e.preventDefault();
@@ -63,30 +63,30 @@ const BasicCalculator = ({ rates, sarimaRate, isFlipped }) => {
         const predictedBill = ((firstKw + secondKw) * +sarimaRate) / 2;
 
         setPredictedBill(predictedBill);
+        onPredictedBillChange({ basicCalcuPredictedBill: predictedBill });
 
-        if (!user.records) return;
+        // if (!user.records) return;
 
-        if (user.records.length > 0) {
-            const newRecords = [...user.records];
-            const lastRecord = newRecords[newRecords.length - 1];
-            lastRecord.forecasted = predictedBill;
-            setUserRecords(newRecords);
-        }
+        // if (user.records.length > 0) {
+        //     const newRecords = [...user.records];
+        //     const lastRecord = newRecords[newRecords.length - 1];
+        //     lastRecord.forecasted = predictedBill;
+        //     setUserRecords(newRecords);
+        // }
 
-        // most recent bill and predicted bill comparison
+        // get percentage difference, most recent bill and predicted bill comparison
         const difference = ((predictedBill - firstMonthBill) / firstMonthBill) * 100;
-
         setBillsDiff(difference);
 
-        // ! STATE UPDATES =======================================
+        // // ! STATE UPDATES RESET =======================================
 
-        const { id } = user;
+        // const { id } = user;
 
-        updateUserAppliances({
-            id,
-            selectedAppliances: [],
-        });
-        setUserAppliances([]);
+        // updateUserAppliances({
+        //     id,
+        //     selectedAppliances: [],
+        // });
+        // setUserAppliances([]);
     };
 
     return (
@@ -155,25 +155,30 @@ const BasicCalculator = ({ rates, sarimaRate, isFlipped }) => {
                                 <p>
                                     Based on your inputs, your bill will increase{" "}
                                     {Math.abs(billsDiff).toFixed(2)}% than the previous month.
-                                    <br />
-                                    <br />
-                                    <hr />
-                                    <br />
+                                </p>
+                                <br />
+                                <hr />
+                                <br />
+                                <p>
                                     If you have trouble conserving for electricity, visit these site
                                     to learn more.
                                 </p>
                             </div>
                         ) : (
-                            <p>
-                                Based on your inputs, your predicted bill will be{" "}
-                                {Math.abs(billsDiff).toFixed(2)}% lower than the previous month.
-                                Keep up the good work!
-                                <br />
+                            <div>
+                                <p>
+                                    Based on your inputs, your predicted bill will be{" "}
+                                    {Math.abs(billsDiff).toFixed(2)}% lower than the previous month.
+                                    Keep up the good work!
+                                </p>
                                 <br />
                                 <hr />
                                 <br />
-                                If you need more tips on conserving electricity visit these sites.
-                            </p>
+                                <p>
+                                    If you need more tips on conserving electricity visit these
+                                    sites.
+                                </p>
+                            </div>
                         )}
 
                         <ul className="list-links">
