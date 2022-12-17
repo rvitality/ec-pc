@@ -92,7 +92,7 @@ const reducer = (state, action) => {
     return initialState;
 };
 
-const AdvancedCalculator = () => {
+const AdvancedCalculator = ({ onPredictedBillChange }) => {
     const [state, dispatch] = useReducer(reducer, initialState);
 
     const { setAppliances, sarimaRate, setModalIsOpen } = useApplianceContext();
@@ -195,19 +195,18 @@ const AdvancedCalculator = () => {
         setUserAppliances(filteredAppliances);
 
         // ! ================================
-        const forecastedBill = filteredAppliances.reduce(
-            (sum, item) => sum + item.applianceBill,
-            0
-        );
+        const predictedBill = filteredAppliances.reduce((sum, item) => sum + item.applianceBill, 0);
 
-        if (!user.records || !filteredAppliances.length) return;
+        onPredictedBillChange({ advancedCalcuPredictedBill: predictedBill });
 
-        if (user.records.length > 0) {
-            const newRecords = [...user.records];
-            const lastRecord = newRecords[newRecords.length - 1];
-            lastRecord.forecasted = forecastedBill;
-            setUserRecords(newRecords);
-        }
+        // if (!user.records || !filteredAppliances.length) return;
+
+        // if (user.records.length > 0) {
+        //     const newRecords = [...user.records];
+        //     const lastRecord = newRecords[newRecords.length - 1];
+        //     lastRecord.forecasted = predictedBill;
+        //     setUserRecords(newRecords);
+        // }
     };
 
     return (
