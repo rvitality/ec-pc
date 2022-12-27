@@ -2,7 +2,6 @@ import React, { useRef } from "react";
 
 const DurationInput = ({ num, onChangeInputHander }) => {
     const durationRef = useRef();
-    // const duration = durationRef.current?.value || 1;
 
     const inputBlurHandler = e => {
         let inputValue = +e.target.value;

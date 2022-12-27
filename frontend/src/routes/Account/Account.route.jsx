@@ -71,11 +71,6 @@ const Account = () => {
 
         setInputError("");
 
-        // var regex = /[0-9]|\./;
-        // if (!regex.test(inputBill)) return;
-
-        // const errorRate = (Math.abs(forecastedBill - inputBill) / forecastedBill) * 100;
-        // const accuracy = (100 - errorRate).toFixed(2);
         const accuracy = calculateAccuracy(forecastedBill, inputBill);
         setAccuracy(accuracy);
     };

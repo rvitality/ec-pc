@@ -34,17 +34,6 @@ const reducer = (state, action) => {
             return { ...state, selectedAppliance: appliance };
         }
 
-        // const existingAppliance = appliances.find(
-        //     item => item.applianceID === appliance.applianceID
-        // );
-
-        // if (existingAppliance && Object.keys(existingAppliance).length > 0) {
-        //     return { ...state, message: { status: "error", msg: "Appliance already exists." } };
-        // }
-
-        // return {...state, appliance}
-        // setSelectedAppliance(appliance);
-
         return { ...state, selectedAppliance: appliance };
     }
 
@@ -187,7 +176,6 @@ const Appliance = ({
         setWattage(wattageValue);
 
         const previousAppliance = prevSelectedAppliance.current;
-        // const currentAppliance = { ...selectedAppliance, wattage: wattageValue };
 
         const currentAppliance = getCurrentAppliance({
             wattageValue: wattageValue,

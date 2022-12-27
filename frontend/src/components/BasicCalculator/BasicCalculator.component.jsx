@@ -36,16 +36,6 @@ const BasicCalculator = ({ rates, sarimaRate, onPredictedBillChange }) => {
     const firstMonthRef = useRef();
     const secondMonthRef = useRef();
 
-    // useEffect(() => {
-    //     if (isFlipped) {
-    //         setBillsDiff(null);
-    //         setPredictedBill(null);
-
-    //         firstMonthRef.current.value = "";
-    //         secondMonthRef.current.value = "";
-    //     }
-    // }, [isFlipped]);
-
     const submitHandler = e => {
         e.preventDefault();
 
@@ -65,28 +55,9 @@ const BasicCalculator = ({ rates, sarimaRate, onPredictedBillChange }) => {
         setPredictedBill(predictedBill);
         onPredictedBillChange({ basicCalcuPredictedBill: predictedBill });
 
-        // if (!user.records) return;
-
-        // if (user.records.length > 0) {
-        //     const newRecords = [...user.records];
-        //     const lastRecord = newRecords[newRecords.length - 1];
-        //     lastRecord.forecasted = predictedBill;
-        //     setUserRecords(newRecords);
-        // }
-
         // get percentage difference, most recent bill and predicted bill comparison
         const difference = ((predictedBill - firstMonthBill) / firstMonthBill) * 100;
         setBillsDiff(difference);
-
-        // // ! STATE UPDATES RESET =======================================
-
-        // const { id } = user;
-
-        // updateUserAppliances({
-        //     id,
-        //     selectedAppliances: [],
-        // });
-        // setUserAppliances([]);
     };
 
     return (

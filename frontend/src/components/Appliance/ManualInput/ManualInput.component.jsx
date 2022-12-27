@@ -29,11 +29,6 @@ const ManualInput = ({ onBlurApplianceNameHandler, onBlurWattageHandler, applian
         const wattageValue = +e.target.value;
         if (wattageValue > 5000 || wattageValue < 1) return;
 
-        // const newAppliance = {
-        //     ...appliance,
-        //     wattage: wattageValue,
-        // };
-
         setAppliance(prevState => ({ ...prevState, wattage: wattageValue }));
 
         onBlurWattageHandler(wattageValue);

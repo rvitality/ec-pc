@@ -27,8 +27,6 @@ const RATES = [
 ];
 
 const RatesGraph = ({ rates = [], predictedRates = [] }) => {
-    // console.log(rates);
-
     // ! THERE WILL ALWAYS BE AT LEAST 24 RATES BECAUSE PYTHON (SARIMA) REQUIRES IT TO PREDICT A VALUE
     const yrs = rates ? [...new Set(rates.map(rate => rate.yr))] : [];
     const lastTwoYrs = yrs.length >= 2 ? yrs.slice(-2) : [];
@@ -41,15 +39,6 @@ const RatesGraph = ({ rates = [], predictedRates = [] }) => {
     const secondYearData = rates
         .map(rate => (rate.yr === secondYr ? { x: rate.x - 1, y: rate.y, yr: rate.yr } : null))
         .filter(Boolean);
-
-    // predictedRates = [
-    //     { x: "Nov", y: 17.2113213, yr: 2021 },
-    //     { x: "Nov", y: 17.2113213, yr: 2021 },
-    //     { x: "Nov", y: 17.2113213, yr: 2021 },
-    //     { x: "Dec", y: 19.2113213, yr: 2022 },
-    //     { x: "Jan", y: 22.2113213, yr: 2023 },
-    //     { x: "Jan", y: 22.2113213, yr: 2024 },
-    // ];
 
     const formattedPredictedRates = predictedRates?.map(rate => {
         const { date, value } = rate;

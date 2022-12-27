@@ -11,10 +11,6 @@ import "./SelectedAppliancesTable.styles.scss";
 const SelectedAppliancesTable = ({ dataToDisplay }) => {
     const { user, setUserAppliances, setUserRecords } = useAuthContext();
 
-    // const updateApplianceHandler = appliance => {
-    //     console.log(appliance);
-    // };
-
     const deleteApplianceHandler = appliance => {
         const modifiedAppliances = user.selectedAppliances?.filter(
             currentAppliance => currentAppliance.applianceID !== appliance.applianceID

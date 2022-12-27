@@ -164,11 +164,6 @@ const AdvancedCalculator = ({ onPredictedBillChange }) => {
 
         setAppliances(state.selectedAppliances);
 
-        // if (sarimaRate === 1 || !sarimaRate) {
-        //     setError("Please wait for the Predicted Rate (SARIMA).");
-        //     return;
-        // }
-
         // ! =======================================
 
         const { id, selectedAppliances } = user;
@@ -198,15 +193,6 @@ const AdvancedCalculator = ({ onPredictedBillChange }) => {
         const predictedBill = filteredAppliances.reduce((sum, item) => sum + item.applianceBill, 0);
 
         onPredictedBillChange({ advancedCalcuPredictedBill: predictedBill });
-
-        // if (!user.records || !filteredAppliances.length) return;
-
-        // if (user.records.length > 0) {
-        //     const newRecords = [...user.records];
-        //     const lastRecord = newRecords[newRecords.length - 1];
-        //     lastRecord.forecasted = predictedBill;
-        //     setUserRecords(newRecords);
-        // }
     };
 
     return (
