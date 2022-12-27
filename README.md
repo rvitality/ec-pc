@@ -16,10 +16,11 @@ This includes two different calculators: basic and advanced.
 
 ## 📸 Screenshots
 
+|                                            |                                                |
 | :----------------------------------------: | :--------------------------------------------: |
-| ![advanced_calcu](misc/advanced-calcu.png) | ![basic_calcu](misc/basic-calcu.png) |
-| ![account](misc/account.png) | ![bills](misc/bills.png) |
-| ![official_rate](misc/official-rate.png) | ![user_predictions](misc/user-predictions.png) |
+| ![advanced_calcu](misc/advanced-calcu.png) |      ![basic_calcu](misc/basic-calcu.png)      |
+|        ![account](misc/account.png)        |            ![bills](misc/bills.png)            |
+|  ![official_rate](misc/official-rate.png)  | ![user_predictions](misc/user-predictions.png) |
 
 ## 🛠 Built With
 
