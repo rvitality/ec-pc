@@ -16,11 +16,10 @@ This includes two different calculators: basic and advanced.
 
 ## 📸 Screenshots
 
-|                                            |                                                |
 | :----------------------------------------: | :--------------------------------------------: |
-| ![advanced_calcu](misc/advanced-calcu.png) |      ![basic_calcu](misc/basic-calcu.png)      |
-|  ![official_rate](misc/official-rate.png)  | ![user_predictions](misc/user-predictions.png) |
-|        ![account](misc/account.png)        |            ![bills](misc/bills.png)            |
+| ![advanced_calcu](misc/advanced-calcu.png) | ![basic_calcu](misc/basic-calcu.png) |
+| ![account](misc/account.png) | ![bills](misc/bills.png) |
+| ![official_rate](misc/official-rate.png) | ![user_predictions](misc/user-predictions.png) |
 
 ## 🛠 Built With
 
@@ -29,7 +28,7 @@ This includes two different calculators: basic and advanced.
 -   [SCSS](https://sass-lang.com/) - It is CSS with superpowers. A more advanced and evolved variant of the CSS language.
 -   [Python](https://www.python.org/) - Python is an interpreted, object-oriented, high-level programming language with dynamic semantics.
 -   [SARIMAX](https://medium.datadriveninvestor.com/time-series-prediction-using-sarimax-a6604f258c56) - Used for time series prediction with python.
--   [Flask](https://flask.palletsprojects.com/en/2.2.x/) - Flask is a micro web framework written in Python.
+-   [Flask](https://flask.palletsprojects.com/en/2.2.x/) - Flask is a micro web framework written in python.
 
 ## Installation
 
@@ -54,13 +53,14 @@ npm start
 
 ## Run backend server
 
-1. Change directory
+1. Open new terminal
+2. Change directory
 
 ```
 cd .\backend\
 ```
 
-2. Run flask server
+3. Run flask server
 
 ```
 flask run
