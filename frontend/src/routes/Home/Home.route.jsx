@@ -1,9 +1,5 @@
 import React from "react";
 
-import jyumulImgSrc from "../../assets/images/jyumul.jpg";
-import csorianoImgSrc from "../../assets/images/csoriano.png";
-import dvelascoImgSrc from "../../assets/images/dvelasco.png";
-
 import heroImgSrc from "../../assets/illustrations/hero.png";
 
 import "./Home.styles.scss";
